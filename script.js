@@ -25,13 +25,13 @@ const displayDie = (result) => {
   const nextTentNumber = 6 - diceInPyramid.length;
   let nextTent = document.getElementById(`tent-${nextTentNumber}`);
   nextTent.className = `dice-tent ${result.color}-die`;
-  nextTent.innerText = result.number;
+  nextTent.innerHTML = `<p>${result.number}</p>`;
 };
 
 const resetPyramid = () => {
   document.querySelectorAll(".dice-tent").forEach((tent) => {
     tent.className = "dice-tent";
-    tent.innerText = "";
+    tent.innerHTML = "";
   });
   diceInPyramid = [...allDice];
 };
