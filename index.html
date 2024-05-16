@@ -7,10 +7,10 @@
     <link rel="stylesheet" type="text/css" href="styles/board.css" />
     <link rel="stylesheet" type="text/css" href="styles/camels.css" />
     <link rel="stylesheet" type="text/css" href="styles/dice.css" />
-    <script src="scripts/dice-roller/diceDisplay.js"></script>
     <script src="scripts/dice-roller/diceLogic.js"></script>
-    <script src="scripts/camels/camelDisplay.js"></script>
+    <script src="scripts/dice-roller/diceDisplay.js"></script>
     <script src="scripts/camels/camelLogic.js"></script>
+    <script src="scripts/camels/camelDisplay.js"></script>
   </head>
   <body>
     <div id="racetrack">
@@ -27,7 +27,6 @@
       <div class="track-space" id="track-space-1">
         <div class="space-number-label">
           <p>1</p>
-          <div class="camel" id="yellow-camel"></div>
         </div>
       </div>
       <div class="track-space" id="track-space-2">
@@ -109,5 +108,6 @@
         </div>
       </div>
     </div>
+    <button onclick="displayCamels()">load camels</button>
   </body>
 </html>
