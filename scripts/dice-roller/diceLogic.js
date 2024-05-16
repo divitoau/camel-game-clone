@@ -21,29 +21,21 @@ const resolveResult = (die, face) => {
   return { color, number };
 };
 
-const displayDie = (result) => {
-  const nextTentNumber = 6 - diceInPyramid.length;
-  let nextTent = document.getElementById(`tent-${nextTentNumber}`);
-  nextTent.className = `dice-tent ${result.color}-die`;
-  nextTent.innerHTML = `<p>${result.number}</p>`;
-};
-
 const resetPyramid = () => {
-  document.querySelectorAll(".dice-tent").forEach((tent) => {
-    tent.className = "dice-tent";
-    tent.innerHTML = "";
-  });
+  resetTents();
   diceInPyramid = [...allDice];
 };
 
 const bopPyramid = () => {
   if (diceInPyramid.length > 1) {
+    if (diceInPyramid.length === 2) {
+      promptResetPyramid();
+    }
     const selectedDie = selectDie();
     const selectedFace = selectFace();
     const result = resolveResult(selectedDie, selectedFace);
     displayDie(result);
   } else {
     resetPyramid();
-    console.log("pyramid reset");
   }
 };
