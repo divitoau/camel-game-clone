@@ -13,3 +13,33 @@
     aspect-ratio: 1/1;
     border: 2px black solid;
 }
+
+.blue_die {
+    background-color: blue;
+}
+
+.yellow_die {
+    background-color: yellow;
+}
+
+.green_die {
+    background-color: green;
+}
+
+.red_die {
+    background-color: red;
+}
+
+.purple_die {
+    background-color: purple;
+}
+
+.grey_black_die {
+    background-color: grey;
+    color: black
+}
+
+.grey_white_die {
+    background-color: grey;
+    color: white
+}
