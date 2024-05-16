@@ -7,7 +7,11 @@ class Camel {
   }
 
   move(rollNumber) {
-    this.position += rollNumber;
+    if (this.color === "white" || this.color === "black") {
+      this.position -= rollNumber;
+    } else {
+      this.position += rollNumber;
+    }
   }
 
   setStartingPosition(position, elevation, camelUnder) {

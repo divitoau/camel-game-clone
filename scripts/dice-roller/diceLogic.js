@@ -40,6 +40,13 @@ const bopPyramid = () => {
     }
     result = rollDie();
     displayDie(result);
+    camelColor = result.color.startsWith("grey-")
+      ? result.color.substring(5)
+      : result.color;
+    console.log(camelColor);
+    const camel = allCamels.find((c) => c.color === camelColor);
+    camel.move(result.number);
+    displayNewPosition(camelColor);
   } else {
     resetPyramid();
   }

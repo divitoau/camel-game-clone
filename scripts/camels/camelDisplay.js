@@ -10,4 +10,9 @@ const displayCamels = () => {
   });
 };
 
-//           <div class="camel" id="yellow-camel"></div>
+const displayNewPosition = (color) => {
+  const camelFigure = document.getElementById(`${color}-camel`);
+  const camel = allCamels.find((c) => c.color === color);
+  const newSpace = document.getElementById(`track-space-${camel.position}`);
+  newSpace.appendChild(camelFigure);
+};
