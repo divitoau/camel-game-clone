@@ -4,20 +4,97 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>camel game</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="styles/board.css" />
+    <link rel="stylesheet" type="text/css" href="styles/camels.css" />
+    <link rel="stylesheet" type="text/css" href="styles/dice.css" />
     <script src="scripts/dice-roller/diceDisplay.js"></script>
     <script src="scripts/dice-roller/diceLogic.js"></script>
+    <script src="scripts/camels/camelDisplay.js"></script>
+    <script src="scripts/camels/camelLogic.js"></script>
   </head>
   <body>
     <div id="racetrack">
-      <div class="track-space" id="track-space-15">15</div>
-      <div class="track-space" id="track-space-16">16</div>
-      <div class="track-space" id="track-space-1">1</div>
-      <div class="track-space" id="track-space-2">2</div>
-      <div class="track-space" id="track-space-3">3</div>
-      <div class="track-space" id="track-space-4">4</div>
-      <div class="track-space" id="track-space-14">14</div>
-      <div class="track-space" id="track-space-13">13</div>
+      <div class="track-space" id="track-space-15">
+        <div class="space-number-label">
+          <p>15</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-16">
+        <div class="space-number-label">
+          <p>16</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-1">
+        <div class="space-number-label">
+          <p>1</p>
+          <div class="camel" id="yellow-camel"></div>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-2">
+        <div class="space-number-label">
+          <p>2</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-3">
+        <div class="space-number-label">
+          <p>3</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-4">
+        <div class="space-number-label">
+          <p>4</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-14">
+        <div class="space-number-label">
+          <p>14</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-13">
+        <div class="space-number-label">
+          <p>13</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-5">
+        <div class="space-number-label">
+          <p>5</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-6">
+        <div class="space-number-label">
+          <p>6</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-12">
+        <div class="space-number-label">
+          <p>12</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-11">
+        <div class="space-number-label">
+          <p>11</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-10">
+        <div class="space-number-label">
+          <p>10</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-9">
+        <div class="space-number-label">
+          <p>9</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-8">
+        <div class="space-number-label">
+          <p>8</p>
+        </div>
+      </div>
+      <div class="track-space" id="track-space-7">
+        <div class="space-number-label">
+          <p>7</p>
+        </div>
+      </div>
       <div id="center-track">
         <button onclick="bopPyramid()" id="pyramid-button">
           bop the pyramid
@@ -31,14 +108,6 @@
           <div class="dice-tent" id="tent-5"></div>
         </div>
       </div>
-      <div class="track-space" id="track-space-5">5</div>
-      <div class="track-space" id="track-space-6">6</div>
-      <div class="track-space" id="track-space-12">12</div>
-      <div class="track-space" id="track-space-11">11</div>
-      <div class="track-space" id="track-space-10">10</div>
-      <div class="track-space" id="track-space-9">9</div>
-      <div class="track-space" id="track-space-8">8</div>
-      <div class="track-space" id="track-space-7">7</div>
     </div>
   </body>
 </html>

@@ -1,0 +1,29 @@
+.blue-die {
+    background-color: blue;
+}
+
+.yellow-die {
+    background-color: yellow;
+}
+
+.green-die {
+    background-color: green;
+}
+
+.red-die {
+    background-color: red;
+}
+
+.purple-die {
+    background-color: purple;
+}
+
+.grey-black-die {
+    background-color: grey;
+    color: black
+}
+
+.grey-white-die {
+    background-color: grey;
+    color: white
+}

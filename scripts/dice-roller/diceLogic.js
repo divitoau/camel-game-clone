@@ -26,14 +26,19 @@ const resetPyramid = () => {
   diceInPyramid = [...allDice];
 };
 
+const rollDie = () => {
+  const selectedDie = selectDie();
+  const selectedFace = selectFace();
+  const result = resolveResult(selectedDie, selectedFace);
+  return result;
+};
+
 const bopPyramid = () => {
   if (diceInPyramid.length > 1) {
     if (diceInPyramid.length === 2) {
       promptResetPyramid();
     }
-    const selectedDie = selectDie();
-    const selectedFace = selectFace();
-    const result = resolveResult(selectedDie, selectedFace);
+    result = rollDie();
     displayDie(result);
   } else {
     resetPyramid();

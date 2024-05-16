@@ -1,0 +1,37 @@
+.camel {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 1px black solid;
+    position: relative;
+    left: 20px;
+}
+
+#blue-camel {
+    background-color: blue;
+}
+
+#yellow-camel {
+    background-color: yellow;
+}
+
+#green-camel {
+    background-color: green;
+}
+
+#red-camel {
+    background-color: red;
+}
+
+#purple-camel {
+    background-color: purple;
+}
+
+#white-camel {
+    background-color: white;
+}
+
+#black-camel {
+    background-color: black;
+}
