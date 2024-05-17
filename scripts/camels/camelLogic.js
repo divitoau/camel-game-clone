@@ -7,10 +7,27 @@ class Camel {
   }
 
   move(rollNumber) {
+    let newPosition;
     if (this.color === "white" || this.color === "black") {
-      this.position -= rollNumber;
+      newPosition = this.position - rollNumber;
     } else {
-      this.position += rollNumber;
+      newPosition = this.position + rollNumber;
+    }
+    const camelsOnSpace = allCamels.filter((c) => c.position === newPosition);
+    const camelAbove = allCamels.find(
+      (c) => c.camelUnder && c.camelUnder.color === this.color
+    );
+    const topCamel = camelsOnSpace.find(
+      (c) => c.elevation === camelsOnSpace.length - 1
+    );
+
+    this.camelUnder = topCamel;
+    this.position = newPosition;
+    this.elevation = camelsOnSpace.length;
+    if (camelAbove) {
+      camelAbove.position = newPosition;
+      camelAbove.elevation = this.elevation + 1;
+      displayNewPosition(camelAbove.color);
     }
   }
 
@@ -64,3 +81,4 @@ const setStartingPositions = () => {
 };
 
 setStartingPositions();
+allCamels.forEach((camel) => console.log(camel));
