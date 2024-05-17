@@ -19,7 +19,13 @@ const resolveResult = (die, face) => {
   let color = die;
   let number = face > 3 ? face - 3 : face;
   if (die === "grey") {
-    color = face > 3 ? "grey-black" : "grey-white";
+    if (whiteCarryingRacer !== blackCarryingRacer) {
+      color = whiteCarryingRacer ? "grey-white" : "grey-black";
+    } else if (whiteCarryingBlack !== blackCarryingWhite) {
+      color = whiteCarryingBlack ? "grey-black" : "grey-white";
+    } else {
+      color = face > 3 ? "grey-black" : "grey-white";
+    }
   }
   return { color, number };
 };
