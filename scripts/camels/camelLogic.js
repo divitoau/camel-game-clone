@@ -2,6 +2,7 @@ let whiteCarryingRacer = false;
 let blackCarryingRacer = false;
 let whiteCarryingBlack = false;
 let blackCarryingWhite = false;
+let raceOver = false;
 
 class Camel {
   constructor(color, position, elevation, camelUnder) {
@@ -77,6 +78,9 @@ const allCamels = [
 ];
 
 const setStartingPositions = () => {
+
+// figure out why this doesnt work to reset game
+
   for (let i = 0; i < 6; i++) {
     let spawnRoll = rollDie();
     if (!spawnRoll.color.startsWith("grey-")) {
@@ -111,6 +115,23 @@ const setStartingPositions = () => {
       ? (whiteCarryingBlack = true)
       : (blackCarryingWhite = true);
   }
+};
+
+const getRanking = () => {
+
+// figure how to rank these puppies
+
+  /*   let rankingArray = [];
+
+  allCamels.forEach((c) => {});
+  numberArray.sort((a, b) => a - b); */
+};
+
+const endRace = () => {
+  raceOver = true;
+  console.log("race over");
+  getRanking();
+  promptResetGame();
 };
 
 setStartingPositions();

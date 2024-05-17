@@ -18,3 +18,8 @@ const resetTents = () => {
   const button = document.getElementById("pyramid-button");
   button.innerText = "bop the pyramid";
 };
+
+const promptResetGame = () => {
+    const button = document.getElementById("pyramid-button");
+    button.innerText = "reset game";
+}

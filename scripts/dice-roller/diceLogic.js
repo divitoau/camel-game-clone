@@ -51,8 +51,16 @@ const identifyCamel = (result) => {
   return allCamels.find((c) => c.color === camelColor);
 };
 
+const resetGame = () => {
+  resetTents();
+  setStartingPositions();
+  displayCamels();
+};
+
 const bopPyramid = () => {
-  if (diceInPyramid.length > 1) {
+  if (raceOver === true) {
+    resetGame();
+  } else if (diceInPyramid.length > 1) {
     // changes button text when 5 dice are displayed
     if (diceInPyramid.length === 2) {
       promptResetPyramid();
