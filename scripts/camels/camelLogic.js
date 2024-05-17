@@ -1,3 +1,8 @@
+let whiteCarryingRacer = false;
+let blackCarryingRacer = false;
+let whiteCarryingBlack = false;
+let blackCarryingWhite = false;
+
 class Camel {
   constructor(color, position, elevation, camelUnder) {
     this.color = color;
@@ -12,6 +17,12 @@ class Camel {
       newPosition = this.position - rollNumber;
     } else {
       newPosition = this.position + rollNumber;
+      if (this.camelUnder?.color === "white") {
+        whiteCarryingRacer = false;
+      }
+      if (this.camelUnder?.color === "black") {
+        blackCarryingRacer = false;
+      }
     }
 
     const camelsOnSpace = allCamels.filter((c) => c.position === newPosition);
@@ -33,9 +44,22 @@ class Camel {
     this.camelUnder = topCamel;
     this.position = newPosition;
     this.elevation = camelsOnSpace.length;
+
+    if (this.color === "white") {
+      blackCarryingWhite = this.camelUnder?.color === "black" ? true : false;
+    } else if (this.color === "black") {
+      whiteCarryingBlack = this.camelUnder?.color === "white" ? true : false;
+    } else {
+      if (this.camelUnder?.color === "white") {
+        whiteCarryingRacer = true;
+      }
+      if (this.camelUnder?.color === "black") {
+        blackCarryingRacer = true;
+      }
+    }
   }
 
-  setStartingPosition(position, elevation, camelUnder) {
+  setPosition(position, elevation, camelUnder) {
     this.position = position;
     this.elevation = elevation;
     this.camelUnder = camelUnder;
@@ -60,7 +84,7 @@ const setStartingPositions = () => {
       const camelsOnSpace = allCamels.filter(
         (c) => c.position === spawnRoll.number
       );
-      camel.setStartingPosition(
+      camel.setPosition(
         spawnRoll.number,
         camelsOnSpace.length,
         camelsOnSpace.find((c) => c.elevation === camelsOnSpace.length - 1)
@@ -76,12 +100,17 @@ const setStartingPositions = () => {
   const otherCrazyCamel = allCamels.find((c) => c.color === otherCrazyColor);
   const occPosition = 17 - Math.ceil(Math.random() * 3);
 
-  crazyCamel.setStartingPosition(17 - crazyNumber, 0);
-  otherCrazyCamel.setStartingPosition(
+  crazyCamel.setPosition(17 - crazyNumber, 0);
+  otherCrazyCamel.setPosition(
     occPosition,
     occPosition === crazyCamel.position ? 1 : 0,
     occPosition === crazyCamel.position ? crazyCamel : undefined
   );
+  if (otherCrazyCamel.elevation === 1) {
+    crazyColor === "white"
+      ? (whiteCarryingBlack = true)
+      : (blackCarryingWhite = true);
+  }
 };
 
 setStartingPositions();
