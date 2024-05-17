@@ -13,22 +13,26 @@ class Camel {
     } else {
       newPosition = this.position + rollNumber;
     }
+
     const camelsOnSpace = allCamels.filter((c) => c.position === newPosition);
-    const camelAbove = allCamels.find(
-      (c) => c.camelUnder && c.camelUnder.color === this.color
-    );
     const topCamel = camelsOnSpace.find(
       (c) => c.elevation === camelsOnSpace.length - 1
     );
+    const camelsAbove = allCamels.filter(
+      (c) => c.position === this.position && c.elevation > this.elevation
+    );
+
+    if (camelsAbove.length > 0) {
+      camelsAbove.forEach((c) => {
+        c.position = newPosition;
+        c.elevation = camelsOnSpace.length + (c.elevation - this.elevation);
+        displayNewPosition(c.color);
+      });
+    }
 
     this.camelUnder = topCamel;
     this.position = newPosition;
     this.elevation = camelsOnSpace.length;
-    if (camelAbove) {
-      camelAbove.position = newPosition;
-      camelAbove.elevation = this.elevation + 1;
-      displayNewPosition(camelAbove.color);
-    }
   }
 
   setStartingPosition(position, elevation, camelUnder) {
