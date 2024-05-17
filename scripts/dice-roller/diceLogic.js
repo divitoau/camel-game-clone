@@ -60,14 +60,8 @@ const bopPyramid = () => {
     result = rollDie();
     displayDie(result);
     const camel = identifyCamel(result);
-
-    console.log(camel.color);
-    console.log("was " + camel.elevation);
-
     camel.move(result.number);
     displayNewPosition(camel.color);
-
-    console.log("is now " + camel.elevation);
   } else {
     // pressing button again when 5 dice are displayed reloads them into pyramid
     resetPyramid();

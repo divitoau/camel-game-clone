@@ -114,4 +114,3 @@ const setStartingPositions = () => {
 };
 
 setStartingPositions();
-allCamels.forEach((camel) => console.log(camel));
