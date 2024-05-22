@@ -70,7 +70,7 @@ const bopPyramid = () => {
     camel.move(result.number);
     // changes button text when 5 dice are displayed
     if (diceInPyramid.length === 1 && raceOver !== true) {
-      getRanking();
+      endLeg();
       promptResetPyramid();
     }
   } else {

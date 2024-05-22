@@ -59,6 +59,7 @@ class Camel {
       }
     }
     displayNewPosition(this.color);
+    getRanking();
     checkIfFinished(this);
   }
 
@@ -78,6 +79,8 @@ const allCamels = [
   new Camel("white"),
   new Camel("black"),
 ];
+
+let rankedCamels = [];
 
 const setStartingPositions = () => {
   for (let i = 0; i < 6; i++) {
@@ -117,14 +120,13 @@ const setStartingPositions = () => {
 };
 
 const getRanking = () => {
-  const rankedCamels = allCamels.slice(0, 5).sort((a, b) => {
+  rankedCamels = allCamels.slice(0, 5).sort((a, b) => {
     if (a.position === b.position) {
       return b.elevation - a.elevation;
     } else {
       return b.position - a.position;
     }
   });
-  console.log(rankedCamels);
 };
 
 const checkIfFinished = (camel) => {
@@ -133,13 +135,6 @@ const checkIfFinished = (camel) => {
   } else if (camel.position < 1) {
     endRace();
   }
-};
-
-const endRace = () => {
-  raceOver = true;
-  console.log("race over");
-  getRanking();
-  promptResetGame();
 };
 
 setStartingPositions();
