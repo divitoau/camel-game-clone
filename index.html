@@ -7,11 +7,7 @@
     <link rel="stylesheet" type="text/css" href="styles/board.css" />
     <link rel="stylesheet" type="text/css" href="styles/camels.css" />
     <link rel="stylesheet" type="text/css" href="styles/dice.css" />
-    <script src="scripts/dice-roller/diceLogic.js"></script>
-    <script src="scripts/dice-roller/diceDisplay.js"></script>
-    <script src="scripts/camels/camelLogic.js"></script>
-    <script src="scripts/camels/camelDisplay.js"></script>
-    <script src="scripts/scoring/scoringLogic.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/playerMenu.css" />
   </head>
   <body>
     <div id="racetrack">
@@ -109,7 +105,13 @@
         </div>
       </div>
     </div>
-    <button onclick="displayCamels()">load camels</button>
-    <button onclick="getRanking()">rank camels</button>
+    <div id="bet-button-container"></div>
+    <script src="scripts/dice-roller/diceLogic.js"></script>
+    <script src="scripts/dice-roller/diceDisplay.js"></script>
+    <script src="scripts/camels/camelLogic.js"></script>
+    <script src="scripts/camels/camelDisplay.js"></script>
+    <script src="scripts/scoring/scoringLogic.js"></script>
+    <script src="scripts/players/playerLogic.js"></script>
+    <script src="scripts/players/playerDisplay.js"></script>
   </body>
 </html>

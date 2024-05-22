@@ -1,6 +1,5 @@
 const displayCamels = () => {
-  document.querySelector(".camel") === null
-    ? allCamels.forEach((camel) => {
+ allCamels.forEach((camel) => {
         // creates an html element to represent a camel, assigns attributes, and appends to appropriate board space
         const camelFigure = document.createElement("div");
         camelFigure.className = `camel elevation-${camel.elevation}`;
@@ -10,7 +9,6 @@ const displayCamels = () => {
         );
         startingSpace.appendChild(camelFigure);
       })
-    : console.log("stop pressing that");
 };
 
 const removeCamels = () => {
@@ -36,3 +34,5 @@ const displayNewPosition = (color) => {
   camelFigure.className = `camel elevation-${camel.elevation}`;
   newSpace.appendChild(camelFigure);
 };
+
+displayCamels()
