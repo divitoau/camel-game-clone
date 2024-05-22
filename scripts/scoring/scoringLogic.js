@@ -69,7 +69,7 @@ const endLeg = () => {
     console.log(`money from pyramid: ${legPyramidMoney}`);
 
     const legNet = legBetMoney + legPyramidMoney;
-    p.updateInventory(p.money + legNet, [], 0, true);
+    p.resolveLeg(p.money + legNet);
 
     console.log(`money net: ${legNet}`);
     console.log(`total money: ${p.money}`);

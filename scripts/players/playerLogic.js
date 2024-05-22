@@ -1,10 +1,10 @@
 class Player {
-  constructor(name, money, bettingTickets, pyramidTickets, hasSpectator) {
+  constructor(name, money, bettingTickets, pyramidTickets, spectatorTile) {
     this.name = name;
     this.money = money;
     this.bettingTickets = bettingTickets;
     this.pyramidTickets = pyramidTickets;
-    this.hasSpectator = hasSpectator;
+    this.spectatorTile = spectatorTile;
   }
 
   takeBettingTicket(color) {
@@ -29,18 +29,32 @@ class Player {
     endTurn();
   }
 
-  updateInventory(money, bettingTickets, pyramidTickets, hasSpectator) {
-    this.money = money;
-    this.bettingTickets = bettingTickets;
-    this.pyramidTickets = pyramidTickets;
-    this.hasSpectator = hasSpectator;
+  placeSpectatorTile(isCheering, space) {
+    this.spectatorTile.isCheering = isCheering;
+    this.spectatorTile.position = space;
+  }
+
+  resolveLeg(newMoney) {
+    this.money = newMoney;
+    this.bettingTickets = [];
+    this.pyramidTickets = 0;
+    this.spectatorTile.isCheering = null;
+    this.spectatorTile.position = null;
+  }
+}
+
+class SpectatorTile {
+  constructor(player, isCheering, position) {
+    this.player = player;
+    this.isCheering = isCheering;
+    this.position = position;
   }
 }
 
 const allPlayers = [
-  new Player("Austin", 3, [], 0, true),
-  new Player("Enemy", 3, [], 0, true),
-  new Player("Third Guy", 3, [], 0, true),
+  new Player("Austin", 3, [], 0, new SpectatorTile("Austin", null, null)),
+  new Player("Enemy", 3, [], 0, new SpectatorTile("Enemy", null, null)),
+  new Player("Third Guy", 3, [], 0, new SpectatorTile("Third Guy", null, null)),
 ];
 
 let currentPlayerNumber = 0;
