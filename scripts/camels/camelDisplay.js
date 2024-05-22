@@ -13,6 +13,13 @@ const displayCamels = () => {
     : console.log("stop pressing that");
 };
 
+const removeCamels = () => {
+  allCamels.forEach((camel) => {
+    const camelFigure = document.getElementById(`${camel.color}-camel`);
+    camelFigure.remove();
+  });
+};
+
 // moves camel figure to new appropriate board space
 const displayNewPosition = (color) => {
   const camelFigure = document.getElementById(`${color}-camel`);

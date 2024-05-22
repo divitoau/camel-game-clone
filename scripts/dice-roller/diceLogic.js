@@ -53,7 +53,9 @@ const identifyCamel = (result) => {
 
 const resetGame = () => {
   console.log("resetting game");
-  resetTents();
+  raceOver = false;
+  resetPyramid();
+  removeCamels();
   setStartingPositions();
   displayCamels();
 };
@@ -67,7 +69,7 @@ const bopPyramid = () => {
     const camel = identifyCamel(result);
     camel.move(result.number);
     // changes button text when 5 dice are displayed
-    if (diceInPyramid.length === 1) {
+    if (diceInPyramid.length === 1 && raceOver !== true) {
       getRanking();
       promptResetPyramid();
     }

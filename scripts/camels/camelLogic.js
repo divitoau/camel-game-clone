@@ -80,8 +80,6 @@ const allCamels = [
 ];
 
 const setStartingPositions = () => {
-  // ********** figure out why this doesnt work to reset game
-
   for (let i = 0; i < 6; i++) {
     let spawnRoll = rollDie();
     if (!spawnRoll.color.startsWith("grey-")) {

@@ -20,6 +20,6 @@ const resetTents = () => {
 };
 
 const promptResetGame = () => {
-    const button = document.getElementById("pyramid-button");
-    button.innerText = "reset game";
-}
+  const button = document.getElementById("pyramid-button");
+  button.innerText = "reset game";
+};
