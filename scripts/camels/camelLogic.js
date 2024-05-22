@@ -42,7 +42,7 @@ class Camel {
       });
     }
 
-    this.camelUnder = topCamel;
+    this.camelUnder = topCamel ? topCamel : null;
     this.position = newPosition;
     this.elevation = camelsOnSpace.length;
 
@@ -93,10 +93,14 @@ const setStartingPositions = () => {
       camel.setPosition(
         spawnRoll.number,
         camelsOnSpace.length,
-        camelsOnSpace.find((c) => c.elevation === camelsOnSpace.length - 1)
+        camelsOnSpace.length > 0
+          ? camelsOnSpace.find((c) => c.elevation === camelsOnSpace.length - 1)
+          : null
       );
     }
   }
+
+  getRanking();
 
   const crazyRoll = selectFace();
   const crazyNumber = crazyRoll > 3 ? crazyRoll - 3 : crazyRoll;
@@ -104,13 +108,13 @@ const setStartingPositions = () => {
   const crazyCamel = allCamels.find((c) => c.color === crazyColor);
   const otherCrazyColor = crazyColor === "white" ? "black" : "white";
   const otherCrazyCamel = allCamels.find((c) => c.color === otherCrazyColor);
-  const occPosition = 17 - Math.ceil(Math.random() * 3);
+  const otherCrazyPosition = 17 - Math.ceil(Math.random() * 3);
 
-  crazyCamel.setPosition(17 - crazyNumber, 0);
+  crazyCamel.setPosition(17 - crazyNumber, 0, null);
   otherCrazyCamel.setPosition(
-    occPosition,
-    occPosition === crazyCamel.position ? 1 : 0,
-    occPosition === crazyCamel.position ? crazyCamel : undefined
+    otherCrazyPosition,
+    otherCrazyPosition === crazyCamel.position ? 1 : 0,
+    otherCrazyPosition === crazyCamel.position ? crazyCamel : null
   );
   if (otherCrazyCamel.elevation === 1) {
     crazyColor === "white"
