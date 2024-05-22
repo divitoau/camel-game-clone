@@ -1,15 +1,7 @@
 class Player {
-  constructor(
-    name,
-    money,
-    hasStartMarker,
-    bettingTickets,
-    pyramidTickets,
-    hasSpectator
-  ) {
+  constructor(name, money, bettingTickets, pyramidTickets, hasSpectator) {
     this.name = name;
     this.money = money;
-    this.hasStartMarker = hasStartMarker;
     this.bettingTickets = bettingTickets;
     this.pyramidTickets = pyramidTickets;
     this.hasSpectator = hasSpectator;
@@ -46,16 +38,16 @@ class Player {
 }
 
 const allPlayers = [
-  new Player("Austin", 3, true, [], 0, true),
-  new Player("Enemy", 3, false, [], 0, true),
+  new Player("Austin", 3, [], 0, true),
+  new Player("Enemy", 3, [], 0, true),
+  new Player("Third Guy", 3, [], 0, true),
 ];
 
 let currentPlayerNumber = 0;
 let currentPlayer = allPlayers[currentPlayerNumber];
-console.log(`current player: ${currentPlayer.name}`);
 
 const endTurn = () => {
   currentPlayerNumber = (currentPlayerNumber + 1) % allPlayers.length;
   currentPlayer = allPlayers[currentPlayerNumber];
-  console.log(`current player: ${currentPlayer.name}`);
+  console.log(`${currentPlayer.name}'s turn`);
 };

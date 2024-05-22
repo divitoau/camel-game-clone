@@ -78,5 +78,6 @@ const bopPyramid = () => {
     // pressing button again when 5 dice are displayed reloads them into pyramid
     resetPyramid();
     resetBettingTickets();
+    console.log(`${currentPlayer.name}'s turn`);
   }
 };
