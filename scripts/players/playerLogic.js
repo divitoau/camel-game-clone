@@ -29,9 +29,11 @@ class Player {
     endTurn();
   }
 
-  placeSpectatorTile(isCheering, space) {
+  placeSpectatorTile(isCheering, position) {
     this.spectatorTile.isCheering = isCheering;
-    this.spectatorTile.position = space;
+    this.spectatorTile.position = position;
+    removeSpectatorPlacers();
+    endTurn();
   }
 
   resolveLeg(newMoney) {
