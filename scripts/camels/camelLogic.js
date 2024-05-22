@@ -135,8 +135,10 @@ const getRanking = () => {
 
 const checkIfFinished = (camel) => {
   if (camel.position > 16) {
+    endLeg();
     endRace();
   } else if (camel.position < 1) {
+    endLeg();
     endRace();
   }
 };
