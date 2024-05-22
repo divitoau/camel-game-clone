@@ -38,8 +38,27 @@ let allBettingTickets = {
 };
 
 const endLeg = () => {
-  console.log(`leg leader: ${rankedCamels[0].color}`);
-  console.log(`leg second: ${rankedCamels[1].color}`);
+  const legLeader = rankedCamels[0].color;
+  const legSecond = rankedCamels[1].color;
+  let legBetMoney = 0;
+
+  currentPlayer.bettingTickets.forEach((t) => {
+    if (t.color === legLeader) {
+      legBetMoney += t.value;
+    } else if (t.color === legSecond) {
+      legBetMoney += 1;
+    } else {
+      legBetMoney -= 1;
+    }
+  });
+
+  console.log(`leg leader: ${legLeader}`);
+  console.log(`leg second: ${legSecond}`);
+  console.log(`money from bets: ${legBetMoney}`);
+  console.log(`money from pyramid: ${currentPlayer.pyramidTickets}`);
+
+  const legNet = legBetMoney + currentPlayer.pyramidTickets;
+  console.log(`money net: ${legNet}`);
 };
 
 const endRace = () => {

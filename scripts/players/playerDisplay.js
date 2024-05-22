@@ -8,7 +8,7 @@ allCamels.forEach((camel) => {
     betButtonContainer.appendChild(betButton);
     betButton.addEventListener(
       "click",
-      () => player1.takeBettingTicket(camel.color),
+      () => currentPlayer.takeBettingTicket(camel.color),
       false
     );
   }

@@ -66,6 +66,7 @@ const bopPyramid = () => {
   } else if (diceInPyramid.length > 1) {
     result = rollDie();
     displayDie(result);
+    currentPlayer.takePyramidTicket();
     const camel = identifyCamel(result);
     camel.move(result.number);
     // changes button text when 5 dice are displayed
