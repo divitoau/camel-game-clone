@@ -2,3 +2,23 @@
     height: 40px;
     background-color: burlywood;
 }
+
+#blue-bet-button {
+    background-color: blue;
+}
+
+#yellow-bet-button {
+    background-color: yellow;
+}
+
+#green-bet-button {
+    background-color: green;
+}
+
+#red-bet-button {
+    background-color: red;
+}
+
+#purple-bet-button {
+    background-color: purple;
+}
