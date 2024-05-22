@@ -1,6 +1,5 @@
 class Player {
   constructor(
-    order,
     name,
     money,
     hasStartMarker,
@@ -8,7 +7,6 @@ class Player {
     pyramidTickets,
     hasSpectator
   ) {
-    this.order = order;
     this.name = name;
     this.money = money;
     this.hasStartMarker = hasStartMarker;
@@ -25,6 +23,7 @@ class Player {
       console.log(
         `${this.name} snagged a ${takenTicket.value} pound ${takenTicket.color} ticket`
       );
+      endTurn();
     } else {
       console.log("no tickets of this color are left");
     }
@@ -35,12 +34,21 @@ class Player {
     console.log(
       `${this.name} snagged a pyramid ticket, now has ${this.pyramidTickets}`
     );
+    endTurn();
   }
 }
 
 const allPlayers = [
-  new Player(1, "Austin", 3, true, [], 0, true),
-  new Player(2, "Enemy", 3, false, [], 0, true),
+  new Player("Austin", 3, true, [], 0, true),
+  new Player("Enemy", 3, false, [], 0, true),
 ];
 
-let currentPlayer = allPlayers.find((p) => p.order === 1);
+let currentPlayerNumber = 0;
+let currentPlayer = allPlayers[currentPlayerNumber];
+console.log(`current player: ${currentPlayer.name}`);
+
+const endTurn = () => {
+  currentPlayerNumber = (currentPlayerNumber + 1) % allPlayers.length;
+  currentPlayer = allPlayers[currentPlayerNumber];
+  console.log(`current player: ${currentPlayer.name}`);
+};
