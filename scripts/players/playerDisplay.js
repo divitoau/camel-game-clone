@@ -34,17 +34,18 @@ booingButton.addEventListener("click", () => {
 });
 
 const displaySpectatorPlacers = (isCheering) => {
-  // ******* make prohibited spaces not count your own tile when moving it after already placed
   let prohibitedSpaces = [1];
   allCamels.forEach((c) => {
     prohibitedSpaces.push(c.position);
   });
   allPlayers.forEach((p) => {
-    prohibitedSpaces.push(
-      p.spectatorTile.position,
-      p.spectatorTile.position + 1,
-      p.spectatorTile.position - 1
-    );
+    if (p !== currentPlayer) {
+      prohibitedSpaces.push(
+        p.spectatorTile.position,
+        p.spectatorTile.position + 1,
+        p.spectatorTile.position - 1
+      );
+    }
   });
   document.querySelectorAll(".track-space").forEach((s) => {
     const spaceNumber = parseInt(s.id.substring(12));
