@@ -58,6 +58,8 @@ class Camel {
         blackCarryingRacer = true;
       }
     }
+    displayNewPosition(this.color);
+    checkIfFinished(this);
   }
 
   setPosition(position, elevation, camelUnder) {
@@ -78,8 +80,7 @@ const allCamels = [
 ];
 
 const setStartingPositions = () => {
-
-// figure out why this doesnt work to reset game
+  // ********** figure out why this doesnt work to reset game
 
   for (let i = 0; i < 6; i++) {
     let spawnRoll = rollDie();
@@ -118,13 +119,22 @@ const setStartingPositions = () => {
 };
 
 const getRanking = () => {
+  const rankedCamels = allCamels.slice(0, 5).sort((a, b) => {
+    if (a.position === b.position) {
+      return b.elevation - a.elevation;
+    } else {
+      return b.position - a.position;
+    }
+  });
+  console.log(rankedCamels);
+};
 
-// figure how to rank these puppies
-
-  /*   let rankingArray = [];
-
-  allCamels.forEach((c) => {});
-  numberArray.sort((a, b) => a - b); */
+const checkIfFinished = (camel) => {
+  if (camel.position > 16) {
+    endRace();
+  } else if (camel.position < 1) {
+    endRace();
+  }
 };
 
 const endRace = () => {

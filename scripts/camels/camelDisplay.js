@@ -20,10 +20,8 @@ const displayNewPosition = (color) => {
   let newSpaceNumber;
   if (camel.position > 16) {
     newSpaceNumber = camel.position - 16;
-    endRace();
   } else if (camel.position < 1) {
     newSpaceNumber = 16 + camel.position;
-    endRace();
   } else {
     newSpaceNumber = camel.position;
   }

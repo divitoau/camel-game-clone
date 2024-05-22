@@ -52,6 +52,7 @@ const identifyCamel = (result) => {
 };
 
 const resetGame = () => {
+  console.log("resetting game");
   resetTents();
   setStartingPositions();
   displayCamels();
@@ -61,15 +62,15 @@ const bopPyramid = () => {
   if (raceOver === true) {
     resetGame();
   } else if (diceInPyramid.length > 1) {
-    // changes button text when 5 dice are displayed
-    if (diceInPyramid.length === 2) {
-      promptResetPyramid();
-    }
     result = rollDie();
     displayDie(result);
     const camel = identifyCamel(result);
     camel.move(result.number);
-    displayNewPosition(camel.color);
+    // changes button text when 5 dice are displayed
+    if (diceInPyramid.length === 1) {
+      getRanking();
+      promptResetPyramid();
+    }
   } else {
     // pressing button again when 5 dice are displayed reloads them into pyramid
     resetPyramid();
