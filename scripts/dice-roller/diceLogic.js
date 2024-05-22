@@ -77,5 +77,6 @@ const bopPyramid = () => {
   } else {
     // pressing button again when 5 dice are displayed reloads them into pyramid
     resetPyramid();
+    resetBettingTickets();
   }
 };

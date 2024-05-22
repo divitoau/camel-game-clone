@@ -16,7 +16,7 @@ class Player {
   }
 
   takeBettingTicket(color) {
-    const betColorArray = allBettingTickets[color];
+    const betColorArray = remainingBettingTickets[color];
     if (betColorArray.length > 0) {
       const takenTicket = betColorArray.shift();
       this.bettingTickets.push(takenTicket);
@@ -35,6 +35,13 @@ class Player {
       `${this.name} snagged a pyramid ticket, now has ${this.pyramidTickets}`
     );
     endTurn();
+  }
+
+  updateInventory(money, bettingTickets, pyramidTickets, hasSpectator) {
+    this.money = money;
+    this.bettingTickets = bettingTickets;
+    this.pyramidTickets = pyramidTickets;
+    this.hasSpectator = hasSpectator;
   }
 }
 

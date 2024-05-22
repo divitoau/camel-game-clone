@@ -4,7 +4,7 @@ class BettingTicket {
   }
 }
 
-let allBettingTickets = {
+const allBettingTickets = {
   blue: [
     new BettingTicket("blue", 5),
     new BettingTicket("blue", 3),
@@ -37,10 +37,16 @@ let allBettingTickets = {
   ],
 };
 
+let remainingBettingTickets;
+
+const resetBettingTickets = () => {
+  remainingBettingTickets = JSON.parse(JSON.stringify(allBettingTickets));
+};
+
 const endLeg = () => {
   const legLeader = rankedCamels[0].color;
   const legSecond = rankedCamels[1].color;
-  
+
   console.log(`leg leader: ${legLeader}`);
   console.log(`leg second: ${legSecond}`);
 
@@ -61,8 +67,12 @@ const endLeg = () => {
     console.log(p.name);
     console.log(`money from bets: ${legBetMoney}`);
     console.log(`money from pyramid: ${legPyramidMoney}`);
+
     const legNet = legBetMoney + legPyramidMoney;
+    p.updateInventory(p.money + legNet, [], 0, true);
+
     console.log(`money net: ${legNet}`);
+    console.log(`total money: ${p.money}`);
   });
 };
 
