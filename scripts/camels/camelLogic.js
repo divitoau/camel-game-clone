@@ -26,25 +26,78 @@ class Camel {
       }
     }
 
-    const camelsOnSpace = allCamels.filter((c) => c.position === newPosition);
-    const topCamel = camelsOnSpace.find(
-      (c) => c.elevation === camelsOnSpace.length - 1
-    );
+    let goesUnder = false;
+
+    allPlayers.forEach((p) => {
+      if (p.spectatorTile.position === newPosition) {
+        console.log(`${p.name}'s cash was: ${p.money}`);
+        p.money += 1;
+        console.log(`${p.name}'s cash now: ${p.money}`);
+        if (p.spectatorTile.isCheering) {
+          if (this.color !== "white" && this.color !== "black") {
+            newPosition += 1;
+          } else {
+            newPosition -= 1;
+          }
+          console.log(`${this.color} got bumped up 1`);
+        } else {
+          goesUnder = true;
+          if (this.color !== "white" && this.color !== "black") {
+            newPosition -= 1;
+          } else {
+            newPosition += 1;
+          }
+          console.log(`${this.color} got bumped back 1`);
+        }
+      }
+    });
+
     const camelsAbove = allCamels.filter(
       (c) => c.position === this.position && c.elevation > this.elevation
     );
+    const camelsOnSpace = allCamels.filter((c) => c.position === newPosition);
 
-    if (camelsAbove.length > 0) {
-      camelsAbove.forEach((c) => {
-        c.position = newPosition;
-        c.elevation = camelsOnSpace.length + (c.elevation - this.elevation);
-        displayNewPosition(c.color);
+    if (goesUnder) {
+      camelsOnSpace.forEach((cos) => {
+        if (cos.elevation === 0) {
+          if (camelsAbove.length > 0) {
+            cos.camelUnder = camelsAbove.find((c) => {
+              c.elevation - this.elevation === camelsAbove.length;
+            });
+          } else {
+            cos.camelUnder = this;
+          }
+        }
+        cos.elevation += camelsAbove.length + 1;
+        displayNewPosition(cos.color);
       });
+      if (camelsAbove.length > 0) {
+        camelsAbove.forEach((ca) => {
+          ca.position = newPosition;
+          ca.elevation -= this.elevation;
+          displayNewPosition(ca.color);
+        });
+      }
+      this.camelUnder = null;
+      this.elevation = 0;
+    } else {
+      const topCamel = camelsOnSpace.find(
+        (c) => c.elevation === camelsOnSpace.length - 1
+      );
+
+      if (camelsAbove.length > 0) {
+        camelsAbove.forEach((c) => {
+          c.position = newPosition;
+          c.elevation = camelsOnSpace.length + (c.elevation - this.elevation);
+          displayNewPosition(c.color);
+        });
+      }
+
+      this.camelUnder = topCamel ? topCamel : null;
+      this.elevation = camelsOnSpace.length;
     }
 
-    this.camelUnder = topCamel ? topCamel : null;
     this.position = newPosition;
-    this.elevation = camelsOnSpace.length;
 
     if (this.color === "white") {
       blackCarryingWhite = this.camelUnder?.color === "black" ? true : false;
