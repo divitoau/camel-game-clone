@@ -33,6 +33,7 @@ class Player {
     this.spectatorTile.isCheering = isCheering;
     this.spectatorTile.position = position;
     removeSpectatorPlacers();
+    displaySpectatorTile(isCheering);
     endTurn();
   }
 

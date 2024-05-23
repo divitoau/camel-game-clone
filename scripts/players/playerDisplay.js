@@ -33,7 +33,26 @@ booingButton.addEventListener("click", () => {
   displaySpectatorPlacers(false);
 });
 
+const displaySpectatorTile = (isCheering) => {
+  const tile = document.createElement("div");
+  tile.id = `${currentPlayer.name}-spectator-tile`;
+  if (isCheering) {
+    tile.className = "spectator-tile cheering-tile";
+    tile.innerHTML = `<p>${currentPlayer.name}</p> <p>+1</p>`;
+  } else {
+    tile.className = "spectator-tile booing-tile";
+    tile.innerHTML = `<p>${currentPlayer.name}</p> <p>-1</p>`;
+  }
+  const tilePosition = currentPlayer.spectatorTile.position;
+  const tileSpace = document.getElementById(`track-space-${tilePosition}`);
+  tileSpace.appendChild(tile);
+};
+
 const displaySpectatorPlacers = (isCheering) => {
+  oldTile = document.getElementById(`${currentPlayer.name}-spectator-tile`);
+  if (oldTile) {
+    oldTile.remove();
+  }
   let prohibitedSpaces = [1];
   allCamels.forEach((c) => {
     prohibitedSpaces.push(c.position);
