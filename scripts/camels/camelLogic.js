@@ -177,6 +177,10 @@ const setStartingPositions = () => {
       );
     }
   }
+
+  // put dice back
+  diceInPyramid = [...allDice];
+
   // so that starting ranking is known in case i ever try to write a computer player
   getRanking();
 

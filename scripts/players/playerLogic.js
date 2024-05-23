@@ -62,6 +62,7 @@ const allPlayers = [
 
 let currentPlayerNumber = 0;
 let currentPlayer = allPlayers[currentPlayerNumber];
+console.log(`${currentPlayer.name}'s turn`);
 
 const endTurn = () => {
   currentPlayerNumber = (currentPlayerNumber + 1) % allPlayers.length;

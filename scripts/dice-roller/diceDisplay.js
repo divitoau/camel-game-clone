@@ -1,3 +1,6 @@
+const pyramidButton = document.getElementById("pyramid-button");
+pyramidButton.addEventListener("click", () => bopPyramid());
+
 const displayDie = (result) => {
   const nextTentNumber = 6 - diceInPyramid.length;
   let nextTent = document.getElementById(`tent-${nextTentNumber}`);
