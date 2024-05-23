@@ -1,3 +1,4 @@
+// generates the buttons to claim betting tickets
 const betButtonContainer = document.getElementById("bet-button-container");
 allCamels.forEach((camel) => {
   if (camel.color !== "white" && camel.color !== "black") {
@@ -14,6 +15,7 @@ allCamels.forEach((camel) => {
   }
 });
 
+// variables and event listeners for spectator tile elements
 const spectatorButton = document.getElementById("spectator-button");
 const spectatorDialog = document.getElementById("spectator-dialog");
 const cheeringButton = document.getElementById("cheering-button");
@@ -33,6 +35,7 @@ booingButton.addEventListener("click", () => {
   displaySpectatorPlacers(false);
 });
 
+// shows the newly placed spectator tile on DOM
 const displaySpectatorTile = (isCheering) => {
   const tile = document.createElement("div");
   tile.id = `${currentPlayer.name}-spectator-tile`;
@@ -48,11 +51,14 @@ const displaySpectatorTile = (isCheering) => {
   tileSpace.appendChild(tile);
 };
 
+// creates buttons on each permitted space where a tile can be placed
 const displaySpectatorPlacers = (isCheering) => {
   oldTile = document.getElementById(`${currentPlayer.name}-spectator-tile`);
   if (oldTile) {
     oldTile.remove();
   }
+
+  // tile can't be placed on space 1, space with a camel, or space with or adjacent to another tile
   let prohibitedSpaces = [1];
   allCamels.forEach((c) => {
     prohibitedSpaces.push(c.position);
@@ -86,5 +92,11 @@ const displaySpectatorPlacers = (isCheering) => {
 const removeSpectatorPlacers = () => {
   document.querySelectorAll(".place-button").forEach((b) => {
     b.remove();
+  });
+};
+
+const resetSpectatorTiles = () => {
+  document.querySelectorAll(".spectator-tile").forEach((t) => {
+    t.remove();
   });
 };
