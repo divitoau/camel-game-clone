@@ -53,6 +53,9 @@ const resetBettingTickets = () => {
 
 resetBettingTickets();
 
+let finishWinnerStack = []
+let finishLoserStack = []
+
 const endLeg = () => {
   const legLeader = rankedCamels[0].color;
   const legSecond = rankedCamels[1].color;

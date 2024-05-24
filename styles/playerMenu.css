@@ -1,24 +1,24 @@
-#bet-button-container {
+#leg-bet-container {
     height: 40px;
     background-color: burlywood;
 }
 
-#blue-bet-button {
+.blue-bet-button {
     background-color: blue;
 }
 
-#yellow-bet-button {
+.yellow-bet-button {
     background-color: yellow;
 }
 
-#green-bet-button {
+.green-bet-button {
     background-color: green;
 }
 
-#red-bet-button {
+.red-bet-button {
     background-color: red;
 }
 
-#purple-bet-button {
+.purple-bet-button {
     background-color: purple;
 }

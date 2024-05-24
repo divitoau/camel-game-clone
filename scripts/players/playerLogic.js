@@ -45,6 +45,17 @@ class Player {
     endTurn();
   }
 
+  placeFinishCard(color, isWinner) {
+    const finishCard = this.finishCards.find((f) => f.color === color);
+    const finishIndex = this.finishCards.indexOf(finishCard);
+    this.finishCards.splice(finishIndex, 1);
+    if (isWinner) {
+      finishWinnerStack.push(finishCard);
+    } else {
+      finishLoserStack.push(finishCard);
+    }
+  }
+
   resolveLeg(newMoney) {
     this.money = newMoney;
     this.bettingTickets = [];

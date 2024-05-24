@@ -92,18 +92,33 @@
         </div>
       </div>
       <div id="center-track">
-        <button id="pyramid-button">bop the pyramid</button>
-        <div id="pyramid-ticket-counter"></div>
-        <div id="dice-tent-container">
-          <div class="dice-tent" id="tent-1"></div>
-          <div class="dice-tent" id="tent-2"></div>
-          <div class="dice-tent" id="tent-3"></div>
-          <div class="dice-tent" id="tent-4"></div>
-          <div class="dice-tent" id="tent-5"></div>
+        <div id="dice-container">
+          <button id="pyramid-button">bop the pyramid</button>
+          <div id="pyramid-ticket-counter"></div>
+          <div id="dice-tent-container">
+            <div class="dice-tent" id="tent-1"></div>
+            <div class="dice-tent" id="tent-2"></div>
+            <div class="dice-tent" id="tent-3"></div>
+            <div class="dice-tent" id="tent-4"></div>
+            <div class="dice-tent" id="tent-5"></div>
+          </div>
+        </div>
+        <div id="finish-stacks-container">
+          <div id="finish-winner-container">
+            <button id="finish-winner-button">place finish winner bet</button>
+            <div id="finish-winner-display"></div>
+          </div>
+          <div id="finish-loser-container">
+            <button id="finish-loser-button">place finish loser bet</button>
+            <div id="finish-loser-display"></div>
+          </div>
+          <dialog id="finish-bet-dialog">
+            <button id="finish-bet-cancel-button">Cancel</button>
+          </dialog>
         </div>
       </div>
     </div>
-    <div id="bet-button-container"></div>
+    <div id="leg-bet-container"></div>
     <button id="spectator-button">place spectator tile</button>
     <dialog id="spectator-dialog">
       <p>Place Spectator Tile</p>

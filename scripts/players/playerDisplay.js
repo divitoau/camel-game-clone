@@ -1,21 +1,13 @@
-// generates the buttons to claim betting tickets
-const betButtonContainer = document.getElementById("bet-button-container");
-allCamels.forEach((camel) => {
-  if (camel.color !== "white" && camel.color !== "black") {
-    const betButton = document.createElement("button");
-    betButton.className = `bet-button`;
-    betButton.id = `${camel.color}-bet-button`;
-    betButton.textContent = `Bet on ${camel.color} camel`;
-    betButtonContainer.appendChild(betButton);
-    betButton.addEventListener(
-      "click",
-      () => currentPlayer.takeBettingTicket(camel.color),
-      false
-    );
-  }
-});
+const legBetContainer = document.getElementById("leg-bet-container");
 
-// variables and event listeners for spectator tile elements
+const finishWinnerButton = document.getElementById("finish-winner-button");
+const finishLoserButton = document.getElementById("finish-loser-button");
+const finishBetDialog = document.getElementById("finish-bet-dialog");
+const finishBetCancelButton = document.getElementById(
+  "finish-bet-cancel-button"
+);
+let isPickingWinner = null;
+
 const spectatorButton = document.getElementById("spectator-button");
 const spectatorDialog = document.getElementById("spectator-dialog");
 const cheeringButton = document.getElementById("cheering-button");
@@ -23,6 +15,38 @@ const booingButton = document.getElementById("booing-button");
 const spectatorCancelButton = document.getElementById(
   "spectator-cancel-button"
 );
+
+const createBetButtons = (container) => {
+  currentPlayer.finishCards.forEach((f) => {
+    const color = f.color;
+    const betButton = document.createElement("button");
+    betButton.className = `${color}-bet-button bet-button`;
+    betButton.textContent = `Bet on ${color} camel`;
+    container.appendChild(betButton);
+    betButton.addEventListener(
+      "click",
+      () => {
+        if (container === legBetContainer) {
+          currentPlayer.takeBettingTicket(color);
+        } else if (container === finishBetDialog) {
+          currentPlayer.placeFinishCard(color, isPickingWinner);
+          finishBetDialog.close();
+          removeFinishBetButtons();
+          isPickingWinner = null;
+        }
+      },
+      false
+    );
+  });
+};
+
+finishWinnerButton.addEventListener("click", () => handleFinishButton(true));
+finishLoserButton.addEventListener("click", () => handleFinishButton(false));
+finishBetCancelButton.addEventListener("click", () => {
+  finishBetDialog.close();
+  removeFinishBetButtons();
+  isPickingWinner = null;
+});
 
 spectatorButton.addEventListener("click", () => spectatorDialog.showModal());
 spectatorCancelButton.addEventListener("click", () => spectatorDialog.close());
@@ -34,6 +58,16 @@ booingButton.addEventListener("click", () => {
   spectatorDialog.close();
   displaySpectatorPlacers(false);
 });
+
+const handleFinishButton = (isWinner) => {
+  if (currentPlayer.finishCards.length < 1) {
+    console.log("you are out of finish cards");
+  } else {
+    isPickingWinner = isWinner;
+    createBetButtons(finishBetDialog);
+    finishBetDialog.showModal();
+  }
+};
 
 // shows the newly placed spectator tile on DOM
 const displaySpectatorTile = (isCheering) => {
@@ -89,6 +123,12 @@ const displaySpectatorPlacers = (isCheering) => {
   });
 };
 
+const removeFinishBetButtons = () => {
+  document.querySelectorAll(`#finish-bet-dialog .bet-button`).forEach((b) => {
+    b.remove();
+  });
+};
+
 const removeSpectatorPlacers = () => {
   document.querySelectorAll(".place-button").forEach((b) => {
     b.remove();
@@ -100,3 +140,5 @@ const resetSpectatorTiles = () => {
     t.remove();
   });
 };
+
+createBetButtons(legBetContainer);
