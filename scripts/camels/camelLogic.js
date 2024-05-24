@@ -8,6 +8,10 @@ let blackCarryingWhite = false;
 
 let raceOver = false;
 
+const racerColors = ["blue", "yellow", "green", "red", "purple"];
+
+let rankedCamels = [];
+
 class Camel {
   constructor(color, position, elevation, camelUnder) {
     this.color = color;
@@ -157,8 +161,6 @@ const allCamels = [
   new Camel("black"),
 ];
 
-let rankedCamels = [];
-
 const setStartingPositions = () => {
   // roll all dice to determine the starting positions of the racers
   for (let i = 0; i < 6; i++) {
@@ -227,5 +229,3 @@ const checkIfFinished = (camel) => {
     endRace();
   }
 };
-
-setStartingPositions();

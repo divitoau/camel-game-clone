@@ -1,3 +1,8 @@
+const playerNames = [];
+const allPlayers = [];
+let currentPlayer;
+let currentPlayerIndex;
+
 class Player {
   constructor(
     name,
@@ -77,38 +82,27 @@ class SpectatorTile {
   }
 }
 
-const playerNames = ["Austin", "Segundo", "Tercero"];
-
-const allPlayers = [];
-
 const generatePlayers = () => {
   playerNames.forEach((n) => {
-    let finishArray = allDice
-      .map((c) => {
-        if (c !== "grey") {
-          return new FinishCard(c, n);
-        }
-      })
-      .filter((f) => f !== undefined);
+    let finishArray = racerColors.map((c) => {
+      return new FinishCard(c, n);
+    });
     allPlayers.push(
       new Player(n, 3, [], 0, new SpectatorTile(n, null, null), finishArray)
     );
   });
+  currentPlayerIndex = Math.floor(Math.random() * allPlayers.length);
+  currentPlayer = allPlayers[currentPlayerIndex];
+  console.log(`${currentPlayer.name}'s turn`);
 };
-
-generatePlayers();
 
 const resetPlayers = () => {
   allPlayers.length = 0;
   generatePlayers();
 };
 
-let currentPlayerNumber = 0;
-let currentPlayer = allPlayers[currentPlayerNumber];
-console.log(`${currentPlayer.name}'s turn`);
-
 const endTurn = () => {
-  currentPlayerNumber = (currentPlayerNumber + 1) % allPlayers.length;
-  currentPlayer = allPlayers[currentPlayerNumber];
+  currentPlayerIndex = (currentPlayerIndex + 1) % allPlayers.length;
+  currentPlayer = allPlayers[currentPlayerIndex];
   console.log(`${currentPlayer.name}'s turn`);
 };

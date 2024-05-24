@@ -17,8 +17,9 @@ const spectatorCancelButton = document.getElementById(
 );
 
 const createBetButtons = (container) => {
-  currentPlayer.finishCards.forEach((f) => {
-    const color = f.color;
+  const isLegBet = container === legBetContainer;
+  (isLegBet ? racerColors : currentPlayer.finishCards).forEach((f) => {
+    const color = isLegBet ? f : f.color;
     const betButton = document.createElement("button");
     betButton.className = `${color}-bet-button bet-button`;
     betButton.textContent = `Bet on ${color} camel`;
@@ -26,9 +27,9 @@ const createBetButtons = (container) => {
     betButton.addEventListener(
       "click",
       () => {
-        if (container === legBetContainer) {
+        if (isLegBet) {
           currentPlayer.takeBettingTicket(color);
-        } else if (container === finishBetDialog) {
+        } else {
           currentPlayer.placeFinishCard(color, isPickingWinner);
           finishBetDialog.close();
           removeFinishBetButtons();
@@ -39,6 +40,7 @@ const createBetButtons = (container) => {
     );
   });
 };
+createBetButtons(legBetContainer);
 
 finishWinnerButton.addEventListener("click", () => handleFinishButton(true));
 finishLoserButton.addEventListener("click", () => handleFinishButton(false));
@@ -140,5 +142,3 @@ const resetSpectatorTiles = () => {
     t.remove();
   });
 };
-
-createBetButtons(legBetContainer);

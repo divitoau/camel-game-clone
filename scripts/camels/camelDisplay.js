@@ -34,5 +34,3 @@ const displayNewPosition = (color) => {
   camelFigure.className = `camel elevation-${camel.elevation}`;
   newSpace.appendChild(camelFigure);
 };
-
-displayCamels()

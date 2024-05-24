@@ -14,6 +14,7 @@ class FinishCard {
 
 let finishWinnerStack = [];
 let finishLoserStack = [];
+let remainingBettingTickets;
 
 const allBettingTickets = {
   blue: [
@@ -48,12 +49,9 @@ const allBettingTickets = {
   ],
 };
 
-let remainingBettingTickets;
-
 const resetBettingTickets = () => {
   remainingBettingTickets = JSON.parse(JSON.stringify(allBettingTickets));
 };
-
 resetBettingTickets();
 
 const resetFinishCards = () => {
