@@ -54,6 +54,10 @@ class Player {
     } else {
       finishLoserStack.push(finishCard);
     }
+    console.log(
+      `${this.name} placed a bet on overall ${isWinner ? "winner" : "loser"}`
+    );
+    endTurn();
   }
 
   resolveLeg(newMoney) {
