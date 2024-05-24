@@ -1,10 +1,18 @@
 class Player {
-  constructor(name, money, bettingTickets, pyramidTickets, spectatorTile) {
+  constructor(
+    name,
+    money,
+    bettingTickets,
+    pyramidTickets,
+    spectatorTile,
+    finishCards
+  ) {
     this.name = name;
     this.money = money;
     this.bettingTickets = bettingTickets;
     this.pyramidTickets = pyramidTickets;
     this.spectatorTile = spectatorTile;
+    this.finishCards = finishCards;
   }
 
   takeBettingTicket(color) {
@@ -54,11 +62,26 @@ class SpectatorTile {
   }
 }
 
-const allPlayers = [
-  new Player("Austin", 3, [], 0, new SpectatorTile("Austin", null, null)),
-  new Player("Enemy", 3, [], 0, new SpectatorTile("Enemy", null, null)),
-  new Player("Third Guy", 3, [], 0, new SpectatorTile("Third Guy", null, null)),
-];
+let playerNames = ["Austin", "Segundo", "Tercero"];
+
+const allPlayers = [];
+
+const generatePlayers = () => {
+  playerNames.forEach((n) => {
+    let finishArray = allDice
+      .map((c) => {
+        if (c !== "grey") {
+          return new FinishCard(c, n);
+        }
+      })
+      .filter((f) => f !== undefined);
+    allPlayers.push(
+      new Player(n, 3, [], 0, new SpectatorTile(n, null, null), finishArray)
+    );
+  });
+};
+
+generatePlayers();
 
 let currentPlayerNumber = 0;
 let currentPlayer = allPlayers[currentPlayerNumber];

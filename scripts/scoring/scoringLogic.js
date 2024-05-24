@@ -1,6 +1,14 @@
 class BettingTicket {
   constructor(color, value) {
-    (this.color = color), (this.value = value);
+    this.color = color;
+    this.value = value;
+  }
+}
+
+class FinishCard {
+  constructor(color, playerName) {
+    this.color = color;
+    this.playerName = playerName;
   }
 }
 
