@@ -58,6 +58,9 @@ const resetGame = () => {
   removeCamels();
   setStartingPositions();
   displayCamels();
+  resetSpectatorTiles();
+  resetFinishCards();
+  resetPlayers();
 };
 
 const bopPyramid = () => {

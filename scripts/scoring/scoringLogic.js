@@ -12,6 +12,9 @@ class FinishCard {
   }
 }
 
+let finishWinnerStack = [];
+let finishLoserStack = [];
+
 const allBettingTickets = {
   blue: [
     new BettingTicket("blue", 5),
@@ -53,8 +56,10 @@ const resetBettingTickets = () => {
 
 resetBettingTickets();
 
-let finishWinnerStack = []
-let finishLoserStack = []
+const resetFinishCards = () => {
+  finishWinnerStack.length = 0;
+  finishLoserStack.length = 0;
+};
 
 const endLeg = () => {
   const legLeader = rankedCamels[0].color;
@@ -89,10 +94,39 @@ const endLeg = () => {
   });
 };
 
+const countFinishCards = (isWinner) => {
+  console.log(`${isWinner ? "winner" : "loser"} bets:`);
+  const betSuccess = isWinner ? rankedCamels[0].color : rankedCamels[4].color;
+  const finishBetValues = [8, 5, 3, 2];
+  let finishBetIndex = 0;
+  (isWinner ? finishWinnerStack : finishLoserStack).forEach((f) => {
+    const owner = allPlayers.find((p) => p.name === f.playerName);
+    if (f.color === betSuccess) {
+      const finishWinnings = finishBetValues[finishBetIndex];
+      console.log(
+        `${owner.name} earned ${finishWinnings} for their bet on ${f.color}`
+      );
+      if (finishBetIndex < 4) {
+        owner.money += finishWinnings;
+        finishBetIndex += 1;
+      } else {
+        owner.money += 1;
+      }
+    } else {
+      console.log(`${owner.name} lost 1 for their bet on ${f.color}`);
+      owner.money -= 1;
+    }
+  });
+};
+
 const endRace = () => {
   raceOver = true;
+  const winnerCamel = rankedCamels[0].color;
+  const loserCamel = rankedCamels[4].color;
   console.log("race over");
-  console.log(`winner: ${rankedCamels[0].color}`);
-  console.log(`loser: ${rankedCamels[4].color}`);
+  console.log(`winner: ${winnerCamel}`);
+  console.log(`loser: ${loserCamel}`);
+  countFinishCards(true);
+  countFinishCards(false);
   promptResetGame();
 };

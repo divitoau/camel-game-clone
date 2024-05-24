@@ -77,7 +77,7 @@ class SpectatorTile {
   }
 }
 
-let playerNames = ["Austin", "Segundo", "Tercero"];
+const playerNames = ["Austin", "Segundo", "Tercero"];
 
 const allPlayers = [];
 
@@ -97,6 +97,11 @@ const generatePlayers = () => {
 };
 
 generatePlayers();
+
+const resetPlayers = () => {
+  allPlayers.length = 0;
+  generatePlayers();
+};
 
 let currentPlayerNumber = 0;
 let currentPlayer = allPlayers[currentPlayerNumber];
