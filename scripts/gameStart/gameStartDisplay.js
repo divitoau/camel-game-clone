@@ -10,15 +10,20 @@ if (playerNames.length < 2) {
 }
 
 const addPlayer = () => {
-  const newPlayer = newPlayerInput.value;
-  if (playerNames.includes(newPlayer)) {
+  const newPlayer = newPlayerInput.value.trim().substring(0, 16);
+  if (newPlayer === "") {
+    console.log("Player name cannot be empty");
+    newPlayerInput.value = "";
+  } else if (playerNames.includes(newPlayer)) {
     console.log(`${newPlayer} is already taken`);
   } else {
     playerNames.push(newPlayer);
     if (playerNames.length === 2) {
       promptStartGame();
     }
-    startingPlayerList.innerHTML += `<p>${newPlayer}</p>`;
+    const playerElement = document.createElement("p");
+    playerElement.textContent = newPlayer;
+    startingPlayerList.appendChild(playerElement);
     newPlayerInput.value = "";
   }
 };
