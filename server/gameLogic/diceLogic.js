@@ -8,16 +8,16 @@ let whiteCarryingBlack = false;
 let blackCarryingWhite = false;
 
 const getWhiteCarryingRacer = () => {
-  whiteCarryingRacer;
+  return whiteCarryingRacer;
 };
 const getBlackCarryingRacer = () => {
-  blackCarryingRacer;
+  return blackCarryingRacer;
 };
 const getWhiteCarryingBlack = () => {
-  whiteCarryingBlack;
+  return whiteCarryingBlack;
 };
 const getBlackCarryingWhite = () => {
-  blackCarryingWhite;
+  return blackCarryingWhite;
 };
 
 const setWhiteCarryingRacer = (value) => {
