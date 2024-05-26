@@ -1,3 +1,5 @@
+const racerColors = ["blue", "yellow", "green", "red", "purple"];
+
 const legBetContainer = document.getElementById("leg-bet-container");
 
 const finishWinnerButton = document.getElementById("finish-winner-button");

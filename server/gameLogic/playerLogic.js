@@ -82,6 +82,21 @@ class SpectatorTile {
   }
 }
 
+const addPlayer = (name) => {
+  let msg;
+  if (name === "") {
+    msg = "Player name cannot be empty";
+  } else if (playerNames.includes(name)) {
+    msg = `${name} is already taken`;
+  } else {
+    playerNames.push(name);
+    msg = `${name} added`;
+    if (playerNames.length === 2) {
+      // ******* figure out some logic designating a host who can start the game
+    }
+  }
+};
+
 const generatePlayers = () => {
   playerNames.forEach((n) => {
     let finishArray = racerColors.map((c) => {

@@ -13,7 +13,7 @@
     <dialog id="game-start-dialog">
       <h2>Welcome to Camel Up!</h2>
       <label for="new-player-input">add a new player</label>
-      <input type="text" id="new-player-input" placeholder="name"/>
+      <input type="text" id="new-player-input" placeholder="name" />
       <button id="add-player-button">add player</button>
       <div id="starting-player-list"></div>
     </dialog>
@@ -133,14 +133,11 @@
       <button id="booing-button">Booing</button>
       <button id="spectator-cancel-button">Cancel</button>
     </dialog>
-    <script src="scripts/dice-roller/diceLogic.js"></script>
-    <script src="scripts/dice-roller/diceDisplay.js"></script>
-    <script src="scripts/camels/camelLogic.js"></script>
-    <script src="scripts/camels/camelDisplay.js"></script>
-    <script src="scripts/scoring/scoringLogic.js"></script>
-    <script src="scripts/players/playerLogic.js"></script>
-    <script src="scripts/players/playerDisplay.js"></script>
-    <script src="scripts/gameStart/gameStartLogic.js"></script>
-    <script src="scripts/gameStart/gameStartDisplay.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="./diceDisplay.js"></script>
+    <script src="./camelDisplay.js"></script>
+    <script src="./playerDisplay.js"></script>
+    <script src="./gameStartDisplay.js"></script>
   </body>
 </html>

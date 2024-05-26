@@ -5,11 +5,11 @@ const startingPlayerList = document.getElementById("starting-player-list");
 
 addPlayerButton.addEventListener("click", () => addPlayer());
 
-if (playerNames.length < 2) {
+/* if (playerNames.length < 2) {
   gameStartDialog.showModal();
-}
+} */
 
-const addPlayer = () => {
+/* const addPlayer = () => {
   const newPlayer = newPlayerInput.value.trim().substring(0, 16);
   if (newPlayer === "") {
     console.log("Player name cannot be empty");
@@ -26,7 +26,7 @@ const addPlayer = () => {
     startingPlayerList.appendChild(playerElement);
     newPlayerInput.value = "";
   }
-};
+}; */
 
 const promptStartGame = () => {
   startGameButton = document.createElement("button");
