@@ -3,6 +3,15 @@ const allPlayers = [];
 let currentPlayer;
 let currentPlayerIndex;
 
+const racerColors = ["blue", "yellow", "green", "red", "purple"];
+
+class FinishCard {
+  constructor(color, playerName) {
+    this.color = color;
+    this.playerName = playerName;
+  }
+}
+
 class Player {
   constructor(
     name,
@@ -82,6 +91,10 @@ class SpectatorTile {
   }
 }
 
+const getCurrentPlayer = () => {
+  return currentPlayer;
+};
+
 const addPlayer = (name) => {
   let msg;
   if (name === "") {
@@ -91,10 +104,11 @@ const addPlayer = (name) => {
   } else {
     playerNames.push(name);
     msg = `${name} added`;
-    if (playerNames.length === 2) {
+    /*     if (playerNames.length === 2) {
       // ******* figure out some logic designating a host who can start the game
-    }
+    } */
   }
+  return msg;
 };
 
 const generatePlayers = () => {
@@ -120,4 +134,12 @@ const endTurn = () => {
   currentPlayerIndex = (currentPlayerIndex + 1) % allPlayers.length;
   currentPlayer = allPlayers[currentPlayerIndex];
   console.log(`${currentPlayer.name}'s turn`);
+};
+
+module.exports = {
+  allPlayers,
+  playerNames,
+  getCurrentPlayer,
+  addPlayer,
+  generatePlayers,
 };

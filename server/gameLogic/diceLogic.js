@@ -1,6 +1,37 @@
 const allDice = ["blue", "yellow", "green", "red", "purple", "grey"];
 let diceInPyramid = [...allDice];
 
+// booleans to track whether the crazy camels are being ridden
+let whiteCarryingRacer = false;
+let blackCarryingRacer = false;
+let whiteCarryingBlack = false;
+let blackCarryingWhite = false;
+
+const getWhiteCarryingRacer = () => {
+  whiteCarryingRacer;
+};
+const getBlackCarryingRacer = () => {
+  blackCarryingRacer;
+};
+const getWhiteCarryingBlack = () => {
+  whiteCarryingBlack;
+};
+const getBlackCarryingWhite = () => {
+  blackCarryingWhite;
+};
+
+const setWhiteCarryingRacer = (value) => {
+  whiteCarryingRacer = value;
+};
+const setBlackCarryingRacer = (value) => {
+  blackCarryingRacer = value;
+};
+const setWhiteCarryingBlack = (value) => {
+  whiteCarryingBlack = value;
+};
+const setBlackCarryingWhite = (value) => {
+  blackCarryingWhite = value;
+};
 // chooses a die from what is currently in the pyramid
 const selectDie = () => {
   const dieIndex = Math.floor(Math.random() * diceInPyramid.length);
@@ -32,7 +63,6 @@ const resolveResult = (die, face) => {
 
 // puts all dice back in pyramid
 const resetPyramid = () => {
-  resetTents();
   diceInPyramid = [...allDice];
 };
 
@@ -84,4 +114,18 @@ const bopPyramid = () => {
     resetSpectatorTiles();
     console.log(`${currentPlayer.name}'s turn`);
   }
+};
+
+module.exports = {
+  rollDie,
+  resetPyramid,
+  selectFace,
+  getWhiteCarryingRacer,
+  getBlackCarryingRacer,
+  getWhiteCarryingBlack,
+  getBlackCarryingWhite,
+  setWhiteCarryingRacer,
+  setBlackCarryingRacer,
+  setWhiteCarryingBlack,
+  setBlackCarryingWhite,
 };

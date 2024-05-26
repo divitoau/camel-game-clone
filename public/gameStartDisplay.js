@@ -5,27 +5,17 @@ const startingPlayerList = document.getElementById("starting-player-list");
 
 addPlayerButton.addEventListener("click", () => addPlayer());
 
-/* if (playerNames.length < 2) {
+const openStartDialog = () => {
   gameStartDialog.showModal();
-} */
+};
 
-/* const addPlayer = () => {
-  const newPlayer = newPlayerInput.value.trim().substring(0, 16);
-  if (newPlayer === "") {
-    console.log("Player name cannot be empty");
-    newPlayerInput.value = "";
-  } else if (playerNames.includes(newPlayer)) {
-    console.log(`${newPlayer} is already taken`);
-  } else {
-    playerNames.push(newPlayer);
-    if (playerNames.length === 2) {
-      promptStartGame();
-    }
-    const playerElement = document.createElement("p");
-    playerElement.textContent = newPlayer;
-    startingPlayerList.appendChild(playerElement);
-    newPlayerInput.value = "";
-  }
+// ***** this will take some working out with multiple sockets
+
+/* const displayNewPlayer = () => {
+  const playerElement = document.createElement("p");
+  playerElement.textContent = newPlayer;
+  startingPlayerList.appendChild(playerElement);
+  newPlayerInput.value = "";
 }; */
 
 const promptStartGame = () => {
@@ -33,11 +23,4 @@ const promptStartGame = () => {
   startGameButton.innerText = "start game";
   startGameButton.addEventListener("click", () => startGame());
   gameStartDialog.appendChild(startGameButton);
-};
-
-const startGame = () => {
-  gameStartDialog.close();
-  generatePlayers();
-  setStartingPositions();
-  displayCamels();
 };

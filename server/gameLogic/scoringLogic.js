@@ -5,13 +5,6 @@ class BettingTicket {
   }
 }
 
-class FinishCard {
-  constructor(color, playerName) {
-    this.color = color;
-    this.playerName = playerName;
-  }
-}
-
 let finishWinnerStack = [];
 let finishLoserStack = [];
 let remainingBettingTickets;

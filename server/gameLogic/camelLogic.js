@@ -1,14 +1,20 @@
+const {
+  rollDie,
+  resetPyramid,
+  selectFace,
+  getWhiteCarryingRacer,
+  getBlackCarryingRacer,
+  getWhiteCarryingBlack,
+  getBlackCarryingWhite,
+  setWhiteCarryingRacer,
+  setBlackCarryingRacer,
+  setWhiteCarryingBlack,
+  setBlackCarryingWhite,
+} = require("./diceLogic");
+
 // this file contains the logic for the movement of the camels
 
-// booleans to track whether the crazy camels are being ridden
-let whiteCarryingRacer = false;
-let blackCarryingRacer = false;
-let whiteCarryingBlack = false;
-let blackCarryingWhite = false;
-
 let raceOver = false;
-
-const racerColors = ["blue", "yellow", "green", "red", "purple"];
 
 let rankedCamels = [];
 
@@ -31,10 +37,10 @@ class Camel {
 
       // check if a camel is getting off of black or white
       if (this.camelUnder?.color === "white") {
-        whiteCarryingRacer = false;
+        setWhiteCarryingRacer(false);
       }
       if (this.camelUnder?.color === "black") {
-        blackCarryingRacer = false;
+        setBlackCarryingRacer(false);
       }
     }
 
@@ -126,15 +132,15 @@ class Camel {
 
     // logic for determing whether black or white are currently being ridden
     if (this.color === "white") {
-      blackCarryingWhite = this.camelUnder?.color === "black";
+      setBlackCarryingRacer(this.camelUnder?.color === "black");
     } else if (this.color === "black") {
-      whiteCarryingBlack = this.camelUnder?.color === "white";
+      setWhiteCarryingRacer(this.camelUnder?.color === "white");
     } else {
       if (this.camelUnder?.color === "white") {
-        whiteCarryingRacer = true;
+        setWhiteCarryingRacer(true);
       }
       if (this.camelUnder?.color === "black") {
-        blackCarryingRacer = true;
+        setBlackCarryingRacer(true);
       }
     }
 
@@ -181,7 +187,7 @@ const setStartingPositions = () => {
   }
 
   // put dice back
-  diceInPyramid = [...allDice];
+  resetPyramid();
 
   // so that starting ranking is known in case i ever try to write a computer player
   getRanking();
@@ -203,8 +209,8 @@ const setStartingPositions = () => {
   );
   if (otherCrazyCamel.elevation === 1) {
     crazyColor === "white"
-      ? (whiteCarryingBlack = true)
-      : (blackCarryingWhite = true);
+      ? setWhiteCarryingRacer(true)
+      : setBlackCarryingRacer(true);
   }
 };
 
@@ -228,4 +234,9 @@ const checkIfFinished = (camel) => {
     endLeg();
     endRace();
   }
+};
+
+module.exports = {
+  allCamels,
+  setStartingPositions,
 };

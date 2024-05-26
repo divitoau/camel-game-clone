@@ -1,4 +1,4 @@
-const displayCamels = () => {
+const displayCamels = (allCamels) => {
  allCamels.forEach((camel) => {
         // creates an html element to represent a camel, assigns attributes, and appends to appropriate board space
         const camelFigure = document.createElement("div");
