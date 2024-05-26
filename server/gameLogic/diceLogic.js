@@ -7,19 +7,6 @@ let blackCarryingRacer = false;
 let whiteCarryingBlack = false;
 let blackCarryingWhite = false;
 
-const getWhiteCarryingRacer = () => {
-  return whiteCarryingRacer;
-};
-const getBlackCarryingRacer = () => {
-  return blackCarryingRacer;
-};
-const getWhiteCarryingBlack = () => {
-  return whiteCarryingBlack;
-};
-const getBlackCarryingWhite = () => {
-  return blackCarryingWhite;
-};
-
 const setWhiteCarryingRacer = (value) => {
   whiteCarryingRacer = value;
 };
@@ -120,10 +107,6 @@ module.exports = {
   rollDie,
   resetPyramid,
   selectFace,
-  getWhiteCarryingRacer,
-  getBlackCarryingRacer,
-  getWhiteCarryingBlack,
-  getBlackCarryingWhite,
   setWhiteCarryingRacer,
   setBlackCarryingRacer,
   setWhiteCarryingBlack,

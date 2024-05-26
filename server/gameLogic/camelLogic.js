@@ -2,10 +2,6 @@ const {
   rollDie,
   resetPyramid,
   selectFace,
-  getWhiteCarryingRacer,
-  getBlackCarryingRacer,
-  getWhiteCarryingBlack,
-  getBlackCarryingWhite,
   setWhiteCarryingRacer,
   setBlackCarryingRacer,
   setWhiteCarryingBlack,
@@ -132,9 +128,9 @@ class Camel {
 
     // logic for determing whether black or white are currently being ridden
     if (this.color === "white") {
-      setBlackCarryingRacer(this.camelUnder?.color === "black");
+      setBlackCarryingWhite(this.camelUnder?.color === "black");
     } else if (this.color === "black") {
-      setWhiteCarryingRacer(this.camelUnder?.color === "white");
+      setWhiteCarryingBlack(this.camelUnder?.color === "white");
     } else {
       if (this.camelUnder?.color === "white") {
         setWhiteCarryingRacer(true);
@@ -209,8 +205,8 @@ const setStartingPositions = () => {
   );
   if (otherCrazyCamel.elevation === 1) {
     crazyColor === "white"
-      ? setWhiteCarryingRacer(true)
-      : setBlackCarryingRacer(true);
+      ? setWhiteCarryingBlack(true)
+      : setBlackCarryingWhite(true);
   }
 };
 
