@@ -1,29 +1,13 @@
+const gameState = require("./gameState");
+
 const allDice = ["blue", "yellow", "green", "red", "purple", "grey"];
-let diceInPyramid = [...allDice];
 
-// booleans to track whether the crazy camels are being ridden
-let whiteCarryingRacer = false;
-let blackCarryingRacer = false;
-let whiteCarryingBlack = false;
-let blackCarryingWhite = false;
-
-const setWhiteCarryingRacer = (value) => {
-  whiteCarryingRacer = value;
-};
-const setBlackCarryingRacer = (value) => {
-  blackCarryingRacer = value;
-};
-const setWhiteCarryingBlack = (value) => {
-  whiteCarryingBlack = value;
-};
-const setBlackCarryingWhite = (value) => {
-  blackCarryingWhite = value;
-};
 // chooses a die from what is currently in the pyramid
 const selectDie = () => {
-  const dieIndex = Math.floor(Math.random() * diceInPyramid.length);
-  const selectedDie = diceInPyramid[dieIndex];
-  diceInPyramid.splice(dieIndex, 1);
+  const dieIndex = Math.floor(Math.random() * gameState.diceInPyramid.length);
+  const selectedDie = gameState.diceInPyramid[dieIndex];
+  const rolledDie = gameState.diceInPyramid.splice(dieIndex, 1);
+  gameState.diceOnTents.push(rolledDie);
   return selectedDie;
 };
 
@@ -37,20 +21,15 @@ const resolveResult = (die, face) => {
   let color = die;
   let number = face > 3 ? face - 3 : face;
   if (die === "grey") {
-    if (whiteCarryingRacer !== blackCarryingRacer) {
-      color = whiteCarryingRacer ? "grey-white" : "grey-black";
-    } else if (whiteCarryingBlack !== blackCarryingWhite) {
-      color = whiteCarryingBlack ? "grey-black" : "grey-white";
+    if (gameState.whiteCarryingRacer !== gameState.blackCarryingRacer) {
+      color = gameState.whiteCarryingRacer ? "grey-white" : "grey-black";
+    } else if (gameState.whiteCarryingBlack !== gameState.blackCarryingWhite) {
+      color = gameState.whiteCarryingBlack ? "grey-black" : "grey-white";
     } else {
       color = face > 3 ? "grey-black" : "grey-white";
     }
   }
   return { color, number };
-};
-
-// puts all dice back in pyramid
-const resetPyramid = () => {
-  diceInPyramid = [...allDice];
 };
 
 const rollDie = () => {
@@ -65,38 +44,27 @@ const identifyCamel = (result) => {
   const camelColor = result.color.startsWith("grey-")
     ? result.color.substring(5)
     : result.color;
-  return allCamels.find((c) => c.color === camelColor);
-};
-
-const resetGame = () => {
-  console.log("resetting game");
-  raceOver = false;
-  resetPyramid();
-  removeCamels();
-  setStartingPositions();
-  displayCamels();
-  resetSpectatorTiles();
-  resetFinishCards();
-  resetPlayers();
+  return gameState.allCamels.find((c) => c.color === camelColor);
 };
 
 const bopPyramid = () => {
-  if (raceOver === true) {
+  const currentPlayer = gameState.allPlayers[currentPlayerIndex];
+  if (gameState.raceOver === true) {
     resetGame();
-  } else if (diceInPyramid.length > 1) {
+  } else if (gameState.diceInPyramid.length > 1) {
     result = rollDie();
     displayDie(result);
     currentPlayer.takePyramidTicket();
     const camel = identifyCamel(result);
     camel.move(result.number);
     // changes button text when 5 dice are displayed
-    if (diceInPyramid.length === 1 && raceOver !== true) {
+    if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
       endLeg();
       promptResetPyramid();
     }
   } else {
     // pressing button again when 5 dice are displayed reloads them into pyramid
-    resetPyramid();
+    gameState.resetPyramid();
     resetBettingTickets();
     resetSpectatorTiles();
     console.log(`${currentPlayer.name}'s turn`);
@@ -105,10 +73,5 @@ const bopPyramid = () => {
 
 module.exports = {
   rollDie,
-  resetPyramid,
   selectFace,
-  setWhiteCarryingRacer,
-  setBlackCarryingRacer,
-  setWhiteCarryingBlack,
-  setBlackCarryingWhite,
 };

@@ -1,0 +1,11 @@
+const resetGame = () => {
+  console.log("resetting game");
+  gameState.setRaceOver(false);
+  gameState.resetPyramid();
+  removeCamels();
+  setStartingPositions();
+  displayCamels();
+  resetSpectatorTiles();
+  resetFinishCards();
+  regeneratePlayers();
+};
