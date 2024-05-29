@@ -1,11 +1,13 @@
 const pyramidButton = document.getElementById("pyramid-button");
-pyramidButton.addEventListener("click", () => bopPyramid());
+pyramidButton.addEventListener("click", () => takePyramidTicket());
 
-const displayDie = (result) => {
-  const nextTentNumber = 6 - diceInPyramid.length;
-  let nextTent = document.getElementById(`tent-${nextTentNumber}`);
-  nextTent.className = `dice-tent ${result.color}-die`;
-  nextTent.innerHTML = `<p>${result.number}</p>`;
+const displayDice = (dice) => {
+  dice.forEach((d) => {
+    const tentNumber = dice.indexOf(d) + 1;
+    let tent = document.getElementById(`tent-${tentNumber}`);
+    tent.className = `dice-tent ${d.color}-die`;
+    tent.innerHTML = `<p>${d.number}</p>`;
+  });
 };
 
 const promptResetPyramid = () => {

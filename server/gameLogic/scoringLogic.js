@@ -73,3 +73,5 @@ const endRace = () => {
   countFinishCards(false);
   promptResetGame();
 };
+
+module.exports = { endLeg, endRace };

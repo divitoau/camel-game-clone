@@ -18,6 +18,10 @@ io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
   socket.emit("fullState", gameState.getGameState());
 
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+
   socket.on("newPlayer", (newPlayer) => {
     socket.emit("newPlayerRes", addPlayer(newPlayer), gameState.playerNames);
   });
@@ -25,12 +29,27 @@ io.on("connection", (socket) => {
   socket.on("startGame", () => {
     generatePlayers();
     setStartingPositions();
-    gameState.resetPyramid()
+    gameState.resetPyramid();
     socket.emit("startGameRes", gameState.getGameState());
   });
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
+  socket.on("takePyramidTicket", () => {
+    if (gameState.diceInPyramid.length > 1) {
+      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+      currentPlayer.takePyramidTicket();
+      socket.emit(
+        "takePyramidTicketRes",
+        currentPlayer,
+        gameState.diceOnTents,
+        gameState.allCamels,
+        gameState.allPlayers
+      );
+      // changes button text when 5 dice are displayed
+      if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
+        endLeg();
+        socket.emit("endLeg", gameState.getGameState());
+      }
+    }
   });
 });
 

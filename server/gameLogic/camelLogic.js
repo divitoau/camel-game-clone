@@ -1,5 +1,6 @@
 const gameState = require("./gameState");
 const { rollDie, selectFace } = require("./diceLogic");
+const { endLeg, endRace } = require("./scoringLogic");
 
 // this file contains the logic for the movement of the camels
 
@@ -85,13 +86,11 @@ class Camel {
           }
         }
         cos.elevation += camelsAbove.length + 1;
-        displayNewPosition(cos.color);
       });
       // resolves position of camels riding the moving camel if group is going under
       camelsAbove.forEach((ca) => {
         ca.position = newPosition;
         ca.elevation -= this.elevation;
-        displayNewPosition(ca.color);
       });
 
       // places moving camel on bottom
@@ -107,7 +106,6 @@ class Camel {
       camelsAbove.forEach((c) => {
         c.position = newPosition;
         c.elevation = camelsOnSpace.length + (c.elevation - this.elevation);
-        displayNewPosition(c.color);
       });
 
       // places moving camel
@@ -132,7 +130,6 @@ class Camel {
     }
 
     // update dom, check rankings and if anyone's crossed finish
-    displayNewPosition(this.color);
     gameState.getRanking();
     checkIfFinished(this);
   }

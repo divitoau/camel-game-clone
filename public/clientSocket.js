@@ -6,6 +6,7 @@ socket.on("fullState", (state) => {
     openStartDialog();
   } else {
     displayCamels(state.allCamels);
+    displayDice(state.diceOnTents);
   }
 });
 
@@ -22,6 +23,14 @@ socket.on("startGameRes", (state) => {
   displayCamels(state.allCamels);
 });
 
+socket.on("takePyramidTicketRes", (player, dice, allCamels, allPlayers) => {
+  displayDice(dice);
+  displayNewPosition(allCamels);
+  console.log(
+    `${player.name} snagged a pyramid ticket, now has ${player.pyramidTickets}`
+  );
+});
+
 const addPlayer = () => {
   const newPlayer = newPlayerInput.value.trim().substring(0, 16);
   if (newPlayer === "") {
@@ -35,4 +44,8 @@ const addPlayer = () => {
 
 const startGame = () => {
   socket.emit("startGame");
+};
+
+const takePyramidTicket = () => {
+  socket.emit("takePyramidTicket");
 };

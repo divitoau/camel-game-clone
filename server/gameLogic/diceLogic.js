@@ -1,13 +1,10 @@
 const gameState = require("./gameState");
 
-const allDice = ["blue", "yellow", "green", "red", "purple", "grey"];
-
 // chooses a die from what is currently in the pyramid
 const selectDie = () => {
   const dieIndex = Math.floor(Math.random() * gameState.diceInPyramid.length);
   const selectedDie = gameState.diceInPyramid[dieIndex];
   const rolledDie = gameState.diceInPyramid.splice(dieIndex, 1);
-  gameState.diceOnTents.push(rolledDie);
   return selectedDie;
 };
 
@@ -29,6 +26,10 @@ const resolveResult = (die, face) => {
       color = face > 3 ? "grey-black" : "grey-white";
     }
   }
+  gameState.diceOnTents.push({
+    color,
+    number,
+  });
   return { color, number };
 };
 
@@ -48,16 +49,12 @@ const identifyCamel = (result) => {
 };
 
 const bopPyramid = () => {
-  const currentPlayer = gameState.allPlayers[currentPlayerIndex];
-  if (gameState.raceOver === true) {
-    resetGame();
-  } else if (gameState.diceInPyramid.length > 1) {
+  if (gameState.diceInPyramid.length > 1) {
     result = rollDie();
-    displayDie(result);
-    currentPlayer.takePyramidTicket();
     const camel = identifyCamel(result);
     camel.move(result.number);
-    // changes button text when 5 dice are displayed
+  }
+  /*     // changes button text when 5 dice are displayed
     if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
       endLeg();
       promptResetPyramid();
@@ -66,12 +63,12 @@ const bopPyramid = () => {
     // pressing button again when 5 dice are displayed reloads them into pyramid
     gameState.resetPyramid();
     resetBettingTickets();
-    resetSpectatorTiles();
     console.log(`${currentPlayer.name}'s turn`);
-  }
+  } */
 };
 
 module.exports = {
   rollDie,
   selectFace,
+  bopPyramid,
 };

@@ -1,4 +1,5 @@
 const gameState = require("./gameState");
+const { bopPyramid } = require("./diceLogic");
 
 const racerColors = ["blue", "yellow", "green", "red", "purple"];
 
@@ -50,9 +51,7 @@ class Player {
 
   takePyramidTicket() {
     this.pyramidTickets += 1;
-    console.log(
-      `${this.name} snagged a pyramid ticket, now has ${this.pyramidTickets}`
-    );
+    bopPyramid();
     endTurn();
   }
 
