@@ -1,7 +1,6 @@
 const express = require("express");
 const { createServer } = require("node:http");
 const { Server } = require("socket.io");
-const indexRouter = require("./index.js");
 
 const manager = require("./sessionManager.js");
 const gameState = require("./gameLogic/gameState.js");
@@ -13,7 +12,6 @@ const server = createServer(app);
 const io = new Server(server);
 
 app.use(express.static("public"));
-app.use("/", indexRouter);
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -25,7 +23,7 @@ io.on("connection", (socket) => {
 
   socket.on("playerId", (playerId) => {
     if (playerId) {
-      player = manager.allMaps.find((p) => p.playerId === playerId);
+      const player = manager.allMaps.find((p) => p.playerId === playerId);
       if (player) {
         player.socketId = socket.id;
       }
@@ -34,10 +32,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on("newPlayer", (name, playerId) => {
-    if (playerId.length !== 8) {
+    const playerSockets = manager.allMaps.map((m) => {
+      return m.socketId;
+    });
+    if (playerSockets.includes(socket.id)) {
+      socket.emit("newPlayerRes", "there is already a player on this socket");
+    } else if (playerId.length !== 8) {
       socket.emit("newPlayerRes", "playerId error");
-    }
-    if (name === "") {
+    } else if (name === "") {
       socket.emit("newPlayerRes", "Player name cannot be empty");
     } else if (gameState.playerNames.includes(name)) {
       socket.emit("newPlayerRes", `${name} is already taken`);
@@ -50,6 +52,7 @@ io.on("connection", (socket) => {
         `${name} ${playerMap.isHost ? "is hosting" : "joined"}`,
         gameState.playerNames
       );
+      socket.emit("declareHost", playerMap.isHost);
     }
   });
 
@@ -57,7 +60,7 @@ io.on("connection", (socket) => {
     generatePlayers();
     setStartingPositions();
     gameState.resetPyramid();
-    socket.emit("startGameRes", gameState.getGameState());
+    io.emit("startGameRes", gameState.getGameState());
   });
 
   socket.on("takePyramidTicket", () => {

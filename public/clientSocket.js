@@ -19,10 +19,14 @@ socket.on("newPlayerRes", (res, playerNames) => {
   console.log(res);
   if (playerNames) {
     console.log(playerNames);
-    if (playerNames.length === 2) {
+    if (playerNames.length === 2 && getIsGameHost()) {
       promptStartGame();
     }
   }
+});
+
+socket.on("declareHost", (isHost) => {
+  setIsGameHost(isHost);
 });
 
 socket.on("startGameRes", (state) => {
