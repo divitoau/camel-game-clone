@@ -3,6 +3,7 @@ const { createServer } = require("node:http");
 const { Server } = require("socket.io");
 const indexRouter = require("./index.js");
 
+const manager = require("./sessionManager.js");
 const gameState = require("./gameLogic/gameState.js");
 const { setStartingPositions } = require("./gameLogic/camelLogic");
 const { addPlayer, generatePlayers } = require("./gameLogic/playerLogic");
@@ -22,8 +23,34 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
   });
 
-  socket.on("newPlayer", (newPlayer) => {
-    socket.emit("newPlayerRes", addPlayer(newPlayer), gameState.playerNames);
+  socket.on("playerId", (playerId) => {
+    if (playerId) {
+      player = manager.allMaps.find((p) => p.playerId === playerId);
+      if (player) {
+        player.socketId = socket.id;
+      }
+    }
+    console.log(manager.allMaps);
+  });
+
+  socket.on("newPlayer", (name, playerId) => {
+    if (playerId.length !== 8) {
+      socket.emit("newPlayerRes", "playerId error");
+    }
+    if (name === "") {
+      socket.emit("newPlayerRes", "Player name cannot be empty");
+    } else if (gameState.playerNames.includes(name)) {
+      socket.emit("newPlayerRes", `${name} is already taken`);
+    } else {
+      playerMap = manager.createPlayerMap(name, playerId, socket.id);
+      addPlayer(name);
+      console.log(manager.allMaps);
+      io.emit(
+        "newPlayerRes",
+        `${name} ${playerMap.isHost ? "is hosting" : "joined"}`,
+        gameState.playerNames
+      );
+    }
   });
 
   socket.on("startGame", () => {

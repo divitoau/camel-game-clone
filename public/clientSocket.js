@@ -1,5 +1,10 @@
 const socket = io();
 
+socket.on("connect", () => {
+  const playerId = getPlayerId();
+  socket.emit("playerId", playerId ? playerId : "");
+});
+
 socket.on("fullState", (state) => {
   console.log(state);
   if (state.allPlayers.length < 2) {
@@ -12,9 +17,11 @@ socket.on("fullState", (state) => {
 
 socket.on("newPlayerRes", (res, playerNames) => {
   console.log(res);
-  console.log(playerNames);
-  if (playerNames.length === 2) {
-    promptStartGame();
+  if (playerNames) {
+    console.log(playerNames);
+    if (playerNames.length === 2) {
+      promptStartGame();
+    }
   }
 });
 
@@ -32,12 +39,12 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels, allPlayers) => {
 });
 
 const addPlayer = () => {
-  const newPlayer = newPlayerInput.value.trim().substring(0, 16);
-  if (newPlayer === "") {
+  const name = newPlayerInput.value.trim().substring(0, 16);
+  if (name === "") {
     console.log("Player name cannot be empty");
     newPlayerInput.value = "";
   } else {
-    socket.emit("newPlayer", newPlayer);
+    socket.emit("newPlayer", name, setPlayerId());
     newPlayerInput.value = "";
   }
 };

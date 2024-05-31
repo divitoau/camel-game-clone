@@ -88,19 +88,7 @@ class Player {
 }
 
 const addPlayer = (name) => {
-  let msg;
-  if (name === "") {
-    msg = "Player name cannot be empty";
-  } else if (gameState.playerNames.includes(name)) {
-    msg = `${name} is already taken`;
-  } else {
-    gameState.playerNames.push(name);
-    msg = `${name} added`;
-    /*     if (gameState.playerNames.length === 2) {
-      // ******* figure out some logic designating a host who can start the game
-    } */
-  }
-  return msg;
+  gameState.playerNames.push(name);
 };
 
 const generatePlayers = () => {
