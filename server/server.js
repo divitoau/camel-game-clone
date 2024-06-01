@@ -13,6 +13,10 @@ const io = new Server(server);
 
 app.use(express.static("public"));
 
+const dummyUsers = ["testguy1", "testguy2"];
+let dummyUserIndex = 0;
+const autoStart = true;
+
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
   socket.emit("fullState", gameState.getGameState());
@@ -21,53 +25,57 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
   });
 
-  socket.on("playerId", (playerId) => {
-    if (playerId) {
-      const player = manager.allMaps.find((p) => p.playerId === playerId);
-      if (player) {
-        player.socketId = socket.id;
-      }
+  socket.on("clientId", (clientId) => {
+    const player = manager.allMaps.find((p) => p.clientId === clientId);
+    if (player) {
+      player.socketId = socket.id;
+    } else if (autoStart) {
+      performAutoStart(clientId, socket);
     }
     console.log(manager.allMaps);
   });
 
-  socket.on("newPlayer", (name, playerId) => {
+  socket.on("newPlayer", (name, clientId) => {
     const playerSockets = manager.allMaps.map((m) => {
       return m.socketId;
     });
     if (playerSockets.includes(socket.id)) {
       socket.emit("newPlayerRes", "there is already a player on this socket");
-    } else if (playerId.length !== 8) {
-      socket.emit("newPlayerRes", "playerId error");
+    } else if (clientId.length !== 8) {
+      socket.emit("newPlayerRes", "clientId error");
     } else if (name === "") {
       socket.emit("newPlayerRes", "Player name cannot be empty");
     } else if (gameState.playerNames.includes(name)) {
       socket.emit("newPlayerRes", `${name} is already taken`);
     } else {
-      playerMap = manager.createPlayerMap(name, playerId, socket.id);
+      clientMap = manager.createClientMap(name, clientId, socket.id);
       addPlayer(name);
       console.log(manager.allMaps);
       io.emit(
         "newPlayerRes",
-        `${name} ${playerMap.isHost ? "is hosting" : "joined"}`,
+        `${name} ${clientMap.isHost ? "is hosting" : "joined"}`,
         gameState.playerNames
       );
-      socket.emit("declareHost", playerMap.isHost);
+      socket.emit("declareHost", clientMap.isHost);
     }
   });
 
   socket.on("startGame", () => {
-    generatePlayers();
-    setStartingPositions();
-    gameState.resetPyramid();
-    io.emit("startGameRes", gameState.getGameState());
+    if (manager.checkHost(socket.id)) {
+      generatePlayers();
+      setStartingPositions();
+      gameState.resetPyramid();
+      io.emit("startGameRes", gameState.getGameState());
+    } else {
+      socket.emit("permissionDeny");
+    }
   });
 
   socket.on("takePyramidTicket", () => {
     if (gameState.diceInPyramid.length > 1) {
       const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
       currentPlayer.takePyramidTicket();
-      socket.emit(
+      io.emit(
         "takePyramidTicketRes",
         currentPlayer,
         gameState.diceOnTents,
@@ -77,11 +85,36 @@ io.on("connection", (socket) => {
       // changes button text when 5 dice are displayed
       if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
         endLeg();
-        socket.emit("endLeg", gameState.getGameState());
+        io.emit("endLeg", gameState.getGameState());
       }
     }
   });
 });
+
+const performAutoStart = (clientId, socket) => {
+  clientMap = manager.createClientMap(
+    dummyUsers[dummyUserIndex],
+    clientId,
+    socket.id
+  );
+  addPlayer(dummyUsers[dummyUserIndex]);
+  console.log(manager.allMaps);
+  io.emit(
+    "newPlayerRes",
+    `${dummyUsers[dummyUserIndex]} ${
+      clientMap.isHost ? "is hosting" : "joined"
+    }`,
+    gameState.playerNames
+  );
+  socket.emit("declareHost", clientMap.isHost);
+  dummyUserIndex += 1;
+  if (dummyUserIndex === 2) {
+    generatePlayers();
+    setStartingPositions();
+    gameState.resetPyramid();
+    io.emit("startGameRes", gameState.getGameState());
+  }
+};
 
 const port = process.env.PORT || 8080;
 server.listen(port, "0.0.0.0", () => {

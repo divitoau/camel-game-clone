@@ -2,24 +2,29 @@ const gameState = require("./gameLogic/gameState.js");
 
 const allMaps = [];
 
-class PlayerMap {
-  constructor(name, playerId, socketId, isHost) {
+class ClientMap {
+  constructor(name, clientId, socketId, isHost) {
     this.name = name;
-    this.playerId = playerId;
+    this.clientId = clientId;
     this.socketId = socketId;
     this.isHost = isHost;
   }
 }
 
-const createPlayerMap = (name, playerId, socketId) => {
-  const playerMap = new PlayerMap(
+const createClientMap = (name, clientId, socketId) => {
+  const clientMap = new ClientMap(
     name,
-    playerId,
+    clientId,
     socketId,
     gameState.playerNames.length < 1 ? true : false
   );
-  allMaps.push(playerMap);
-  return playerMap;
+  allMaps.push(clientMap);
+  return clientMap;
 };
 
-module.exports = { allMaps, PlayerMap, createPlayerMap };
+const checkHost = (socketId) => {
+  const hostMap = allMaps.find((m) => m.isHost === true);
+  return hostMap?.socketId === socketId;
+};
+
+module.exports = { allMaps, ClientMap, createClientMap, checkHost };

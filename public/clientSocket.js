@@ -1,8 +1,8 @@
 const socket = io();
 
 socket.on("connect", () => {
-  const playerId = getPlayerId();
-  socket.emit("playerId", playerId ? playerId : "");
+  const clientId = getClientId();
+  socket.emit("clientId", clientId ? clientId : setClientId());
 });
 
 socket.on("fullState", (state) => {
@@ -13,6 +13,10 @@ socket.on("fullState", (state) => {
     displayCamels(state.allCamels);
     displayDice(state.diceOnTents);
   }
+});
+
+socket.on("permissionDeny", () => {
+  console.log("you do not have permission for this action");
 });
 
 socket.on("newPlayerRes", (res, playerNames) => {
@@ -48,7 +52,7 @@ const addPlayer = () => {
     console.log("Player name cannot be empty");
     newPlayerInput.value = "";
   } else {
-    socket.emit("newPlayer", name, setPlayerId());
+    socket.emit("newPlayer", name, setClientId());
     newPlayerInput.value = "";
   }
 };
