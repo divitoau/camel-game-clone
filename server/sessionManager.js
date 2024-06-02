@@ -27,4 +27,10 @@ const checkHost = (socketId) => {
   return hostMap?.socketId === socketId;
 };
 
-module.exports = { allMaps, ClientMap, createClientMap, checkHost };
+const getCurrentPlayerSocket = () => {
+  const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+  const currentMap = allMaps.find((m) => m.name === currentPlayer.name);
+  return currentMap.socketId;
+};
+
+module.exports = { allMaps, ClientMap, createClientMap, checkHost, getCurrentPlayerSocket };

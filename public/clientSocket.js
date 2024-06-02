@@ -33,6 +33,15 @@ socket.on("declareHost", (isHost) => {
   setIsGameHost(isHost);
 });
 
+socket.on("yourTurn", () => {
+  enableAllButtons();
+  console.log("your turn");
+});
+
+socket.on("notYourTurn", () => {
+  disableAllButtons();
+});
+
 socket.on("startGameRes", (state) => {
   gameStartDialog.close();
   displayCamels(state.allCamels);

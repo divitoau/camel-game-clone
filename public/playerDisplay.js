@@ -63,6 +63,20 @@ booingButton.addEventListener("click", () => {
   displaySpectatorPlacers(false);
 });
 
+const allButtons = document.querySelectorAll("button");
+
+const disableAllButtons = () => {
+  allButtons.forEach((b) => {
+    b.setAttribute("disabled", "");
+  });
+};
+
+const enableAllButtons = () => {
+  allButtons.forEach((b) => {
+    b.removeAttribute("disabled", "");
+  });
+};
+
 const handleFinishButton = (isWinner) => {
   if (currentPlayer.finishCards.length < 1) {
     console.log("you are out of finish cards");

@@ -15,7 +15,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = true;
+const autoStart = false;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
       generatePlayers();
       setStartingPositions();
       gameState.resetPyramid();
+      declareTurn();
       io.emit("startGameRes", gameState.getGameState());
     } else {
       socket.emit("permissionDeny");
@@ -88,8 +89,15 @@ io.on("connection", (socket) => {
         io.emit("endLeg", gameState.getGameState());
       }
     }
+    declareTurn();
   });
 });
+
+const declareTurn = () => {
+  const currentPlayerSocket = manager.getCurrentPlayerSocket();
+  io.to(currentPlayerSocket).emit("yourTurn");
+  io.except(currentPlayerSocket).emit("notYourTurn");
+};
 
 const performAutoStart = (clientId, socket) => {
   clientMap = manager.createClientMap(
