@@ -130,7 +130,19 @@
       </div>
     </div>
     <div id="player-interface">
-      <div id="player-inventory"></div>
+      <div id="player-inventory">
+        <div id="money-display">
+          <p class="display-label">Gold:</p>
+          <p id="money-count"></p>
+        </div>
+        <div id="pyramid-tokens-display">
+          <p class="display-label">Pyramid Tokens:</p>
+          <p id="pyramid-tokens-count"></p>
+        </div>
+        <div id="spectator-tile-display"></div>
+        <div id="held-leg-bets-container"></div>
+        <div id="held-finish-cards-container"></div>
+      </div>
       <div id="player-actions">
         <button id="pyramid-button">bop the pyramid</button>
         <button id="spectator-button">place spectator tile</button>
@@ -138,13 +150,13 @@
         <button id="finish-winner-button">place finish winner bet</button>
         <button id="finish-loser-button">place finish loser bet</button>
       </div>
-      <dialog id="spectator-dialog">
-        <p>Place Spectator Tile</p>
-        <button id="cheering-button">Cheering</button>
-        <button id="booing-button">Booing</button>
-        <button id="spectator-cancel-button">Cancel</button>
-      </dialog>
     </div>
+    <dialog id="spectator-dialog">
+      <p>Place Spectator Tile</p>
+      <button id="cheering-button">Cheering</button>
+      <button id="booing-button">Booing</button>
+      <button id="spectator-cancel-button">Cancel</button>
+    </dialog>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./clientSocket.js"></script>
     <script src="./clientSessionManager.js"></script>

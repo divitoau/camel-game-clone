@@ -1,6 +1,67 @@
+button {
+    width: 100px
+}
+
+#player-interface {
+    position: fixed;
+    background-color: #ec8945;
+    height: 24.3%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+}
+
+#player-actions {
+    padding: .3em;
+    display: flex;
+    justify-content: space-between;
+}
+
+#player-inventory {
+    padding: .3em;
+    display: flex;
+    justify-content: space-around;
+}
+
+#money-display {
+    border: 2px black solid;
+    height: 80px;
+    width: 70px;
+}
+
+.display-label {
+    margin-top: 8px;
+    margin-left: 3px;
+}
+
+#pyramid-tokens-display {
+    border: 2px black solid;
+    height: 80px;
+    width: 70px;
+}
+
+#spectator-tile-display {
+    border: 2px black solid;
+    height: 80px;
+    width: 70px;
+}
+
+#held-leg-bets-container {
+    border: 2px black solid;
+    height: 80px;
+    width: 500px;
+}
+
+#held-finish-cards-container {
+    border: 2px black solid;
+    height: 80px;
+    width: 250px;
+}
+
+
 #leg-bet-container {
     height: 40px;
-    background-color: burlywood;
+    display: inline-block;
 }
 
 .blue-bet-button {

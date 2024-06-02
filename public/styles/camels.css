@@ -1,7 +1,7 @@
 .camel {
     display: inline-block;
-    height: 30px;
-    width: 30px;
+    height: 30%;
+    aspect-ratio: 1/1;
     border-radius: 50%;
     border: 1px black solid;
     position: absolute;
@@ -9,36 +9,37 @@
 }
 
 .elevation-0 {
+    bottom: 5%;
     z-index: 1;
 }
 
 .elevation-1 {
-    bottom: 25px;
+    bottom: 15%;
     z-index: 2;
 }
 
 .elevation-2 {
-    bottom: 33px;
+    bottom: 25%;
     z-index: 3;
 }
 
 .elevation-3 {
-    bottom: 41px;
+    bottom: 35%;
     z-index: 4;
 }
 
 .elevation-4 {
-    bottom: 49px;
+    bottom: 45%;
     z-index: 5;
 }
 
 .elevation-5 {
-    bottom: 57px;
+    bottom: 55%;
     z-index: 6;
 }
 
 .elevation-6 {
-    bottom: 65px;
+    bottom: 65%;
     z-index: 7;
 }
 
