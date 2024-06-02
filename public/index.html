@@ -11,13 +11,13 @@
   </head>
   <body>
     <dialog id="game-start-dialog">
-      <h2>Welcome to Camel Up!</h2>
+      <h1>Welcome to Camel Up!</h1>
       <label for="new-player-input">add a new player</label>
       <input type="text" id="new-player-input" placeholder="name" />
       <button id="add-player-button">add player</button>
       <div id="starting-player-list"></div>
     </dialog>
-    <div id="racetrack">
+    <div id="game-board">
       <div class="track-space" id="track-space-15">
         <div class="space-number-label">
           <p>15</p>
@@ -27,6 +27,7 @@
         <div class="space-number-label">
           <p>16</p>
         </div>
+        <div id="finish-line"></div>
       </div>
       <div class="track-space" id="track-space-1">
         <div class="space-number-label">
@@ -99,25 +100,28 @@
         </div>
       </div>
       <div id="center-track">
-        <div id="dice-container">
-          <button id="pyramid-button">bop the pyramid</button>
-          <div id="pyramid-ticket-counter"></div>
-          <div id="dice-tent-container">
-            <div class="dice-tent" id="tent-1"></div>
-            <div class="dice-tent" id="tent-2"></div>
-            <div class="dice-tent" id="tent-3"></div>
-            <div class="dice-tent" id="tent-4"></div>
-            <div class="dice-tent" id="tent-5"></div>
-          </div>
+        <div id="leg-bet-store">
+          <div class="leg-bet-stack" id="blue-leg-bets"></div>
+          <div class="leg-bet-stack" id="yellow-leg-bets"></div>
+          <div class="leg-bet-stack" id="green-leg-bets"></div>
+          <div class="leg-bet-stack" id="red-leg-bets"></div>
+          <div class="leg-bet-stack" id="purple-leg-bets"></div>
+        </div>
+        <div id="dice-tent-container">
+          <div class="dice-tent" id="tent-1"></div>
+          <div class="dice-tent" id="tent-2"></div>
+          <div class="dice-tent" id="tent-3"></div>
+          <div class="dice-tent" id="tent-4"></div>
+          <div class="dice-tent" id="tent-5"></div>
         </div>
         <div id="finish-stacks-container">
-          <div id="finish-winner-container">
-            <button id="finish-winner-button">place finish winner bet</button>
-            <div id="finish-winner-display"></div>
+          <div id="finish-winner-stack">
+            <h2>Winner Bets</h2>
+            <ol></ol>
           </div>
-          <div id="finish-loser-container">
-            <button id="finish-loser-button">place finish loser bet</button>
-            <div id="finish-loser-display"></div>
+          <div id="finish-loser-stack">
+            <h2>Loser Bets</h2>
+            <ol></ol>
           </div>
           <dialog id="finish-bet-dialog">
             <button id="finish-bet-cancel-button">Cancel</button>
@@ -125,14 +129,22 @@
         </div>
       </div>
     </div>
-    <div id="leg-bet-container"></div>
-    <button id="spectator-button">place spectator tile</button>
-    <dialog id="spectator-dialog">
-      <p>Place Spectator Tile</p>
-      <button id="cheering-button">Cheering</button>
-      <button id="booing-button">Booing</button>
-      <button id="spectator-cancel-button">Cancel</button>
-    </dialog>
+    <div id="player-interface">
+      <div id="player-inventory"></div>
+      <div id="player-actions">
+        <button id="pyramid-button">bop the pyramid</button>
+        <button id="spectator-button">place spectator tile</button>
+        <div id="leg-bet-container"></div>
+        <button id="finish-winner-button">place finish winner bet</button>
+        <button id="finish-loser-button">place finish loser bet</button>
+      </div>
+      <dialog id="spectator-dialog">
+        <p>Place Spectator Tile</p>
+        <button id="cheering-button">Cheering</button>
+        <button id="booing-button">Booing</button>
+        <button id="spectator-cancel-button">Cancel</button>
+      </dialog>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./clientSocket.js"></script>
     <script src="./clientSessionManager.js"></script>

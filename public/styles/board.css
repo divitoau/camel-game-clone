@@ -1,7 +1,16 @@
-#racetrack {
+body {
+    margin: 0;
+    background-color: #eed072;
+}
+
+#game-board {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr;
+    height: 70vh;
+    width: 160vh;
+    margin: auto;
+    margin-top: 1em;
 }
 
 #track-space-1 {
@@ -22,6 +31,7 @@
 #track-space-4 {
     grid-column: 6 / span 1;
     grid-row: 1 / span 1;
+    border-radius: 0 50px 0 0;
 }
 
 #track-space-5 {
@@ -37,6 +47,7 @@
 #track-space-7 {
     grid-column: 6 / span 1;
     grid-row: 4 / span 1;
+    border-radius: 0 0 50px 0;
 }
 
 #track-space-8 {
@@ -62,6 +73,7 @@
 #track-space-12 {
     grid-column: 1 / span 1;
     grid-row: 4 / span 1;
+    border-radius: 0 0 0 50px;
 }
 
 #track-space-13 {
@@ -77,6 +89,7 @@
 #track-space-15 {
     grid-column: 1 / span 1;
     grid-row: 1 / span 1;
+    border-radius: 50px 0 0 0;
 }
 
 #track-space-16 {
@@ -84,43 +97,53 @@
     grid-row: 1 / span 1;
 }
 
+.track-space {
+    border: 1px black solid;
+    background-color: #eee1ab;
+    position: relative;
+}
+
 #center-track {
     grid-column: 2 / span 4;
     grid-row: 2 / span 2;
-    background-color: tan;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: 3fr 1fr;
+}
+
+#leg-bet-store {
+    padding-right: 7%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.leg-bet-stack {
+    height: 60%;
+    width: 80%;
+    border: 2px black solid;
+    line-height: 40px;
+    place-self: center;
+}
+
+#dice-tent-container {
+    padding-right: 4%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.dice-tent {
+    height: 40px;
+    aspect-ratio: 1/1;
+    border: 2px black solid;
+    line-height: 40px;
+    justify-self: center;
 }
 
 #finish-stacks-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-}
-
-#pyramid-button {
-    height: 102px;
-}
-
-#dice-tent-container {
-    width: 100%;
-    height: 51px;
-    margin-top: 51px;
-}
-
-.track-space {
-    height: 100px;
-    border: 1px black solid;
-    background-color: beige;
-    position: relative;
-}
-
-.dice-tent {
-    display: inline-block;
-    height: 40px;
-    margin-left: 10px;
-    aspect-ratio: 1/1;
-    border: 2px black solid;
-    line-height: 40px;
+    grid-row: 1 / span 2;
+    grid-column: 2 / span 1;
 }
 
 .spectator-tile {
