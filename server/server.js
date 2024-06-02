@@ -15,7 +15,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = false;
+const autoStart = true;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -25,10 +25,16 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
   });
 
+  // maintains a consistent client state through socket reconnections
   socket.on("clientId", (clientId) => {
     const player = manager.allMaps.find((p) => p.clientId === clientId);
     if (player) {
       player.socketId = socket.id;
+      socket.emit(
+        socket.id === manager.getCurrentPlayerSocket()
+          ? "yourTurn"
+          : "notYourTurn"
+      );
     } else if (autoStart) {
       performAutoStart(clientId, socket);
     }
@@ -73,23 +79,32 @@ io.on("connection", (socket) => {
   });
 
   socket.on("takePyramidTicket", () => {
-    if (gameState.diceInPyramid.length > 1) {
-      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
-      currentPlayer.takePyramidTicket();
-      io.emit(
-        "takePyramidTicketRes",
-        currentPlayer,
-        gameState.diceOnTents,
-        gameState.allCamels,
-        gameState.allPlayers
-      );
-      // changes button text when 5 dice are displayed
-      if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
-        endLeg();
-        io.emit("endLeg", gameState.getGameState());
+    if (checkTurn(socket.id)) {
+      if (gameState.diceInPyramid.length > 1) {
+        const currentPlayer =
+          gameState.allPlayers[gameState.currentPlayerIndex];
+        currentPlayer.takePyramidTicket();
+        io.emit(
+          "takePyramidTicketRes",
+          currentPlayer,
+          gameState.diceOnTents,
+          gameState.allCamels,
+          gameState.allPlayers
+        );
+        // changes button text when 5 dice are displayed
+        if (
+          gameState.diceInPyramid.length === 1 &&
+          gameState.raceOver !== true
+        ) {
+          endLeg();
+          io.emit("endLeg", gameState.getGameState());
+        }
       }
+      declareTurn();
+    } else {
+      socket.emit("permissionDeny");
+      socket.emit("notYourTurn");
     }
-    declareTurn();
   });
 });
 
@@ -97,6 +112,11 @@ const declareTurn = () => {
   const currentPlayerSocket = manager.getCurrentPlayerSocket();
   io.to(currentPlayerSocket).emit("yourTurn");
   io.except(currentPlayerSocket).emit("notYourTurn");
+};
+
+const checkTurn = (socketId) => {
+  const isTurn = socketId === manager.getCurrentPlayerSocket();
+  return isTurn;
 };
 
 const performAutoStart = (clientId, socket) => {
@@ -120,6 +140,7 @@ const performAutoStart = (clientId, socket) => {
     generatePlayers();
     setStartingPositions();
     gameState.resetPyramid();
+    declareTurn();
     io.emit("startGameRes", gameState.getGameState());
   }
 };
