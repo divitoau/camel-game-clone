@@ -38,7 +38,6 @@ io.on("connection", (socket) => {
     } else if (autoStart) {
       performAutoStart(clientId, socket);
     }
-    console.log(manager.allMaps);
   });
 
   socket.on("newPlayer", (name, clientId) => {
@@ -56,7 +55,6 @@ io.on("connection", (socket) => {
     } else {
       clientMap = manager.createClientMap(name, clientId, socket.id);
       addPlayer(name);
-      console.log(manager.allMaps);
       io.emit(
         "newPlayerRes",
         `${name} ${clientMap.isHost ? "is hosting" : "joined"}`,
@@ -126,7 +124,6 @@ const performAutoStart = (clientId, socket) => {
     socket.id
   );
   addPlayer(dummyUsers[dummyUserIndex]);
-  console.log(manager.allMaps);
   io.emit(
     "newPlayerRes",
     `${dummyUsers[dummyUserIndex]} ${

@@ -44,6 +44,8 @@ socket.on("notYourTurn", () => {
 
 socket.on("startGameRes", (state) => {
   gameStartDialog.close();
+  console.log("start game");
+  removeCamels(state.allCamels);
   displayCamels(state.allCamels);
 });
 

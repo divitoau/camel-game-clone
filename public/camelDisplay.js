@@ -11,10 +11,12 @@ const displayCamels = (allCamels) => {
   });
 };
 
-const removeCamels = () => {
+const removeCamels = (allCamels) => {
   allCamels.forEach((camel) => {
     const camelFigure = document.getElementById(`${camel.color}-camel`);
-    camelFigure.remove();
+    if (camelFigure) {
+      camelFigure.remove();
+    }
   });
 };
 
