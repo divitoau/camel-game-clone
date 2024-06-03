@@ -97,6 +97,13 @@ class GameState {
     this.currentPlayerIndex = value;
   }
 
+  hideFinishCards = () => {
+    return this.allPlayers.map((p) => ({
+      ...p,
+      finishCards: p.finishCards ? p.finishCards?.length : 0,
+    }));
+  };
+
   getGameState() {
     return {
       raceOver: this.raceOver,
@@ -104,13 +111,8 @@ class GameState {
       diceOnTents: this.diceOnTents,
       allCamels: this.allCamels,
       rankedCamels: this.rankedCamels,
-      whiteCarryingRacer: this.whiteCarryingRacer,
-      blackCarryingRacer: this.blackCarryingRacer,
-      whiteCarryingBlack: this.whiteCarryingBlack,
-      blackCarryingWhite: this.blackCarryingWhite,
       playerNames: this.playerNames,
-      allPlayers: this.allPlayers,
-      currentPlayerIndex: this.currentPlayerIndex,
+      allPlayers: this.hideFinishCards(),
       finishWinnerStack: this.finishWinnerStack,
       finishLoserStack: this.finishLoserStack,
       remainingBettingTickets: this.remainingBettingTickets,
