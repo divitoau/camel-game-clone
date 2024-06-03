@@ -10,6 +10,8 @@ socket.on("fullState", (state) => {
   if (state.allPlayers.length < 2) {
     openStartDialog();
   } else {
+    removeCamels(state.allCamels);
+    resetTents();
     displayCamels(state.allCamels);
     displayDice(state.diceOnTents);
   }
@@ -45,8 +47,13 @@ socket.on("notYourTurn", () => {
 socket.on("startGameRes", (state) => {
   gameStartDialog.close();
   console.log("start game");
+  resetTents();
   removeCamels(state.allCamels);
   displayCamels(state.allCamels);
+});
+
+socket.on("yourPlayerState", (player) => {
+  updatePlayerDisplay(player);
 });
 
 socket.on("takePyramidTicketRes", (player, dice, allCamels, allPlayers) => {

@@ -1,15 +1,15 @@
 const racerColors = ["blue", "yellow", "green", "red", "purple"];
+let isPickingWinner = null;
 
-const legBetContainer = document.getElementById("leg-bet-container");
+const allButtons = document.querySelectorAll("button");
 
+const pyramidButton = document.getElementById("pyramid-button");
 const finishWinnerButton = document.getElementById("finish-winner-button");
 const finishLoserButton = document.getElementById("finish-loser-button");
 const finishBetDialog = document.getElementById("finish-bet-dialog");
 const finishBetCancelButton = document.getElementById(
   "finish-bet-cancel-button"
 );
-let isPickingWinner = null;
-
 const spectatorButton = document.getElementById("spectator-button");
 const spectatorDialog = document.getElementById("spectator-dialog");
 const cheeringButton = document.getElementById("cheering-button");
@@ -17,6 +17,18 @@ const booingButton = document.getElementById("booing-button");
 const spectatorCancelButton = document.getElementById(
   "spectator-cancel-button"
 );
+const moneyCount = document.getElementById("money-count");
+const pyramidTicketsDisplay = document.getElementById(
+  "pyramid-tickets-display"
+);
+const pyramidTicketsCount = document.getElementById("pyramid-tickets-count");
+const spectatorTileDisplay = document.getElementById("spectator-tile-display");
+const heldLegBetsContainer = document.getElementById("held-leg-bets-container");
+const heldFinishCardsContainer = document.getElementById(
+  "held-finish-cards-container"
+);
+
+const legBetContainer = document.getElementById("leg-bet-container");
 
 const createBetButtons = (container) => {
   const isLegBet = container === legBetContainer;
@@ -44,6 +56,7 @@ const createBetButtons = (container) => {
 };
 createBetButtons(legBetContainer);
 
+pyramidButton.addEventListener("click", () => takePyramidTicket());
 finishWinnerButton.addEventListener("click", () => handleFinishButton(true));
 finishLoserButton.addEventListener("click", () => handleFinishButton(false));
 finishBetCancelButton.addEventListener("click", () => {
@@ -63,8 +76,6 @@ booingButton.addEventListener("click", () => {
   displaySpectatorPlacers(false);
 });
 
-const allButtons = document.querySelectorAll("button");
-
 const disableAllButtons = () => {
   allButtons.forEach((b) => {
     b.setAttribute("disabled", "");
@@ -75,6 +86,27 @@ const enableAllButtons = () => {
   allButtons.forEach((b) => {
     b.removeAttribute("disabled", "");
   });
+};
+
+const updatePlayerDisplay = (player) => {
+  moneyCount.innerText = player.money;
+  pyramidTicketsCount.innerText = player.pyramidTickets;
+  spectatorTileDisplay.innerText =
+    player.spectatorTile.position === null ? "spectator tile" : "";
+  let bettingTicketsDisplay= ' '
+  player.bettingTickets.forEach((b) => {
+    bettingTicketsDisplay = bettingTicketsDisplay.concat(
+      `<span class="${b.color}">${b.value} </span>`
+    );
+  });
+  heldLegBetsContainer.innerHTML = bettingTicketsDisplay;
+  let finishCardsDisplay = " ";
+  player.finishCards.forEach((f) => {
+    finishCardsDisplay = finishCardsDisplay.concat(
+      `<span class="${f.color}">finish </span>`
+    );
+  });
+  heldFinishCardsContainer.innerHTML = finishCardsDisplay;
 };
 
 const handleFinishButton = (isWinner) => {

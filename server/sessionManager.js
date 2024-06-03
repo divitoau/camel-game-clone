@@ -33,4 +33,10 @@ const getCurrentPlayerSocket = () => {
   return currentMap.socketId;
 };
 
-module.exports = { allMaps, ClientMap, createClientMap, checkHost, getCurrentPlayerSocket };
+module.exports = {
+  allMaps,
+  ClientMap,
+  createClientMap,
+  checkHost,
+  getCurrentPlayerSocket,
+};

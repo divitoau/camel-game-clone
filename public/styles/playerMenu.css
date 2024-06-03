@@ -34,7 +34,7 @@ button {
     margin-left: 3px;
 }
 
-#pyramid-tokens-display {
+#pyramid-tickets-display {
     border: 2px black solid;
     height: 80px;
     width: 70px;
@@ -82,4 +82,24 @@ button {
 
 .purple-bet-button {
     background-color: purple;
+}
+
+.blue {
+    color: blue;
+}
+
+.yellow {
+    color: yellow;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.purple {
+    color: purple;
 }

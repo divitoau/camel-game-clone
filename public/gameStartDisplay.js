@@ -19,7 +19,12 @@ const openStartDialog = () => {
 }; */
 
 const promptStartGame = () => {
-  startGameButton = document.createElement("button");
+  const oldButton = document.getElementById("start-game-button");
+  if (oldButton) {
+    oldButton.remove();
+  }
+  const startGameButton = document.createElement("button");
+  startGameButton.id = "start-game-button";
   startGameButton.innerText = "start game";
   startGameButton.addEventListener("click", () => startGame());
   gameStartDialog.appendChild(startGameButton);

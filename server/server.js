@@ -71,6 +71,7 @@ io.on("connection", (socket) => {
       gameState.resetPyramid();
       declareTurn();
       io.emit("startGameRes", gameState.getGameState());
+      sendPlayerStates();
     } else {
       socket.emit("permissionDeny");
     }
@@ -117,6 +118,13 @@ const checkTurn = (socketId) => {
   return isTurn;
 };
 
+const sendPlayerStates = () => {
+  manager.allMaps.forEach((m) => {
+    const player = gameState.allPlayers.find((p) => p.name === m.name);
+    io.to(m.socketId).emit("yourPlayerState", player);
+  });
+};
+
 const performAutoStart = (clientId, socket) => {
   clientMap = manager.createClientMap(
     dummyUsers[dummyUserIndex],
@@ -139,6 +147,7 @@ const performAutoStart = (clientId, socket) => {
     gameState.resetPyramid();
     declareTurn();
     io.emit("startGameRes", gameState.getGameState());
+    sendPlayerStates();
   }
 };
 
