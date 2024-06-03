@@ -63,15 +63,15 @@ class GameState {
     this.remainingBettingTickets = this.initializeBettingTickets();
   }
 
-  resetFinishCards = () => {
+  resetFinishCards() {
     this.finishWinnerStack.length = 0;
     this.finishLoserStack.length = 0;
-  };
+  }
 
-  resetPyramid = () => {
+  resetPyramid() {
     this.diceInPyramid = ["blue", "yellow", "green", "red", "purple", "grey"];
     this.diceOnTents.length = 0;
-  };
+  }
 
   setRaceOver(value) {
     this.raceOver = value;
@@ -97,12 +97,12 @@ class GameState {
     this.currentPlayerIndex = value;
   }
 
-  hideFinishCards = () => {
+  hideFinishCards() {
     return this.allPlayers.map((p) => ({
       ...p,
       finishCards: p.finishCards ? p.finishCards?.length : 0,
     }));
-  };
+  }
 
   getGameState() {
     return {
@@ -127,7 +127,7 @@ class GameState {
     this.allPlayers = players;
   }
 
-  getRanking = () => {
+  getRanking() {
     this.rankedCamels = this.allCamels
       .slice(0, 5)
       .sort((a, b) => {
@@ -138,7 +138,7 @@ class GameState {
         }
       })
       .map((camel) => camel.color);
-  };
+  }
 }
 
 const gameState = new GameState();
