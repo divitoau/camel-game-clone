@@ -106,6 +106,43 @@ io.on("connection", (socket) => {
       socket.emit("notYourTurn");
     }
   });
+
+  socket.on("requestSpectatorSpaces", (isCheering) => {
+    if (checkTurn(socket.id)) {
+      // tile can't be placed on space 1, space with a camel, or space with or adjacent to another tile
+      let prohibitedSpaces = [1];
+      gameState.allCamels.forEach((c) => {
+        prohibitedSpaces.push(c.position);
+      });
+      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+      gameState.allPlayers.forEach((p) => {
+        if (p !== currentPlayer) {
+          prohibitedSpaces.push(
+            p.spectatorTile.position,
+            p.spectatorTile.position + 1,
+            p.spectatorTile.position - 1
+          );
+        }
+      });
+      socket.emit(
+        "spectatorSpaces",
+        currentPlayer.name,
+        prohibitedSpaces,
+        isCheering
+      );
+    } else {
+      socket.emit("permissionDeny");
+      socket.emit("notYourTurn");
+    }
+  });
+
+  socket.on("placeSpectatorTile", (isCheering, spaceNumber) => {
+    const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+    currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
+    io.emit("spectatorTileRes", currentPlayer.name, isCheering, spaceNumber);
+    sendThisPlayerState(socket.id);
+    declareTurn();
+  });
 });
 
 const declareTurn = () => {

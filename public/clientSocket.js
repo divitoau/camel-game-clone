@@ -64,9 +64,20 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels, allPlayers) => {
   );
 });
 
-// ******* this timeout isnt working for some reason, figure that out
 socket.on("endLeg", (legResults) => {
-  setTimeout(displayLegResults(legResults), 10000);
+  setTimeout(() => displayLegResults(legResults), 2000);
+});
+
+socket.on(
+  "spectatorSpaces",
+  (currentPlayerName, prohibitedSpaces, isCheering) => {
+    displaySpectatorPlacers(currentPlayerName, prohibitedSpaces, isCheering);
+  }
+);
+
+socket.on("spectatorTileRes", (currentPlayerName, isCheering, spaceNumber) => {
+  removeSpectatorPlacers();
+  displaySpectatorTile(currentPlayerName, isCheering, spaceNumber);
 });
 
 const addPlayer = () => {
@@ -86,4 +97,12 @@ const startGame = () => {
 
 const takePyramidTicket = () => {
   socket.emit("takePyramidTicket");
+};
+
+const requestSpectatorSpaces = (isCheering) => {
+  socket.emit("requestSpectatorSpaces", isCheering);
+};
+
+const placeSpectatorTile = (isCheering, spaceNumber) => {
+  socket.emit("placeSpectatorTile", isCheering, spaceNumber);
 };

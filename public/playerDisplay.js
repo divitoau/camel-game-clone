@@ -68,12 +68,12 @@ finishBetCancelButton.addEventListener("click", () => {
 spectatorButton.addEventListener("click", () => spectatorDialog.showModal());
 spectatorCancelButton.addEventListener("click", () => spectatorDialog.close());
 cheeringButton.addEventListener("click", () => {
+  requestSpectatorSpaces(true);
   spectatorDialog.close();
-  displaySpectatorPlacers(true);
 });
 booingButton.addEventListener("click", () => {
+  requestSpectatorSpaces(false);
   spectatorDialog.close();
-  displaySpectatorPlacers(false);
 });
 
 const disableActionButtons = () => {
@@ -120,42 +120,31 @@ const handleFinishButton = (isWinner) => {
 };
 
 // shows the newly placed spectator tile on DOM
-const displaySpectatorTile = (isCheering) => {
+const displaySpectatorTile = (currentPlayerName, isCheering, spaceNumber) => {
   const tile = document.createElement("div");
-  tile.id = `${currentPlayer.name}-spectator-tile`;
+  tile.id = `${currentPlayerName}-spectator-tile`;
   if (isCheering) {
     tile.className = "spectator-tile cheering-tile";
-    tile.innerHTML = `<p>${currentPlayer.name}</p> <p>+1</p>`;
+    tile.innerHTML = `<p>${currentPlayerName}</p> <p>+1</p>`;
   } else {
     tile.className = "spectator-tile booing-tile";
-    tile.innerHTML = `<p>${currentPlayer.name}</p> <p>-1</p>`;
+    tile.innerHTML = `<p>${currentPlayerName}</p> <p>-1</p>`;
   }
-  const tilePosition = currentPlayer.spectatorTile.position;
-  const tileSpace = document.getElementById(`track-space-${tilePosition}`);
+  const tileSpace = document.getElementById(`track-space-${spaceNumber}`);
   tileSpace.appendChild(tile);
 };
 
 // creates buttons on each permitted space where a tile can be placed
-const displaySpectatorPlacers = (isCheering) => {
-  oldTile = document.getElementById(`${currentPlayer.name}-spectator-tile`);
+const displaySpectatorPlacers = (
+  currentPlayerName,
+  prohibitedSpaces,
+  isCheering
+) => {
+  oldTile = document.getElementById(`${currentPlayerName}-spectator-tile`);
   if (oldTile) {
     oldTile.remove();
   }
 
-  // tile can't be placed on space 1, space with a camel, or space with or adjacent to another tile
-  let prohibitedSpaces = [1];
-  allCamels.forEach((c) => {
-    prohibitedSpaces.push(c.position);
-  });
-  allPlayers.forEach((p) => {
-    if (p !== currentPlayer) {
-      prohibitedSpaces.push(
-        p.spectatorTile.position,
-        p.spectatorTile.position + 1,
-        p.spectatorTile.position - 1
-      );
-    }
-  });
   document.querySelectorAll(".track-space").forEach((s) => {
     const spaceNumber = parseInt(s.id.substring(12));
     if (!prohibitedSpaces.includes(spaceNumber)) {
@@ -166,7 +155,7 @@ const displaySpectatorPlacers = (isCheering) => {
         isCheering ? "cheering" : "booing"
       } tile`;
       placeButton.addEventListener("click", () =>
-        currentPlayer.placeSpectatorTile(isCheering, spaceNumber)
+        placeSpectatorTile(isCheering, spaceNumber)
       );
       s.appendChild(placeButton);
     }
