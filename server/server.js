@@ -6,6 +6,7 @@ const manager = require("./sessionManager.js");
 const gameState = require("./gameLogic/gameState.js");
 const { setStartingPositions } = require("./gameLogic/camelLogic");
 const { addPlayer, generatePlayers } = require("./gameLogic/playerLogic");
+const { endLeg } = require("./gameLogic/scoringLogic.js");
 
 const app = express();
 const server = createServer(app);
@@ -35,6 +36,7 @@ io.on("connection", (socket) => {
           ? "yourTurn"
           : "notYourTurn"
       );
+      sendThisPlayerState(socket.id);
     } else if (autoStart) {
       performAutoStart(clientId, socket);
     }
@@ -79,26 +81,25 @@ io.on("connection", (socket) => {
 
   socket.on("takePyramidTicket", () => {
     if (checkTurn(socket.id)) {
-      if (gameState.diceInPyramid.length > 1) {
-        const currentPlayer =
-          gameState.allPlayers[gameState.currentPlayerIndex];
-        currentPlayer.takePyramidTicket();
-        io.emit(
-          "takePyramidTicketRes",
-          currentPlayer,
-          gameState.diceOnTents,
-          gameState.allCamels,
-          gameState.allPlayers
-        );
-        // changes button text when 5 dice are displayed
-        if (
-          gameState.diceInPyramid.length === 1 &&
-          gameState.raceOver !== true
-        ) {
-          endLeg();
-          io.emit("endLeg", gameState.getGameState());
-        }
+      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+      currentPlayer.takePyramidTicket();
+      io.emit(
+        "takePyramidTicketRes",
+        currentPlayer,
+        gameState.diceOnTents,
+        gameState.allCamels,
+        gameState.allPlayers
+      );
+      if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
+        manager.allMaps.forEach((m) => {
+          io.to(m.socketId).emit("endLeg", endLeg(m));
+        });
+        console.log(gameState.getGameState());
+        gameState.resetPyramid();
+        gameState.resetBettingTickets();
       }
+
+      sendPlayerStates();
       declareTurn();
     } else {
       socket.emit("permissionDeny");
@@ -123,6 +124,12 @@ const sendPlayerStates = () => {
     const player = gameState.allPlayers.find((p) => p.name === m.name);
     io.to(m.socketId).emit("yourPlayerState", player);
   });
+};
+
+const sendThisPlayerState = (socketId) => {
+  const thisMap = manager.allMaps.find((m) => m.socketId === socketId);
+  const thisPlayer = gameState.allPlayers.find((p) => p.name === thisMap.name);
+  io.to(socketId).emit("yourPlayerState", thisPlayer);
 };
 
 const performAutoStart = (clientId, socket) => {

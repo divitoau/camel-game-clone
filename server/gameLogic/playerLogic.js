@@ -123,9 +123,6 @@ const endTurn = () => {
   gameState.setCurrentPlayerIndex(
     (gameState.currentPlayerIndex + 1) % gameState.allPlayers.length
   );
-  console.log(
-    `${gameState.allPlayers[gameState.currentPlayerIndex].name}'s turn`
-  );
 };
 
 module.exports = {

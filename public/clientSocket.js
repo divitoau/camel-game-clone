@@ -36,12 +36,12 @@ socket.on("declareHost", (isHost) => {
 });
 
 socket.on("yourTurn", () => {
-  enableAllButtons();
+  enableActionButtons();
   console.log("your turn");
 });
 
 socket.on("notYourTurn", () => {
-  disableAllButtons();
+  disableActionButtons();
 });
 
 socket.on("startGameRes", (state) => {
@@ -62,6 +62,11 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels, allPlayers) => {
   console.log(
     `${player.name} snagged a pyramid ticket, now has ${player.pyramidTickets}`
   );
+});
+
+// ******* this timeout isnt working for some reason, figure that out
+socket.on("endLeg", (legResults) => {
+  setTimeout(displayLegResults(legResults), 10000);
 });
 
 const addPlayer = () => {

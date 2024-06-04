@@ -1,36 +1,30 @@
 const gameState = require("./gameState");
 
-const endLeg = () => {
+const endLeg = (clientMap) => {
   const legLeader = gameState.rankedCamels[0];
   const legSecond = gameState.rankedCamels[1];
 
   console.log(`leg leader: ${legLeader}`);
   console.log(`leg second: ${legSecond}`);
 
-  gameState.allPlayers.forEach((p) => {
-    const legPyramidMoney = p.pyramidTickets;
+  const player = gameState.allPlayers.find((p) => p.name === clientMap.name);
 
-    let legBetMoney = 0;
-    p.bettingTickets.forEach((t) => {
-      if (t.color === legLeader) {
-        legBetMoney += t.value;
-      } else if (t.color === legSecond) {
-        legBetMoney += 1;
-      } else {
-        legBetMoney -= 1;
-      }
-    });
+  const legPyramidMoney = player.pyramidTickets;
 
-    console.log(p.name);
-    console.log(`money from bets: ${legBetMoney}`);
-    console.log(`money from pyramid: ${legPyramidMoney}`);
-
-    const legNet = legBetMoney + legPyramidMoney;
-    p.resolveLeg(p.money + legNet);
-
-    console.log(`money net: ${legNet}`);
-    console.log(`total money: ${p.money}`);
+  let legBetMoney = 0;
+  player.bettingTickets.forEach((t) => {
+    if (t.color === legLeader) {
+      legBetMoney += t.value;
+    } else if (t.color === legSecond) {
+      legBetMoney += 1;
+    } else {
+      legBetMoney -= 1;
+    }
   });
+
+  player.resolveLeg(player.money + legBetMoney + legPyramidMoney);
+
+  return { legBetMoney, legPyramidMoney };
 };
 
 const countFinishCards = (isWinner) => {

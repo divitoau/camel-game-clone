@@ -54,17 +54,6 @@ const bopPyramid = () => {
     const camel = identifyCamel(result);
     camel.move(result.number);
   }
-  /*     // changes button text when 5 dice are displayed
-    if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
-      endLeg();
-      promptResetPyramid();
-    }
-  } else {
-    // pressing button again when 5 dice are displayed reloads them into pyramid
-    gameState.resetPyramid();
-    resetBettingTickets();
-    console.log(`${currentPlayer.name}'s turn`);
-  } */
 };
 
 module.exports = {

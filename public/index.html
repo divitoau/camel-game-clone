@@ -123,9 +123,6 @@
             <h2>Loser Bets</h2>
             <ol></ol>
           </div>
-          <dialog id="finish-bet-dialog">
-            <button id="finish-bet-cancel-button">Cancel</button>
-          </dialog>
         </div>
       </div>
     </div>
@@ -151,11 +148,18 @@
         <button id="finish-loser-button">place finish loser bet</button>
       </div>
     </div>
+    <dialog id="finish-bet-dialog">
+      <button id="finish-bet-cancel-button">Cancel</button>
+    </dialog>
     <dialog id="spectator-dialog">
       <p>Place Spectator Tile</p>
       <button id="cheering-button">Cheering</button>
       <button id="booing-button">Booing</button>
       <button id="spectator-cancel-button">Cancel</button>
+    </dialog>
+    <dialog id="leg-summary-dialog">
+      <div id="leg-summary-display"></div>
+      <button id="leg-summary-button">OK</button>
     </dialog>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./clientSocket.js"></script>
@@ -165,5 +169,6 @@
     <script src="./camelDisplay.js"></script>
     <script src="./playerDisplay.js"></script>
     <script src="./gameStartDisplay.js"></script>
+    <script src="./scoringDisplay.js"></script>
   </body>
 </html>

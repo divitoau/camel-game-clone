@@ -1,7 +1,7 @@
 const racerColors = ["blue", "yellow", "green", "red", "purple"];
 let isPickingWinner = null;
 
-const allButtons = document.querySelectorAll("button");
+const actionButtons = document.querySelectorAll("#player-actions button");
 
 const pyramidButton = document.getElementById("pyramid-button");
 const finishWinnerButton = document.getElementById("finish-winner-button");
@@ -76,14 +76,14 @@ booingButton.addEventListener("click", () => {
   displaySpectatorPlacers(false);
 });
 
-const disableAllButtons = () => {
-  allButtons.forEach((b) => {
+const disableActionButtons = () => {
+  actionButtons.forEach((b) => {
     b.setAttribute("disabled", "");
   });
 };
 
-const enableAllButtons = () => {
-  allButtons.forEach((b) => {
+const enableActionButtons = () => {
+  actionButtons.forEach((b) => {
     b.removeAttribute("disabled", "");
   });
 };
@@ -93,7 +93,7 @@ const updatePlayerDisplay = (player) => {
   pyramidTicketsCount.innerText = player.pyramidTickets;
   spectatorTileDisplay.innerText =
     player.spectatorTile.position === null ? "spectator tile" : "";
-  let bettingTicketsDisplay= ' '
+  let bettingTicketsDisplay = " ";
   player.bettingTickets.forEach((b) => {
     bettingTicketsDisplay = bettingTicketsDisplay.concat(
       `<span class="${b.color}">${b.value} </span>`
