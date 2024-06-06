@@ -121,6 +121,10 @@ const handleFinishButton = (isWinner) => {
 
 // shows the newly placed spectator tile on DOM
 const displaySpectatorTile = (currentPlayerName, isCheering, spaceNumber) => {
+  oldTile = document.getElementById(`${currentPlayerName}-spectator-tile`);
+  if (oldTile) {
+    oldTile.remove();
+  }
   const tile = document.createElement("div");
   tile.id = `${currentPlayerName}-spectator-tile`;
   if (isCheering) {
@@ -131,7 +135,7 @@ const displaySpectatorTile = (currentPlayerName, isCheering, spaceNumber) => {
     tile.innerHTML = `<p>${currentPlayerName}</p> <p>-1</p>`;
   }
   const tileSpace = document.getElementById(`track-space-${spaceNumber}`);
-  tileSpace.appendChild(tile);
+  tileSpace?.appendChild(tile);
 };
 
 // creates buttons on each permitted space where a tile can be placed

@@ -14,6 +14,10 @@ socket.on("fullState", (state) => {
     resetTents();
     displayCamels(state.allCamels);
     displayDice(state.diceOnTents);
+    state.allPlayers.forEach((p) => {
+      const tile = p.spectatorTile;
+      displaySpectatorTile(tile.player, tile.isCheering, tile.position);
+    });
   }
 });
 
