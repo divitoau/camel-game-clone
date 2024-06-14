@@ -84,6 +84,10 @@ socket.on("spectatorTileRes", (currentPlayerName, isCheering, spaceNumber) => {
   displaySpectatorTile(currentPlayerName, isCheering, spaceNumber);
 });
 
+socket.on("bettingTicketsRes", (bettingTickets) => {
+  showBettingDialog(bettingTickets);
+});
+
 const addPlayer = () => {
   const name = newPlayerInput.value.trim().substring(0, 16);
   if (name === "") {
@@ -109,4 +113,12 @@ const requestSpectatorSpaces = (isCheering) => {
 
 const placeSpectatorTile = (isCheering, spaceNumber) => {
   socket.emit("placeSpectatorTile", isCheering, spaceNumber);
+};
+
+const getBettingTickets = () => {
+  socket.emit("getBettingTickets");
+};
+
+const takeBettingTicket = (color) => {
+  socket.emit("takeBettingTicket", color);
 };

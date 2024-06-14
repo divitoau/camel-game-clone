@@ -137,11 +137,32 @@ io.on("connection", (socket) => {
   });
 
   socket.on("placeSpectatorTile", (isCheering, spaceNumber) => {
-    const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
-    currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
-    io.emit("spectatorTileRes", currentPlayer.name, isCheering, spaceNumber);
-    sendThisPlayerState(socket.id);
-    declareTurn();
+    if (checkTurn(socket.id)) {
+      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+      currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
+      io.emit("spectatorTileRes", currentPlayer.name, isCheering, spaceNumber);
+      sendThisPlayerState(socket.id);
+      declareTurn();
+    } else {
+      socket.emit("permissionDeny");
+      socket.emit("notYourTurn");
+    }
+  });
+
+  socket.on("getBettingTickets", () => {
+    socket.emit("bettingTicketsRes", gameState.remainingBettingTickets);
+  });
+
+  socket.on("takeBettingTicket", (color) => {
+    if (checkTurn(socket.id)) {
+      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+      currentPlayer.takeBettingTicket(color);
+      sendPlayerStates();
+      declareTurn();
+    } else {
+      socket.emit("permissionDeny");
+      socket.emit("notYourTurn");
+    }
   });
 });
 
