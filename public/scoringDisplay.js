@@ -5,7 +5,7 @@ const legSummaryDisplay = document.getElementById("leg-summary-display");
 legSummaryButton.addEventListener("click", () => {
   legSummaryDialog.close();
   resetTents();
-  resetSpectatorTiles();
+  removeAllElements(".spectator-tile");
 });
 
 const displayLegResults = (legResults) => {

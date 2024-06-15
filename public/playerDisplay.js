@@ -36,7 +36,7 @@ finishWinnerButton.addEventListener("click", () => handleFinishButton(true));
 finishLoserButton.addEventListener("click", () => handleFinishButton(false));
 finishBetCancelButton.addEventListener("click", () => {
   finishBetDialog.close();
-  removeFinishBetButtons();
+  removeAllElements("#finish-bet-dialog .bet-button");
   isPickingWinner = null;
 });
 
@@ -54,7 +54,7 @@ booingButton.addEventListener("click", () => {
 legBetButton.addEventListener("click", () => getBettingTickets());
 legBetCancelButton.addEventListener("click", () => {
   legBetDialog.close();
-  removeLegBetButtons();
+  removeAllElements("#leg-bet-dialog .bet-button");
   isPickingWinner = null;
 });
 
@@ -151,11 +151,11 @@ const createBetButtons = (container, ticketArray) => {
         if (container === legBetDialog) {
           takeBettingTicket(color);
           legBetDialog.close();
-          removeLegBetButtons();
+          removeAllElements("#leg-bet-dialog .bet-button");
         } else if (container === finishBetDialog) {
           placeFinishCard(color, isPickingWinner);
           finishBetDialog.close();
-          removeFinishBetButtons();
+          removeAllElements("#finish-bet-dialog .bet-button");
           isPickingWinner = null;
         }
       },
@@ -189,26 +189,8 @@ const showFinishDialog = (isWinner) => {
   }
 };
 
-const removeFinishBetButtons = () => {
-  document.querySelectorAll(`#finish-bet-dialog .bet-button`).forEach((b) => {
-    b.remove();
-  });
-};
-
-const removeSpectatorPlacers = () => {
-  document.querySelectorAll(".place-button").forEach((b) => {
-    b.remove();
-  });
-};
-
-const resetSpectatorTiles = () => {
-  document.querySelectorAll(".spectator-tile").forEach((t) => {
-    t.remove();
-  });
-};
-
-const removeLegBetButtons = () => {
-  document.querySelectorAll(`#leg-bet-dialog .bet-button`).forEach((b) => {
+const removeAllElements = (elementString) => {
+  document.querySelectorAll(elementString).forEach((b) => {
     b.remove();
   });
 };

@@ -157,6 +157,7 @@ io.on("connection", (socket) => {
     if (checkTurn(socket.id)) {
       const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
       currentPlayer.takeBettingTicket(color);
+      io.emit("updateBettingTickets", gameState.remainingBettingTickets);
       sendPlayerStates();
       declareTurn();
     } else {

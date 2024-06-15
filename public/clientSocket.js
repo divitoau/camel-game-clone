@@ -18,6 +18,7 @@ socket.on("fullState", (state) => {
       const tile = p.spectatorTile;
       displaySpectatorTile(tile.player, tile.isCheering, tile.position);
     });
+    displayBettingTickets(state.remainingBettingTickets);
   }
 });
 
@@ -54,6 +55,7 @@ socket.on("startGameRes", (state) => {
   resetTents();
   removeCamels(state.allCamels);
   displayCamels(state.allCamels);
+  displayBettingTickets(state.remainingBettingTickets);
 });
 
 socket.on("yourPlayerState", (player) => {
@@ -80,12 +82,16 @@ socket.on(
 );
 
 socket.on("spectatorTileRes", (currentPlayerName, isCheering, spaceNumber) => {
-  removeSpectatorPlacers();
+  removeAllElements(".place-button");
   displaySpectatorTile(currentPlayerName, isCheering, spaceNumber);
 });
 
 socket.on("bettingTicketsRes", (bettingTickets) => {
   showBettingDialog(bettingTickets);
+});
+
+socket.on("updateBettingTickets", (bettingTickets) => {
+  displayBettingTickets(bettingTickets);
 });
 
 const addPlayer = () => {
