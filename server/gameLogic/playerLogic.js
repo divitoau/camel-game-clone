@@ -107,9 +107,6 @@ const generatePlayers = () => {
   gameState.setCurrentPlayerIndex(
     Math.floor(Math.random() * gameState.allPlayers.length)
   );
-  /*   console.log(
-    `${gameState.allPlayers[gameState.currentPlayerIndex].name}'s turn`
-  ); */
 };
 
 const regeneratePlayers = () => {

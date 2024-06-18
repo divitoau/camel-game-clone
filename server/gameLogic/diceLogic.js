@@ -4,7 +4,7 @@ const gameState = require("./gameState");
 const selectDie = () => {
   const dieIndex = Math.floor(Math.random() * gameState.diceInPyramid.length);
   const selectedDie = gameState.diceInPyramid[dieIndex];
-  const rolledDie = gameState.diceInPyramid.splice(dieIndex, 1);
+  gameState.diceInPyramid.splice(dieIndex, 1);
   return selectedDie;
 };
 

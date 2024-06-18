@@ -4,9 +4,6 @@ const endLeg = (clientMap) => {
   const legLeader = gameState.rankedCamels[0];
   const legSecond = gameState.rankedCamels[1];
 
-  console.log(`leg leader: ${legLeader}`);
-  console.log(`leg second: ${legSecond}`);
-
   const player = gameState.allPlayers.find((p) => p.name === clientMap.name);
 
   const legPyramidMoney = player.pyramidTickets;

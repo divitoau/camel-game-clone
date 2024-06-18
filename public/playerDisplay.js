@@ -1,5 +1,3 @@
-const racerColors = ["blue", "yellow", "green", "red", "purple"];
-
 const actionButtons = document.querySelectorAll("#player-actions button");
 
 const pyramidButton = document.getElementById("pyramid-button");
@@ -95,19 +93,14 @@ const updatePlayerDisplay = (player) => {
 
 // shows the newly placed spectator tile on DOM
 const displaySpectatorTile = (currentPlayerName, isCheering, spaceNumber) => {
-  oldTile = document.getElementById(`${currentPlayerName}-spectator-tile`);
-  if (oldTile) {
-    oldTile.remove();
-  }
+  removeOldTile(currentPlayerName);
   const tile = document.createElement("div");
   tile.id = `${currentPlayerName}-spectator-tile`;
-  if (isCheering) {
-    tile.className = "spectator-tile cheering-tile";
-    tile.innerHTML = `<p>${currentPlayerName}</p> <p>+1</p>`;
-  } else {
-    tile.className = "spectator-tile booing-tile";
-    tile.innerHTML = `<p>${currentPlayerName}</p> <p>-1</p>`;
-  }
+  tile.className = `spectator-tile ${isCheering ? "cheering" : "booing"}-tile`;
+  tile.innerHTML = `<p>${currentPlayerName}</p> <p>${
+    isCheering ? "+" : "-"
+  }1</p>`;
+
   const tileSpace = document.getElementById(`track-space-${spaceNumber}`);
   tileSpace?.appendChild(tile);
 };
@@ -118,11 +111,7 @@ const displaySpectatorPlacers = (
   prohibitedSpaces,
   isCheering
 ) => {
-  oldTile = document.getElementById(`${currentPlayerName}-spectator-tile`);
-  if (oldTile) {
-    oldTile.remove();
-  }
-
+  removeOldTile(currentPlayerName);
   document.querySelectorAll(".track-space").forEach((s) => {
     const spaceNumber = parseInt(s.id.substring(12));
     if (!prohibitedSpaces.includes(spaceNumber)) {
@@ -186,6 +175,13 @@ const showFinishDialog = (isWinner, finishCards) => {
   } else {
     createBetButtons(finishBetDialog, finishCards, isWinner);
     finishBetDialog.showModal();
+  }
+};
+
+const removeOldTile = () => {
+  oldTile = document.getElementById(`${currentPlayerName}-spectator-tile`);
+  if (oldTile) {
+    oldTile.remove();
   }
 };
 

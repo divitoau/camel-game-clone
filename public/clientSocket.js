@@ -6,21 +6,15 @@ socket.on("connect", () => {
 });
 
 socket.on("fullState", (state) => {
-  console.log(state);
   if (state.allPlayers.length < 2) {
     openStartDialog();
   } else {
-    removeCamels(state.allCamels);
-    resetTents();
-    displayCamels(state.allCamels);
+    displayState(state);
     displayDice(state.diceOnTents);
     state.allPlayers.forEach((p) => {
       const tile = p.spectatorTile;
       displaySpectatorTile(tile.player, tile.isCheering, tile.position);
     });
-    displayBettingTickets(state.remainingBettingTickets);
-    displayFinishStack(true, state.finishWinnerStack);
-    displayFinishStack(false, state.finishLoserStack);
   }
 });
 
@@ -54,19 +48,14 @@ socket.on("notYourTurn", () => {
 socket.on("startGameRes", (state) => {
   gameStartDialog.close();
   console.log("start game");
-  resetTents();
-  removeCamels(state.allCamels);
-  displayCamels(state.allCamels);
-  displayBettingTickets(state.remainingBettingTickets);
-  displayFinishStack(true, state.finishWinnerStack);
-  displayFinishStack(false, state.finishLoserStack);
+  displayState(state);
 });
 
 socket.on("yourPlayerState", (player) => {
   updatePlayerDisplay(player);
 });
 
-socket.on("takePyramidTicketRes", (player, dice, allCamels, allPlayers) => {
+socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
   displayDice(dice);
   displayNewPosition(allCamels);
   console.log(
@@ -103,7 +92,6 @@ socket.on("finishCardsRes", (isWinner, finishCards) => {
 });
 
 socket.on("updateFinishStack", (isWinner, finishStack) => {
-  console.log(finishStack);
   displayFinishStack(isWinner, finishStack);
 });
 
@@ -148,4 +136,13 @@ const takeBettingTicket = (color) => {
 
 const placeFinishCard = (color, isWinner) => {
   socket.emit("placeFinishCard", color, isWinner);
+};
+
+const displayState = (state) => {
+  resetTents();
+  removeCamels(state.allCamels);
+  displayCamels(state.allCamels);
+  displayBettingTickets(state.remainingBettingTickets);
+  displayFinishStack(true, state.finishWinnerStack);
+  displayFinishStack(false, state.finishLoserStack);
 };
