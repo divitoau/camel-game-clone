@@ -206,10 +206,7 @@ const setStartingPositions = () => {
 
 // check if a camel has crossed finish (in either direction)
 const checkIfFinished = (camel) => {
-  if (camel.position > 16) {
-    endLeg();
-    endRace();
-  } else if (camel.position < 1) {
+  if (camel.position > 16 || camel.position < 1) {
     endLeg();
     endRace();
   }

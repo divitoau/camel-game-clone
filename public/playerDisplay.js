@@ -178,7 +178,7 @@ const showFinishDialog = (isWinner, finishCards) => {
   }
 };
 
-const removeOldTile = () => {
+const removeOldTile = (currentPlayerName) => {
   oldTile = document.getElementById(`${currentPlayerName}-spectator-tile`);
   if (oldTile) {
     oldTile.remove();

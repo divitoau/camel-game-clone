@@ -88,11 +88,15 @@ io.on("connection", (socket) => {
         gameState.allPlayers
       );
       if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
-        manager.allMaps.forEach((m) => {
-          io.to(m.socketId).emit("endLeg", endLeg(m));
-        });
         gameState.resetPyramid();
         gameState.resetBettingTickets();
+        manager.allMaps.forEach((m) => {
+          io.to(m.socketId).emit(
+            "endLeg",
+            endLeg(m),
+            gameState.remainingBettingTickets
+          );
+        });
       }
       sendPlayerStates();
       declareTurn();

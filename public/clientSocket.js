@@ -63,8 +63,11 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
   );
 });
 
-socket.on("endLeg", (legResults) => {
-  setTimeout(() => displayLegResults(legResults), 2000);
+socket.on("endLeg", (legResults, bettingTickets) => {
+  setTimeout(() => {
+    displayBettingTickets(bettingTickets);
+    displayLegResults(legResults);
+  }, 2000);
 });
 
 socket.on(
