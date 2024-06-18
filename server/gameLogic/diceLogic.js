@@ -52,7 +52,7 @@ const bopPyramid = () => {
   if (gameState.diceInPyramid.length > 1) {
     result = rollDie();
     const camel = identifyCamel(result);
-    camel.move(result.number);
+    return camel.move(result.number);
   }
 };
 

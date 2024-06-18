@@ -6,7 +6,10 @@ const manager = require("./sessionManager.js");
 const gameState = require("./gameLogic/gameState.js");
 const { setStartingPositions } = require("./gameLogic/camelLogic");
 const { addPlayer, generatePlayers } = require("./gameLogic/playerLogic");
-const { endLeg } = require("./gameLogic/scoringLogic.js");
+const {
+  calculateLeg,
+  countFinishCards,
+} = require("./gameLogic/scoringLogic.js");
 
 const app = express();
 const server = createServer(app);
@@ -18,7 +21,9 @@ const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
 const autoStart = true;
 
-// ****** make final scoring work, make betting ticket display reset each leg, check for cards before taking / placing on server side
+/*  ****** make final scoring display modal,
+check for cards before taking / placing on server side,
+prevent actions during endleg timeout */
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -79,27 +84,30 @@ io.on("connection", (socket) => {
   socket.on("takePyramidTicket", () => {
     checkTurn(socket, () => {
       const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
-      currentPlayer.takePyramidTicket();
+      const isFinished = currentPlayer.takePyramidTicket();
       io.emit(
         "takePyramidTicketRes",
         currentPlayer,
         gameState.diceOnTents,
-        gameState.allCamels,
-        gameState.allPlayers
+        gameState.allCamels
       );
-      if (gameState.diceInPyramid.length === 1 && gameState.raceOver !== true) {
+      if (isFinished) {
+        endRace();
+      } else if (gameState.diceInPyramid.length === 1) {
         gameState.resetPyramid();
         gameState.resetBettingTickets();
         manager.allMaps.forEach((m) => {
           io.to(m.socketId).emit(
             "endLeg",
-            endLeg(m),
+            calculateLeg(m.name),
             gameState.remainingBettingTickets
           );
         });
       }
       sendPlayerStates();
-      declareTurn();
+      if (gameState.raceOver !== true) {
+        declareTurn();
+      }
     });
   });
 
@@ -211,6 +219,28 @@ const sendThisPlayerState = (socketId) => {
   const thisMap = manager.allMaps.find((m) => m.socketId === socketId);
   const thisPlayer = gameState.allPlayers.find((p) => p.name === thisMap.name);
   io.to(socketId).emit("yourPlayerState", thisPlayer);
+};
+
+const endRace = () => {
+  gameState.setRaceOver(true);
+  const winnerCardScores = countFinishCards(true);
+  const loserCardScores = countFinishCards(false);
+  const allCardScores = winnerCardScores.concat(loserCardScores);
+  manager.allMaps.forEach((m) => {
+    let totalFinishRewards = 0;
+    allCardScores.forEach((c) => {
+      if (c.owner === m.name) {
+        totalFinishRewards += c.reward;
+      }
+    });
+    io.to(m.socketId).emit(
+      "endRace",
+      calculateLeg(m.name),
+      winnerCardScores,
+      loserCardScores,
+      totalFinishRewards
+    );
+  });
 };
 
 const performAutoStart = (clientId, socket) => {

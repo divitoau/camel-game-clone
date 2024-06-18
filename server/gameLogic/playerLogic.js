@@ -51,8 +51,9 @@ class Player {
 
   takePyramidTicket() {
     this.pyramidTickets += 1;
-    bopPyramid();
+    const isFinished = bopPyramid();
     endTurn();
+    return isFinished;
   }
 
   placeSpectatorTile(isCheering, position) {

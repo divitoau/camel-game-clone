@@ -98,6 +98,18 @@ socket.on("updateFinishStack", (isWinner, finishStack) => {
   displayFinishStack(isWinner, finishStack);
 });
 
+socket.on(
+  "endRace",
+  (legResults, winnerCardScores, loserCardScores, totalFinishRewards) => {
+    console.log(
+      legResults,
+      winnerCardScores,
+      loserCardScores,
+      totalFinishRewards
+    );
+  }
+);
+
 const addPlayer = () => {
   const name = newPlayerInput.value.trim().substring(0, 16);
   if (name === "") {

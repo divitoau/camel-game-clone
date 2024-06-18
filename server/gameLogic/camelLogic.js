@@ -1,6 +1,5 @@
 const gameState = require("./gameState");
 const { rollDie, selectFace } = require("./diceLogic");
-const { endLeg, endRace } = require("./scoringLogic");
 
 // this file contains the logic for the movement of the camels
 
@@ -131,7 +130,7 @@ class Camel {
 
     // update dom, check rankings and if anyone's crossed finish
     gameState.getRanking();
-    checkIfFinished(this);
+    return checkIfFinished(this.position);
   }
 
   setPosition(position, elevation, camelUnder) {
@@ -205,11 +204,8 @@ const setStartingPositions = () => {
 // generate an array of the racers ordered by position then elevation, descending
 
 // check if a camel has crossed finish (in either direction)
-const checkIfFinished = (camel) => {
-  if (camel.position > 16 || camel.position < 1) {
-    endLeg();
-    endRace();
-  }
+const checkIfFinished = (position) => {
+  return position > 16 || position < 1;
 };
 
 module.exports = {
