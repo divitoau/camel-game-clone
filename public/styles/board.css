@@ -112,7 +112,7 @@ body {
     grid-template-rows: 3fr 1fr;
 }
 
-#leg-bet-store {
+#leg-bet-container {
     padding-right: 4%;
     padding-left: 4%;
     display: flex;

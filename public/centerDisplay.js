@@ -28,3 +28,17 @@ const displayBettingTickets = (tickets) => {
     }
   }
 };
+
+const displayFinishStack = (isWinner, finishStack) => {
+  removeAllElements(
+    isWinner ? "#finish-winner-stack li" : "#finish-loser-stack li"
+  );
+  finishStack.forEach((c) => {
+    const cardElement = document.createElement("li");
+    const stackElement = document.getElementById(
+      isWinner ? "finish-winner-stack" : "finish-loser-stack"
+    );
+    cardElement.textContent = c;
+    stackElement.appendChild(cardElement);
+  });
+};

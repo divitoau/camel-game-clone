@@ -104,6 +104,13 @@ class GameState {
     }));
   }
 
+  hideFinishStack(isWinner) {
+    const finishStack = isWinner
+      ? this.finishWinnerStack
+      : this.finishLoserStack;
+    return finishStack.map((c) => c.playerName);
+  }
+
   getGameState() {
     return {
       raceOver: this.raceOver,
@@ -113,8 +120,8 @@ class GameState {
       rankedCamels: this.rankedCamels,
       playerNames: this.playerNames,
       allPlayers: this.hideFinishCards(),
-      finishWinnerStack: this.finishWinnerStack,
-      finishLoserStack: this.finishLoserStack,
+      finishWinnerStack: this.hideFinishStack(true),
+      finishLoserStack: this.hideFinishStack(false),
       remainingBettingTickets: this.remainingBettingTickets,
     };
   }

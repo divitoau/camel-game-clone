@@ -1,15 +1,9 @@
 const racerColors = ["blue", "yellow", "green", "red", "purple"];
-let isPickingWinner = null;
 
 const actionButtons = document.querySelectorAll("#player-actions button");
 
 const pyramidButton = document.getElementById("pyramid-button");
-const finishWinnerButton = document.getElementById("finish-winner-button");
-const finishLoserButton = document.getElementById("finish-loser-button");
-const finishBetDialog = document.getElementById("finish-bet-dialog");
-const finishBetCancelButton = document.getElementById(
-  "finish-bet-cancel-button"
-);
+
 const spectatorButton = document.getElementById("spectator-button");
 const spectatorDialog = document.getElementById("spectator-dialog");
 const cheeringButton = document.getElementById("cheering-button");
@@ -17,9 +11,18 @@ const booingButton = document.getElementById("booing-button");
 const spectatorCancelButton = document.getElementById(
   "spectator-cancel-button"
 );
+
 const legBetButton = document.getElementById("leg-bet-button");
 const legBetDialog = document.getElementById("leg-bet-dialog");
 const legBetCancelButton = document.getElementById("leg-bet-cancel-button");
+
+const finishWinnerButton = document.getElementById("finish-winner-button");
+const finishLoserButton = document.getElementById("finish-loser-button");
+const finishBetDialog = document.getElementById("finish-bet-dialog");
+const finishBetCancelButton = document.getElementById(
+  "finish-bet-cancel-button"
+);
+
 const moneyCount = document.getElementById("money-count");
 const pyramidTicketsDisplay = document.getElementById(
   "pyramid-tickets-display"
@@ -32,13 +35,6 @@ const heldFinishCardsContainer = document.getElementById(
 );
 
 pyramidButton.addEventListener("click", () => takePyramidTicket());
-finishWinnerButton.addEventListener("click", () => handleFinishButton(true));
-finishLoserButton.addEventListener("click", () => handleFinishButton(false));
-finishBetCancelButton.addEventListener("click", () => {
-  finishBetDialog.close();
-  removeAllElements("#finish-bet-dialog .bet-button");
-  isPickingWinner = null;
-});
 
 spectatorButton.addEventListener("click", () => spectatorDialog.showModal());
 spectatorCancelButton.addEventListener("click", () => spectatorDialog.close());
@@ -55,7 +51,13 @@ legBetButton.addEventListener("click", () => getBettingTickets());
 legBetCancelButton.addEventListener("click", () => {
   legBetDialog.close();
   removeAllElements("#leg-bet-dialog .bet-button");
-  isPickingWinner = null;
+});
+
+finishWinnerButton.addEventListener("click", () => getFinishCards(true));
+finishLoserButton.addEventListener("click", () => getFinishCards(false));
+finishBetCancelButton.addEventListener("click", () => {
+  finishBetDialog.close();
+  removeAllElements("#finish-bet-dialog .bet-button");
 });
 
 const disableActionButtons = () => {
@@ -138,7 +140,7 @@ const displaySpectatorPlacers = (
   });
 };
 
-const createBetButtons = (container, ticketArray) => {
+const createBetButtons = (container, ticketArray, isWinner) => {
   ticketArray.forEach((t) => {
     const color = t.color;
     const betButton = document.createElement("button");
@@ -153,10 +155,9 @@ const createBetButtons = (container, ticketArray) => {
           legBetDialog.close();
           removeAllElements("#leg-bet-dialog .bet-button");
         } else if (container === finishBetDialog) {
-          placeFinishCard(color, isPickingWinner);
+          placeFinishCard(color, isWinner);
           finishBetDialog.close();
           removeAllElements("#finish-bet-dialog .bet-button");
-          isPickingWinner = null;
         }
       },
       false
@@ -179,12 +180,11 @@ const showBettingDialog = (bettingTickets) => {
   }
 };
 
-const showFinishDialog = (isWinner) => {
-  if (currentPlayer.finishCards.length < 1) {
+const showFinishDialog = (isWinner, finishCards) => {
+  if (finishCards.length < 1) {
     console.log("you are out of finish cards");
   } else {
-    isPickingWinner = isWinner;
-    createBetButtons(finishBetDialog);
+    createBetButtons(finishBetDialog, finishCards, isWinner);
     finishBetDialog.showModal();
   }
 };

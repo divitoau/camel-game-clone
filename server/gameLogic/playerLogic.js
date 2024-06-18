@@ -66,9 +66,9 @@ class Player {
     const finishIndex = this.finishCards.indexOf(finishCard);
     this.finishCards.splice(finishIndex, 1);
     if (isWinner) {
-      finishWinnerStack.push(finishCard);
+      gameState.finishWinnerStack.push(finishCard);
     } else {
-      finishLoserStack.push(finishCard);
+      gameState.finishLoserStack.push(finishCard);
     }
     console.log(
       `${this.name} placed a bet on overall ${isWinner ? "winner" : "loser"}`

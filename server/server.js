@@ -165,6 +165,33 @@ io.on("connection", (socket) => {
       socket.emit("notYourTurn");
     }
   });
+
+  socket.on("getFinishCards", (isWinner) => {
+    if (checkTurn(socket.id)) {
+      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+      socket.emit("finishCardsRes", isWinner, currentPlayer.finishCards);
+    } else {
+      socket.emit("permissionDeny");
+      socket.emit("notYourTurn");
+    }
+  });
+
+  socket.on("placeFinishCard", (color, isWinner) => {
+    if (checkTurn(socket.id)) {
+      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+      currentPlayer.placeFinishCard(color, isWinner);
+      io.emit(
+        "updateFinishStack",
+        isWinner,
+        gameState.hideFinishStack(isWinner)
+      );
+      sendPlayerStates();
+      declareTurn();
+    } else {
+      socket.emit("permissionDeny");
+      socket.emit("notYourTurn");
+    }
+  });
 });
 
 const declareTurn = () => {

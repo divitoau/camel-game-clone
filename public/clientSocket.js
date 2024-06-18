@@ -19,6 +19,8 @@ socket.on("fullState", (state) => {
       displaySpectatorTile(tile.player, tile.isCheering, tile.position);
     });
     displayBettingTickets(state.remainingBettingTickets);
+    displayFinishStack(true, state.finishWinnerStack);
+    displayFinishStack(false, state.finishLoserStack);
   }
 });
 
@@ -56,6 +58,8 @@ socket.on("startGameRes", (state) => {
   removeCamels(state.allCamels);
   displayCamels(state.allCamels);
   displayBettingTickets(state.remainingBettingTickets);
+  displayFinishStack(true, state.finishWinnerStack);
+  displayFinishStack(false, state.finishLoserStack);
 });
 
 socket.on("yourPlayerState", (player) => {
@@ -94,6 +98,15 @@ socket.on("updateBettingTickets", (bettingTickets) => {
   displayBettingTickets(bettingTickets);
 });
 
+socket.on("finishCardsRes", (isWinner, finishCards) => {
+  showFinishDialog(isWinner, finishCards);
+});
+
+socket.on("updateFinishStack", (isWinner, finishStack) => {
+  console.log(finishStack);
+  displayFinishStack(isWinner, finishStack);
+});
+
 const addPlayer = () => {
   const name = newPlayerInput.value.trim().substring(0, 16);
   if (name === "") {
@@ -125,6 +138,14 @@ const getBettingTickets = () => {
   socket.emit("getBettingTickets");
 };
 
+const getFinishCards = (isWinner) => {
+  socket.emit("getFinishCards", isWinner);
+};
+
 const takeBettingTicket = (color) => {
   socket.emit("takeBettingTicket", color);
+};
+
+const placeFinishCard = (color, isWinner) => {
+  socket.emit("placeFinishCard", color, isWinner);
 };
