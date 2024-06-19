@@ -1,5 +1,7 @@
 const socket = io();
 
+const autoPlay = true;
+
 socket.on("connect", () => {
   const clientId = getClientId();
   socket.emit("clientId", clientId ? clientId : setClientId());
@@ -39,10 +41,31 @@ socket.on("declareHost", (isHost) => {
 socket.on("yourTurn", () => {
   enableActionButtons();
   console.log("your turn");
+  if (autoPlay) {
+    if (document.getElementById("tent-5").className.length > 10) {
+      setTimeout(() => {
+        legSummaryDialog.close();
+        resetTents();
+        removeAllElements(".spectator-tile");
+      }, 100);
+    }
+    setTimeout(() => {
+      socket.emit("takePyramidTicket");
+    }, 100);
+  }
 });
 
 socket.on("notYourTurn", () => {
   disableActionButtons();
+  if (autoPlay) {
+    if (document.getElementById("tent-5").className.length > 10) {
+      setTimeout(() => {
+        legSummaryDialog.close();
+        resetTents();
+        removeAllElements(".spectator-tile");
+      }, 50);
+    }
+  }
 });
 
 socket.on("startGameRes", (state) => {
@@ -64,10 +87,15 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
 });
 
 socket.on("endLeg", (legResults, bettingTickets) => {
-  setTimeout(() => {
+  if (autoPlay) {
     displayBettingTickets(bettingTickets);
     displayLegResults(legResults);
-  }, 2000);
+  } else {
+    setTimeout(() => {
+      displayBettingTickets(bettingTickets);
+      displayLegResults(legResults);
+    }, 2000);
+  }
 });
 
 socket.on(
@@ -98,14 +126,18 @@ socket.on("updateFinishStack", (isWinner, finishStack) => {
   displayFinishStack(isWinner, finishStack);
 });
 
+socket.on("finalEndLeg", (finalResults) => {
+  displayFinalLeg(finalResults);
+});
+
 socket.on(
   "endRace",
-  (legResults, winnerCardScores, loserCardScores, totalFinishRewards) => {
-    console.log(
-      legResults,
+  (winnerCardScores, loserCardScores, totalFinishRewards, rankedPlayers) => {
+    updateFinalSummary(
       winnerCardScores,
       loserCardScores,
-      totalFinishRewards
+      totalFinishRewards,
+      rankedPlayers
     );
   }
 );

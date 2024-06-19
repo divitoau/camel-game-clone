@@ -164,6 +164,26 @@
       <div id="leg-summary-display"></div>
       <button id="leg-summary-button">OK</button>
     </dialog>
+    <dialog id="final-summary-dialog">
+      <div id="final-summary-display">
+        <div id="final-winner-container">
+          <h2>Winner Bets</h2>
+          <ol id="final-winner-bets"></ol>
+        </div>
+        <div id="final-loser-container">
+          <h2>Loser Bets</h2>
+          <ol id="final-loser-bets"></ol>
+        </div>
+        <div id="total-rewards">
+          <h2>Payout from finish bets</h2>
+        </div>
+        <div id="player-ranking-container">
+          <h2>Player Ranking</h2>
+          <ol id="player-ranking"></ol>
+        </div>
+      </div>
+      <button id="final-summary-button">OK</button>
+    </dialog>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./clientSocket.js"></script>
     <script src="./clientSessionManager.js"></script>

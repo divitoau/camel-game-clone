@@ -9,6 +9,7 @@ const { addPlayer, generatePlayers } = require("./gameLogic/playerLogic");
 const {
   calculateLeg,
   countFinishCards,
+  declarePlayerRanking,
 } = require("./gameLogic/scoringLogic.js");
 
 const app = express();
@@ -94,15 +95,7 @@ io.on("connection", (socket) => {
       if (isFinished) {
         endRace();
       } else if (gameState.diceInPyramid.length === 1) {
-        gameState.resetPyramid();
-        gameState.resetBettingTickets();
-        manager.allMaps.forEach((m) => {
-          io.to(m.socketId).emit(
-            "endLeg",
-            calculateLeg(m.name),
-            gameState.remainingBettingTickets
-          );
-        });
+        endLeg(false);
       }
       sendPlayerStates();
       if (gameState.raceOver !== true) {
@@ -221,11 +214,25 @@ const sendThisPlayerState = (socketId) => {
   io.to(socketId).emit("yourPlayerState", thisPlayer);
 };
 
+const endLeg = (isFinal) => {
+  gameState.resetPyramid();
+  gameState.resetBettingTickets();
+  manager.allMaps.forEach((m) => {
+    io.to(m.socketId).emit(
+      isFinal ? "finalEndLeg" : "endLeg",
+      calculateLeg(m.name),
+      !isFinal ? gameState.remainingBettingTickets : null
+    );
+  });
+};
+
 const endRace = () => {
   gameState.setRaceOver(true);
+  endLeg(true);
   const winnerCardScores = countFinishCards(true);
   const loserCardScores = countFinishCards(false);
   const allCardScores = winnerCardScores.concat(loserCardScores);
+  const rankedPlayers = declarePlayerRanking();
   manager.allMaps.forEach((m) => {
     let totalFinishRewards = 0;
     allCardScores.forEach((c) => {
@@ -235,10 +242,10 @@ const endRace = () => {
     });
     io.to(m.socketId).emit(
       "endRace",
-      calculateLeg(m.name),
       winnerCardScores,
       loserCardScores,
-      totalFinishRewards
+      totalFinishRewards,
+      rankedPlayers
     );
   });
 };

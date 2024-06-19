@@ -62,4 +62,10 @@ const countFinishCards = (isWinner) => {
   return finishCardScores;
 };
 
-module.exports = { calculateLeg, countFinishCards };
+const declarePlayerRanking = () => {
+  const rankedPlayers = gameState.allPlayers.sort((a, b) => b.money - a.money)
+    .map(({ name, money }) => ({ name, money }));
+  return rankedPlayers;
+};
+
+module.exports = { calculateLeg, countFinishCards, declarePlayerRanking };
