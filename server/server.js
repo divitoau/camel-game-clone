@@ -20,9 +20,11 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = true;
+const autoStart = false;
 
 /*  ****** make final scoring display modal,
+make start modal function as wanted
+make money after leg update when modal closes
 check for cards before taking / placing on server side,
 prevent actions during endleg timeout */
 
@@ -51,19 +53,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on("newPlayer", (name, clientId) => {
-    const playerSockets = manager.allMaps.map((m) => {
-      return m.socketId;
-    });
+    const playerSockets = manager.allMaps.map((m) => m.socketId);
     if (playerSockets.includes(socket.id)) {
       socket.emit("newPlayerRes", "there is already a player on this socket");
     } else if (clientId.length !== 8) {
       socket.emit("newPlayerRes", "clientId error");
-    } else if (name === "") {
+    } else if (!name) {
       socket.emit("newPlayerRes", "Player name cannot be empty");
     } else if (gameState.playerNames.includes(name)) {
       socket.emit("newPlayerRes", `${name} is already taken`);
     } else {
-      clientMap = manager.createClientMap(name, clientId, socket.id);
+      const clientMap = manager.createClientMap(name, clientId, socket.id);
       addPlayer(name);
       io.emit(
         "newPlayerRes",
@@ -98,7 +98,7 @@ io.on("connection", (socket) => {
         endLeg(false);
       }
       sendPlayerStates();
-      if (gameState.raceOver !== true) {
+      if (!gameState.raceOver) {
         declareTurn();
       }
     });
@@ -106,21 +106,8 @@ io.on("connection", (socket) => {
 
   socket.on("requestSpectatorSpaces", (isCheering) => {
     checkTurn(socket, () => {
-      // tile can't be placed on space 1, space with a camel, or space with or adjacent to another tile
-      let prohibitedSpaces = [1];
-      gameState.allCamels.forEach((c) => {
-        prohibitedSpaces.push(c.position);
-      });
+      const prohibitedSpaces = getProhibitedSpaces();
       const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
-      gameState.allPlayers.forEach((p) => {
-        if (p !== currentPlayer) {
-          prohibitedSpaces.push(
-            p.spectatorTile.position,
-            p.spectatorTile.position + 1,
-            p.spectatorTile.position - 1
-          );
-        }
-      });
       socket.emit(
         "spectatorSpaces",
         currentPlayer.name,
@@ -212,6 +199,22 @@ const sendThisPlayerState = (socketId) => {
   const thisMap = manager.allMaps.find((m) => m.socketId === socketId);
   const thisPlayer = gameState.allPlayers.find((p) => p.name === thisMap.name);
   io.to(socketId).emit("yourPlayerState", thisPlayer);
+};
+
+const getProhibitedSpaces = () => {
+  const prohibitedSpaces = new Set([1]);
+  gameState.allCamels.forEach((c) => {
+    prohibitedSpaces.add(c.position);
+  });
+  const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+  gameState.allPlayers.forEach((p) => {
+    if (p !== currentPlayer) {
+      prohibitedSpaces.add(p.spectatorTile.position);
+      prohibitedSpaces.add(p.spectatorTile.position + 1);
+      prohibitedSpaces.add(p.spectatorTile.position - 1);
+    }
+  });
+  return Array.from(prohibitedSpaces);
 };
 
 const endLeg = (isFinal) => {

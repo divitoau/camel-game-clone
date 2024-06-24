@@ -1,6 +1,6 @@
 const socket = io();
 
-const autoPlay = true;
+const autoPlay = false;
 
 socket.on("connect", () => {
   const clientId = getClientId();
