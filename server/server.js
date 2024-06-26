@@ -36,27 +36,7 @@ io.on("connection", (socket) => {
 
   // maintains a consistent client state through socket reconnections
   socket.on("clientId", (clientId) => {
-    if (!gameState.raceStarted) {
-      const hostName = manager.allMaps.find((m) => m.isHost === true)?.name;
-      socket.emit("newPlayerRes", gameState.playerNames, hostName);
-    }
-    const player = manager.allMaps.find((p) => p.clientId === clientId);
-    if (player) {
-      player.socketId = socket.id;
-      if (gameState.raceStarted) {
-        socket.emit(
-          socket.id === manager.getCurrentPlayerSocket()
-            ? "yourTurn"
-            : "notYourTurn"
-        );
-        sendThisPlayerState(socket.id);
-        socket.emit("fullState", gameState.getGameState());
-      } else {
-        socket.emit("yourName", player.name);
-      }
-    } else if (autoStart) {
-      performAutoStart(clientId, socket);
-    }
+    handleClientReconnect(clientId, socket);
   });
 
   socket.on("newPlayer", (name, clientId) => {
@@ -91,8 +71,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("takePyramidTicket", () => {
-    checkTurn(socket, () => {
-      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+    checkTurn(socket, (currentPlayer) => {
       const isFinished = currentPlayer.takePyramidTicket();
       io.emit(
         "takePyramidTicketRes",
@@ -113,9 +92,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("requestSpectatorSpaces", (isCheering) => {
-    checkTurn(socket, () => {
+    checkTurn(socket, (currentPlayer) => {
       const prohibitedSpaces = getProhibitedSpaces();
-      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
       socket.emit(
         "spectatorSpaces",
         currentPlayer.name,
@@ -126,8 +104,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("placeSpectatorTile", (isCheering, spaceNumber) => {
-    checkTurn(socket, () => {
-      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+    checkTurn(socket, (currentPlayer) => {
       currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
       io.emit("spectatorTileRes", currentPlayer.name, isCheering, spaceNumber);
       sendThisPlayerState(socket.id);
@@ -140,8 +117,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("takeBettingTicket", (color) => {
-    checkTurn(socket, () => {
-      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+    checkTurn(socket, (currentPlayer) => {
       currentPlayer.takeBettingTicket(color);
       io.emit("updateBettingTickets", gameState.remainingBettingTickets);
       sendPlayerStates();
@@ -150,15 +126,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("getFinishCards", (isWinner) => {
-    checkTurn(socket, () => {
-      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+    checkTurn(socket, (currentPlayer) => {
       socket.emit("finishCardsRes", isWinner, currentPlayer.finishCards);
     });
   });
 
   socket.on("placeFinishCard", (color, isWinner) => {
-    checkTurn(socket, () => {
-      const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+    checkTurn(socket, (currentPlayer) => {
       currentPlayer.placeFinishCard(color, isWinner);
       io.emit(
         "updateFinishStack",
@@ -171,6 +145,31 @@ io.on("connection", (socket) => {
   });
 });
 
+const handleClientReconnect = (clientId, socket) => {
+  if (!gameState.raceStarted) {
+    const hostName = manager.allMaps.find((m) => m.isHost === true)?.name;
+    socket.emit("newPlayerRes", gameState.playerNames, hostName);
+  }
+  const player = manager.allMaps.find((p) => p.clientId === clientId);
+  if (player) {
+    player.socketId = socket.id;
+    if (gameState.raceStarted) {
+      const currentPlayerObject = manager.getCurrentPlayerSocket();
+      socket.emit(
+        socket.id === currentPlayerObject.currentSocketId
+          ? "yourTurn"
+          : "notYourTurn"
+      );
+      sendThisPlayerState(socket.id);
+      socket.emit("fullState", gameState.getGameState());
+    } else {
+      socket.emit("yourName", player.name);
+    }
+  } else if (autoStart) {
+    performAutoStart(clientId, socket);
+  }
+};
+
 const startGame = () => {
   generatePlayers();
   setStartingPositions();
@@ -182,15 +181,16 @@ const startGame = () => {
 };
 
 const declareTurn = () => {
-  const currentPlayerSocket = manager.getCurrentPlayerSocket();
+  const currentPlayerSocket = manager.getCurrentPlayerSocket().currentSocketId;
   io.to(currentPlayerSocket).emit("yourTurn");
   io.except(currentPlayerSocket).emit("notYourTurn");
 };
 
 const checkTurn = (socket, callback) => {
-  const isTurn = socket.id === manager.getCurrentPlayerSocket();
+  const currentPlayerObject = manager.getCurrentPlayerSocket();
+  const isTurn = socket.id === currentPlayerObject.currentSocketId;
   if (isTurn) {
-    callback();
+    callback(currentPlayerObject.currentPlayer);
   } else {
     socket.emit("permissionDeny");
     socket.emit("notYourTurn");

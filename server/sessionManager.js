@@ -29,8 +29,10 @@ const checkHost = (socketId) => {
 
 const getCurrentPlayerSocket = () => {
   const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
-  const currentMap = allMaps.find((m) => m.name === currentPlayer.name);
-  return currentMap.socketId;
+  const currentSocketId = allMaps.find(
+    (m) => m.name === currentPlayer.name
+  ).socketId;
+  return { currentSocketId, currentPlayer };
 };
 
 module.exports = {
