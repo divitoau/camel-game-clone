@@ -23,14 +23,12 @@ let dummyUserIndex = 0;
 const autoStart = false;
 
 /*  ****** make final scoring display modal,
-make start modal function as wanted
 make money after leg update when modal closes
 check for cards before taking / placing on server side,
 prevent actions during endleg timeout */
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
-  socket.emit("fullState", gameState.getGameState());
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
@@ -38,15 +36,24 @@ io.on("connection", (socket) => {
 
   // maintains a consistent client state through socket reconnections
   socket.on("clientId", (clientId) => {
+    if (!gameState.raceStarted) {
+      const hostName = manager.allMaps.find((m) => m.isHost === true)?.name;
+      socket.emit("newPlayerRes", gameState.playerNames, hostName);
+    }
     const player = manager.allMaps.find((p) => p.clientId === clientId);
     if (player) {
       player.socketId = socket.id;
-      socket.emit(
-        socket.id === manager.getCurrentPlayerSocket()
-          ? "yourTurn"
-          : "notYourTurn"
-      );
-      sendThisPlayerState(socket.id);
+      if (gameState.raceStarted) {
+        socket.emit(
+          socket.id === manager.getCurrentPlayerSocket()
+            ? "yourTurn"
+            : "notYourTurn"
+        );
+        sendThisPlayerState(socket.id);
+        socket.emit("fullState", gameState.getGameState());
+      } else {
+        socket.emit("yourName", player.name);
+      }
     } else if (autoStart) {
       performAutoStart(clientId, socket);
     }
@@ -55,22 +62,23 @@ io.on("connection", (socket) => {
   socket.on("newPlayer", (name, clientId) => {
     const playerSockets = manager.allMaps.map((m) => m.socketId);
     if (playerSockets.includes(socket.id)) {
-      socket.emit("newPlayerRes", "there is already a player on this socket");
+      socket.emit("newPlayerFail", "there is already a player on this socket");
     } else if (clientId.length !== 8) {
-      socket.emit("newPlayerRes", "clientId error");
+      socket.emit("newPlayerFail", "clientId error");
+      console.log(clientId);
     } else if (!name) {
-      socket.emit("newPlayerRes", "Player name cannot be empty");
+      socket.emit("newPlayerFail", "Player name cannot be empty");
     } else if (gameState.playerNames.includes(name)) {
-      socket.emit("newPlayerRes", `${name} is already taken`);
+      socket.emit("newPlayerFail", `${name} is already taken`);
     } else {
       const clientMap = manager.createClientMap(name, clientId, socket.id);
+      const hostName = manager.allMaps.find((m) => m.isHost === true).name;
       addPlayer(name);
-      io.emit(
-        "newPlayerRes",
-        `${name} ${clientMap.isHost ? "is hosting" : "joined"}`,
-        gameState.playerNames
-      );
       socket.emit("declareHost", clientMap.isHost);
+      io.emit("newPlayerRes", gameState.playerNames, hostName);
+      manager.allMaps.forEach((m) => {
+        io.to(m.socketId).emit("yourName", m.name);
+      });
     }
   });
 
@@ -167,6 +175,7 @@ const startGame = () => {
   generatePlayers();
   setStartingPositions();
   gameState.resetPyramid();
+  gameState.setRaceStarted(true);
   declareTurn();
   io.emit("startGameRes", gameState.getGameState());
   sendPlayerStates();

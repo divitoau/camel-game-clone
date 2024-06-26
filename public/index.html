@@ -8,15 +8,9 @@
     <link rel="stylesheet" type="text/css" href="styles/camels.css" />
     <link rel="stylesheet" type="text/css" href="styles/dice.css" />
     <link rel="stylesheet" type="text/css" href="styles/playerMenu.css" />
+    <link rel="stylesheet" type="text/css" href="styles/startDisplay.css" />
   </head>
   <body>
-    <dialog id="game-start-dialog">
-      <h1>Welcome to Camel Up!</h1>
-      <label for="new-player-input">add a new player</label>
-      <input type="text" id="new-player-input" placeholder="name" />
-      <button id="add-player-button">add player</button>
-      <div id="starting-player-list"></div>
-    </dialog>
     <div id="game-board">
       <div class="track-space" id="track-space-15">
         <div class="space-number-label">
@@ -148,6 +142,13 @@
         <button id="finish-loser-button">place finish loser bet</button>
       </div>
     </div>
+    <dialog id="game-start-dialog">
+      <h1>Welcome to Camel Up!</h1>
+      <label for="new-player-input">add a new player</label>
+      <input type="text" id="new-player-input" placeholder="name" />
+      <button id="add-player-button">add player</button>
+      <ol id="starting-player-list"></ol>
+    </dialog>
     <dialog id="leg-bet-dialog">
       <button id="leg-bet-cancel-button">Cancel</button>
     </dialog>

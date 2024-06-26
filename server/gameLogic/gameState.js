@@ -7,6 +7,7 @@ class BettingTicket {
 
 class GameState {
   constructor() {
+    this.raceStarted = false;
     this.raceOver = false;
     this.diceInPyramid = ["blue", "yellow", "green", "red", "purple", "grey"];
     this.diceOnTents = [];
@@ -71,6 +72,10 @@ class GameState {
   resetPyramid() {
     this.diceInPyramid = ["blue", "yellow", "green", "red", "purple", "grey"];
     this.diceOnTents.length = 0;
+  }
+
+  setRaceStarted(value) {
+    this.raceStarted = value;
   }
 
   setRaceOver(value) {

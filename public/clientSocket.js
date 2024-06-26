@@ -8,30 +8,35 @@ socket.on("connect", () => {
 });
 
 socket.on("fullState", (state) => {
-  if (state.allPlayers.length < 2) {
-    openStartDialog();
-  } else {
-    displayState(state);
-    displayDice(state.diceOnTents);
-    state.allPlayers.forEach((p) => {
-      const tile = p.spectatorTile;
-      displaySpectatorTile(tile.player, tile.isCheering, tile.position);
-    });
-  }
+  displayState(state);
+  displayDice(state.diceOnTents);
+  state.allPlayers.forEach((p) => {
+    const tile = p.spectatorTile;
+    displaySpectatorTile(tile.player, tile.isCheering, tile.position);
+  });
 });
 
 socket.on("permissionDeny", () => {
   console.log("you do not have permission for this action");
 });
 
-socket.on("newPlayerRes", (res, playerNames) => {
-  console.log(res);
+socket.on("newPlayerFail", (msg) => {
+  alert(msg);
+});
+
+socket.on("newPlayerRes", (playerNames, hostName) => {
+  openStartDialog();
   if (playerNames) {
-    console.log(playerNames);
-    if (playerNames.length === 2 && getIsGameHost()) {
-      promptStartGame();
+    displayNewPlayer(playerNames, hostName);
+    if (playerNames.length === 2) {
+      const isHost = getIsGameHost();
+      promptStartGame(isHost);
     }
   }
+});
+
+socket.on("yourName", (name) => {
+  highlightYourName(name);
 });
 
 socket.on("declareHost", (isHost) => {
