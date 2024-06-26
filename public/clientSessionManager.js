@@ -1,5 +1,7 @@
 const setClientId = () => {
-  const clientId = Math.floor(Math.random() * 1e8).toString();
+  const clientId = Math.floor(Math.random() * 1e8)
+    .toString()
+    .padStart(8, "0");
   const expires = new Date(Date.now() + 864e5).toUTCString();
   document.cookie = `clientId=${clientId}; expires=${expires}; path=/`;
   return clientId;
