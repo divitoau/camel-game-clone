@@ -12,8 +12,6 @@ const playerRanking = document.getElementById("player-ranking");
 
 legSummaryButton.addEventListener("click", () => {
   legSummaryDialog.close();
-  resetTents();
-  removeAllElements(".spectator-tile");
 });
 
 finalSummaryButton.addEventListener("click", () => {

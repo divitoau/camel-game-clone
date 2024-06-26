@@ -25,6 +25,7 @@ socket.on("newPlayerFail", (msg) => {
 });
 
 socket.on("newPlayerRes", (playerNames, hostName) => {
+  closeDialogs();
   openStartDialog();
   if (playerNames) {
     displayNewPlayer(playerNames, hostName);
@@ -45,7 +46,6 @@ socket.on("declareHost", (isHost) => {
 
 socket.on("yourTurn", () => {
   enableActionButtons();
-  console.log("your turn");
   if (autoPlay) {
     if (document.getElementById("tent-5").className.length > 10) {
       setTimeout(() => {
@@ -75,7 +75,6 @@ socket.on("notYourTurn", () => {
 
 socket.on("startGameRes", (state) => {
   gameStartDialog.close();
-  console.log("start game");
   displayState(state);
 });
 
@@ -91,7 +90,8 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
   );
 });
 
-socket.on("endLeg", (legResults, bettingTickets) => {
+socket.on("endLeg", (legResults, bettingTickets, isCurrent) => {
+  closeDialogs();
   if (autoPlay) {
     displayBettingTickets(bettingTickets);
     displayLegResults(legResults);
@@ -99,7 +99,12 @@ socket.on("endLeg", (legResults, bettingTickets) => {
     setTimeout(() => {
       displayBettingTickets(bettingTickets);
       displayLegResults(legResults);
-    }, 2000);
+      resetTents();
+      removeAllElements(".spectator-tile");
+      if (isCurrent) {
+        enableActionButtons();
+      }
+    }, 1000);
   }
 });
 
@@ -132,6 +137,7 @@ socket.on("updateFinishStack", (isWinner, finishStack) => {
 });
 
 socket.on("finalEndLeg", (finalResults) => {
+  closeDialogs();
   displayFinalLeg(finalResults);
 });
 
@@ -146,6 +152,15 @@ socket.on(
     );
   }
 );
+
+const closeDialogs = () => {
+  legSummaryDialog.close();
+  gameStartDialog.close();
+  spectatorDialog.close();
+  legBetDialog.close();
+  finishBetDialog.close();
+  finalSummaryDialog.close();
+};
 
 const addPlayer = () => {
   const name = newPlayerInput.value.trim().substring(0, 16);

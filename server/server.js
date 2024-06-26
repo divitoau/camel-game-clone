@@ -20,12 +20,11 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = false;
+const autoStart = true;
 
 /*  ****** make final scoring display modal,
-make money after leg update when modal closes
 check for cards before taking / placing on server side,
-prevent actions during endleg timeout */
+remove option to add player after player has been added */
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -82,12 +81,12 @@ io.on("connection", (socket) => {
       if (isFinished) {
         endRace();
       } else if (gameState.diceInPyramid.length === 1) {
+        io.emit("notYourTurn");
         endLeg(false);
-      }
-      sendPlayerStates();
-      if (!gameState.raceOver) {
+      } else {
         declareTurn();
       }
+      sendPlayerStates();
     });
   });
 
@@ -227,13 +226,18 @@ const getProhibitedSpaces = () => {
 };
 
 const endLeg = (isFinal) => {
+  const currentPlayerSocket = manager.getCurrentPlayerSocket().currentSocketId;
   gameState.resetPyramid();
   gameState.resetBettingTickets();
+  const eventName = isFinal ? "finalEndLeg" : "endLeg";
+  const bettingTickets = !isFinal ? gameState.remainingBettingTickets : null;
   manager.allMaps.forEach((m) => {
+    const isCurrent = m.socketId === currentPlayerSocket;
     io.to(m.socketId).emit(
-      isFinal ? "finalEndLeg" : "endLeg",
+      eventName,
       calculateLeg(m.name),
-      !isFinal ? gameState.remainingBettingTickets : null
+      bettingTickets,
+      isCurrent
     );
   });
 };
@@ -269,13 +273,8 @@ const performAutoStart = (clientId, socket) => {
     socket.id
   );
   addPlayer(dummyUsers[dummyUserIndex]);
-  io.emit(
-    "newPlayerRes",
-    `${dummyUsers[dummyUserIndex]} ${
-      clientMap.isHost ? "is hosting" : "joined"
-    }`,
-    gameState.playerNames
-  );
+  const hostName = manager.allMaps.find((m) => m.isHost === true).name;
+  io.emit("newPlayerRes", gameState.playerNames, hostName);
   socket.emit("declareHost", clientMap.isHost);
   dummyUserIndex += 1;
   if (dummyUserIndex === 2) {
