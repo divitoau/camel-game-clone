@@ -23,7 +23,6 @@ let dummyUserIndex = 0;
 const autoStart = true;
 
 /*  ****** make final scoring display modal,
-check for cards before taking / placing on server side,
 remove option to add player after player has been added */
 
 io.on("connection", (socket) => {
@@ -41,14 +40,14 @@ io.on("connection", (socket) => {
   socket.on("newPlayer", (name, clientId) => {
     const playerSockets = manager.allMaps.map((m) => m.socketId);
     if (playerSockets.includes(socket.id)) {
-      socket.emit("newPlayerFail", "there is already a player on this socket");
+      socket.emit("issueEncounter", "there is already a player on this socket");
     } else if (clientId.length !== 8) {
-      socket.emit("newPlayerFail", "clientId error");
+      socket.emit("issueEncounter", "clientId error");
       console.log(clientId);
     } else if (!name) {
-      socket.emit("newPlayerFail", "Player name cannot be empty");
+      socket.emit("issueEncounter", "Player name cannot be empty");
     } else if (gameState.playerNames.includes(name)) {
-      socket.emit("newPlayerFail", `${name} is already taken`);
+      socket.emit("issueEncounter", `${name} is already taken`);
     } else {
       const clientMap = manager.createClientMap(name, clientId, socket.id);
       const hostName = manager.allMaps.find((m) => m.isHost === true).name;
@@ -117,10 +116,15 @@ io.on("connection", (socket) => {
 
   socket.on("takeBettingTicket", (color) => {
     checkTurn(socket, (currentPlayer) => {
-      currentPlayer.takeBettingTicket(color);
-      io.emit("updateBettingTickets", gameState.remainingBettingTickets);
-      sendPlayerStates();
-      declareTurn();
+      const betColorArray = gameState.remainingBettingTickets[color];
+      if (betColorArray.length > 0) {
+        currentPlayer.takeBettingTicket(betColorArray);
+        io.emit("updateBettingTickets", gameState.remainingBettingTickets);
+        sendPlayerStates();
+        declareTurn();
+      } else {
+        socket.emit("issueEncounter", `no ${color} tickets are left`);
+      }
     });
   });
 
@@ -132,14 +136,24 @@ io.on("connection", (socket) => {
 
   socket.on("placeFinishCard", (color, isWinner) => {
     checkTurn(socket, (currentPlayer) => {
-      currentPlayer.placeFinishCard(color, isWinner);
-      io.emit(
-        "updateFinishStack",
-        isWinner,
-        gameState.hideFinishStack(isWinner)
+      const finishCard = currentPlayer.finishCards.find(
+        (f) => f.color === color
       );
-      sendPlayerStates();
-      declareTurn();
+      if (finishCard) {
+        currentPlayer.placeFinishCard(finishCard, isWinner);
+        io.emit(
+          "updateFinishStack",
+          isWinner,
+          gameState.hideFinishStack(isWinner)
+        );
+        sendPlayerStates();
+        declareTurn();
+      } else {
+        socket.emit(
+          "issueEncounter",
+          `you have already placed the ${color} finish card`
+        );
+      }
     });
   });
 });

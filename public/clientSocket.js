@@ -20,7 +20,7 @@ socket.on("permissionDeny", () => {
   console.log("you do not have permission for this action");
 });
 
-socket.on("newPlayerFail", (msg) => {
+socket.on("issueEncounter", (msg) => {
   alert(msg);
 });
 

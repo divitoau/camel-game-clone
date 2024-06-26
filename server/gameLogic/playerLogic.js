@@ -35,18 +35,13 @@ class Player {
     this.finishCards = finishCards;
   }
 
-  takeBettingTicket(color) {
-    const betColorArray = gameState.remainingBettingTickets[color];
-    if (betColorArray.length > 0) {
-      const takenTicket = betColorArray.shift();
-      this.bettingTickets.push(takenTicket);
-      console.log(
-        `${this.name} snagged a ${takenTicket.value} pound ${takenTicket.color} ticket`
-      );
-      endTurn();
-    } else {
-      console.log("no tickets of this color are left");
-    }
+  takeBettingTicket(betColorArray) {
+    const takenTicket = betColorArray.shift();
+    this.bettingTickets.push(takenTicket);
+    console.log(
+      `${this.name} snagged a ${takenTicket.value} pound ${takenTicket.color} ticket`
+    );
+    endTurn();
   }
 
   takePyramidTicket() {
@@ -62,8 +57,7 @@ class Player {
     endTurn();
   }
 
-  placeFinishCard(color, isWinner) {
-    const finishCard = this.finishCards.find((f) => f.color === color);
+  placeFinishCard(finishCard, isWinner) {
     const finishIndex = this.finishCards.indexOf(finishCard);
     this.finishCards.splice(finishIndex, 1);
     if (isWinner) {
