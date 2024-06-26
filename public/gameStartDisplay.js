@@ -2,8 +2,16 @@ const gameStartDialog = document.getElementById("game-start-dialog");
 const addPlayerButton = document.getElementById("add-player-button");
 const newPlayerInput = document.getElementById("new-player-input");
 const startingPlayerList = document.getElementById("starting-player-list");
+const newPlayerForm = document.getElementById("new-player-form");
 
-addPlayerButton.addEventListener("click", () => addPlayer());
+addPlayerButton.addEventListener("click", () => {
+  if (newPlayerForm.checkValidity()) {
+    addPlayer();
+    newPlayerInput.value = "";
+  } else {
+    newPlayerForm.reportValidity();
+  }
+});
 
 const openStartDialog = () => {
   const oldButton = document.getElementById("start-game-button");
@@ -46,20 +54,16 @@ const highlightYourName = (name) => {
 };
 
 const promptStartGame = (isHost) => {
-  const oldButton = document.getElementById("start-game-button");
-  if (oldButton) {
-    oldButton.remove();
-  }
-  const startGameButton = document.createElement("button");
-  startGameButton.id = "start-game-button";
-  startGameButton.innerText = "start game";
-  if (!isHost) {
-    startGameButton.setAttribute("disabled", "");
+  if (isHost) {
+    const startGameButton = document.createElement("button");
+    startGameButton.id = "start-game-button";
+    startGameButton.innerText = "start game";
+    startGameButton.addEventListener("click", () => startGame());
+    gameStartDialog.appendChild(startGameButton);
+  } else {
     const waitingText = document.createElement("p");
     waitingText.id = "waiting-text";
     waitingText.textContent = "waiting for host to start game...";
     gameStartDialog.appendChild(waitingText);
   }
-  startGameButton.addEventListener("click", () => startGame());
-  gameStartDialog.appendChild(startGameButton);
 };

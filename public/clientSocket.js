@@ -38,6 +38,7 @@ socket.on("newPlayerRes", (playerNames, hostName) => {
 
 socket.on("yourName", (name) => {
   highlightYourName(name);
+  newPlayerForm.remove();
 });
 
 socket.on("declareHost", (isHost) => {
@@ -166,10 +167,8 @@ const addPlayer = () => {
   const name = newPlayerInput.value.trim().substring(0, 16);
   if (name === "") {
     console.log("Player name cannot be empty");
-    newPlayerInput.value = "";
   } else {
     socket.emit("newPlayer", name, setClientId());
-    newPlayerInput.value = "";
   }
 };
 

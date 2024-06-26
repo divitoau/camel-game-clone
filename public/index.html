@@ -144,9 +144,11 @@
     </div>
     <dialog id="game-start-dialog">
       <h1>Welcome to Camel Up!</h1>
-      <label for="new-player-input">add a new player</label>
-      <input type="text" id="new-player-input" placeholder="name" />
-      <button id="add-player-button">add player</button>
+  <form id="new-player-form">
+    <label for="new-player-input">Add a new player</label>
+    <input type="text" id="new-player-input" name="playerName" placeholder="Name" required minlength="3" />
+    <button type="button" id="add-player-button">Add Player</button>
+  </form>
       <ol id="starting-player-list"></ol>
     </dialog>
     <dialog id="leg-bet-dialog">

@@ -20,10 +20,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = true;
-
-/*  ****** make final scoring display modal,
-remove option to add player after player has been added */
+const autoStart = false;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
