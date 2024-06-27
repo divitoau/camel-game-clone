@@ -29,7 +29,7 @@ socket.on("newPlayerRes", (playerNames, hostName) => {
   openStartDialog();
   if (playerNames) {
     displayNewPlayer(playerNames, hostName);
-    if (playerNames.length === 2) {
+    if (playerNames.length > 1) {
       const isHost = getIsGameHost();
       promptStartGame(isHost);
     }

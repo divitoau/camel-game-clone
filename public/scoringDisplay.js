@@ -62,7 +62,9 @@ const updateFinalSummary = (
     }`;
     finalLoserBets.appendChild(card);
   });
-  totalRewards.innerHTML.concat(`<p>${totalFinishRewards}</p>`);
+  const rewardCount = document.createElement("p");
+  rewardCount.innerText = totalFinishRewards;
+  totalRewards.appendChild(rewardCount);
   rankedPlayers.forEach(({ name, money }) => {
     const player = document.createElement("li");
     player.innerText = `${name} | ${money}`;

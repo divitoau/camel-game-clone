@@ -1,7 +1,5 @@
 const gameState = require("./gameLogic/gameState.js");
 
-const allMaps = [];
-
 class ClientMap {
   constructor(name, clientId, socketId, isHost) {
     this.name = name;
@@ -11,34 +9,35 @@ class ClientMap {
   }
 }
 
-const createClientMap = (name, clientId, socketId) => {
-  const clientMap = new ClientMap(
-    name,
-    clientId,
-    socketId,
-    gameState.playerNames.length < 1 ? true : false
-  );
-  allMaps.push(clientMap);
-  return clientMap;
-};
+class MapState {
+  constructor() {
+    this.allMaps = [];
+    this.hostMap;
+  }
 
-const checkHost = (socketId) => {
-  const hostMap = allMaps.find((m) => m.isHost === true);
-  return hostMap?.socketId === socketId;
-};
+  createClientMap(name, clientId, socketId) {
+    const isHost = gameState.playerNames.length < 1;
+    const clientMap = new ClientMap(name, clientId, socketId, isHost);
+    if (isHost) {
+      this.hostMap = clientMap;
+    }
+    this.allMaps.push(clientMap);
+    return clientMap;
+  }
 
-const getCurrentPlayerSocket = () => {
-  const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
-  const currentSocketId = allMaps.find(
-    (m) => m.name === currentPlayer.name
-  ).socketId;
-  return { currentSocketId, currentPlayer };
-};
+  checkHost(socketId) {
+    return this.hostMap?.socketId === socketId;
+  }
 
-module.exports = {
-  allMaps,
-  ClientMap,
-  createClientMap,
-  checkHost,
-  getCurrentPlayerSocket,
-};
+  getCurrentPlayerSocket() {
+    const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
+    const currentSocketId = this.allMaps.find(
+      (m) => m.name === currentPlayer.name
+    ).socketId;
+    return { currentSocketId, currentPlayer };
+  }
+}
+
+const manager = new MapState();
+
+module.exports = manager;

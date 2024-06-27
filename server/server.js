@@ -40,14 +40,13 @@ io.on("connection", (socket) => {
       socket.emit("issueEncounter", "there is already a player on this socket");
     } else if (clientId.length !== 8) {
       socket.emit("issueEncounter", "clientId error");
-      console.log(clientId);
     } else if (!name) {
       socket.emit("issueEncounter", "Player name cannot be empty");
     } else if (gameState.playerNames.includes(name)) {
       socket.emit("issueEncounter", `${name} is already taken`);
     } else {
       const clientMap = manager.createClientMap(name, clientId, socket.id);
-      const hostName = manager.allMaps.find((m) => m.isHost === true).name;
+      const hostName = manager.hostMap.name;
       addPlayer(name);
       socket.emit("declareHost", clientMap.isHost);
       io.emit("newPlayerRes", gameState.playerNames, hostName);
@@ -75,6 +74,7 @@ io.on("connection", (socket) => {
         gameState.allCamels
       );
       if (isFinished) {
+        io.emit("notYourTurn");
         endRace();
       } else if (gameState.diceInPyramid.length === 1) {
         io.emit("notYourTurn");
@@ -157,7 +157,7 @@ io.on("connection", (socket) => {
 
 const handleClientReconnect = (clientId, socket) => {
   if (!gameState.raceStarted) {
-    const hostName = manager.allMaps.find((m) => m.isHost === true)?.name;
+    const hostName = manager.hostMap?.name;
     socket.emit("newPlayerRes", gameState.playerNames, hostName);
   }
   const player = manager.allMaps.find((p) => p.clientId === clientId);
@@ -284,7 +284,7 @@ const performAutoStart = (clientId, socket) => {
     socket.id
   );
   addPlayer(dummyUsers[dummyUserIndex]);
-  const hostName = manager.allMaps.find((m) => m.isHost === true).name;
+  const hostName = manager.hostMap.name;
   io.emit("newPlayerRes", gameState.playerNames, hostName);
   socket.emit("declareHost", clientMap.isHost);
   dummyUserIndex += 1;
