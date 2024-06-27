@@ -25,8 +25,34 @@ class MapState {
     return clientMap;
   }
 
-  checkHost(socketId) {
-    return this.hostMap?.socketId === socketId;
+  handleClientReconnect(clientId, socket) {
+    if (!gameState.raceStarted) {
+      const hostName = this.hostMap?.name;
+      socket.emit("newPlayerRes", gameState.playerNames, hostName);
+    }
+    const player = this.allMaps.find((p) => p.clientId === clientId);
+    if (player) {
+      player.socketId = socket.id;
+      if (gameState.raceStarted) {
+        const currentPlayerObject = this.getCurrentPlayerSocket();
+        socket.emit(
+          socket.id === currentPlayerObject.currentSocketId
+            ? "yourTurn"
+            : "notYourTurn"
+        );
+        socket.emit("fullState", gameState.getGameState());
+      } else {
+        socket.emit("yourName", player.name);
+      }
+    }
+  }
+
+  checkHost(socket, callback) {
+    if (this.hostMap?.socketId === socket.id) {
+      callback();
+    } else {
+      socket.emit("permissionDeny");
+    }
   }
 
   getCurrentPlayerSocket() {

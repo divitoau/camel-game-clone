@@ -21,7 +21,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = true;
+const autoStart = false;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -32,7 +32,14 @@ io.on("connection", (socket) => {
 
   // maintains a consistent client state through socket reconnections
   socket.on("clientId", (clientId) => {
-    handleClientReconnect(clientId, socket);
+    manager.handleClientReconnect(clientId, socket);
+    if (gameState.raceStarted) {
+      sendThisPlayerState(socket.id);
+    } else {
+      if (autoStart) {
+        performAutoStart(clientId, socket);
+      }
+    }
   });
 
   socket.on("newPlayer", (name, clientId) => {
@@ -58,11 +65,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("startGame", () => {
-    if (manager.checkHost(socket.id)) {
+    manager.checkHost(socket, () => {
       startGame();
-    } else {
-      socket.emit("permissionDeny");
-    }
+    });
   });
 
   socket.on("takePyramidTicket", () => {
@@ -89,7 +94,7 @@ io.on("connection", (socket) => {
 
   socket.on("requestSpectatorSpaces", (isCheering) => {
     checkTurn(socket, (currentPlayer) => {
-      const prohibitedSpaces = getProhibitedSpaces();
+      const prohibitedSpaces = gameState.getProhibitedSpaces();
       socket.emit(
         "spectatorSpaces",
         currentPlayer.name,
@@ -156,43 +161,15 @@ io.on("connection", (socket) => {
   });
 
   socket.on("startNewGame", (isSamePlayers) => {
-    if (manager.checkHost(socket.id)) {
+    manager.checkHost(socket, () => {
       resetGame(isSamePlayers);
       console.log(gameState);
       declareTurn();
       io.emit("startGameRes", gameState.getGameState());
       sendPlayerStates();
-    } else {
-      socket.emit("permissionDeny");
-    }
+    });
   });
 });
-
-// ******* move this to session manager
-const handleClientReconnect = (clientId, socket) => {
-  if (!gameState.raceStarted) {
-    const hostName = manager.hostMap?.name;
-    socket.emit("newPlayerRes", gameState.playerNames, hostName);
-  }
-  const player = manager.allMaps.find((p) => p.clientId === clientId);
-  if (player) {
-    player.socketId = socket.id;
-    if (gameState.raceStarted) {
-      const currentPlayerObject = manager.getCurrentPlayerSocket();
-      socket.emit(
-        socket.id === currentPlayerObject.currentSocketId
-          ? "yourTurn"
-          : "notYourTurn"
-      );
-      sendThisPlayerState(socket.id);
-      socket.emit("fullState", gameState.getGameState());
-    } else {
-      socket.emit("yourName", player.name);
-    }
-  } else if (autoStart) {
-    performAutoStart(clientId, socket);
-  }
-};
 
 const startGame = () => {
   generatePlayers();
@@ -232,22 +209,6 @@ const sendThisPlayerState = (socketId) => {
   const thisMap = manager.allMaps.find((m) => m.socketId === socketId);
   const thisPlayer = gameState.allPlayers.find((p) => p.name === thisMap.name);
   io.to(socketId).emit("yourPlayerState", thisPlayer);
-};
-
-const getProhibitedSpaces = () => {
-  const prohibitedSpaces = new Set([1]);
-  gameState.allCamels.forEach((c) => {
-    prohibitedSpaces.add(c.position);
-  });
-  const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
-  gameState.allPlayers.forEach((p) => {
-    if (p !== currentPlayer) {
-      prohibitedSpaces.add(p.spectatorTile.position);
-      prohibitedSpaces.add(p.spectatorTile.position + 1);
-      prohibitedSpaces.add(p.spectatorTile.position - 1);
-    }
-  });
-  return Array.from(prohibitedSpaces);
 };
 
 const endLeg = (isFinal) => {

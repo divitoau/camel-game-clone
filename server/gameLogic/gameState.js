@@ -151,6 +151,22 @@ class GameState {
       })
       .map((camel) => camel.color);
   }
+
+  getProhibitedSpaces() {
+    const prohibitedSpaces = new Set([1]);
+    this.allCamels.forEach((c) => {
+      prohibitedSpaces.add(c.position);
+    });
+    const currentPlayer = this.allPlayers[this.currentPlayerIndex];
+    this.allPlayers.forEach((p) => {
+      if (p !== currentPlayer) {
+        prohibitedSpaces.add(p.spectatorTile.position);
+        prohibitedSpaces.add(p.spectatorTile.position + 1);
+        prohibitedSpaces.add(p.spectatorTile.position - 1);
+      }
+    });
+    return Array.from(prohibitedSpaces);
+  }
 }
 
 const gameState = new GameState();
