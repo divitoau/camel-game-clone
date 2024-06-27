@@ -118,4 +118,5 @@ const endTurn = () => {
 module.exports = {
   addPlayer,
   generatePlayers,
+  regeneratePlayers,
 };

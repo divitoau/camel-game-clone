@@ -225,6 +225,6 @@ const displayState = (state) => {
   displayFinishStack(false, state.finishLoserStack);
 };
 
-const startNewGame = () => {
-  socket.emit("startNewGame");
+const startNewGame = (isSamePlayers) => {
+  socket.emit("startNewGame", isSamePlayers);
 };

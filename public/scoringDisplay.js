@@ -9,8 +9,20 @@ const finalLoserBets = document.getElementById("final-loser-bets");
 const totalRewards = document.getElementById("total-rewards");
 const playerRanking = document.getElementById("player-ranking");
 
+const newGameDialog = document.getElementById("new-game-dialog");
+const samePlayersButton = document.getElementById("same-players-button");
+const newPlayersButton = document.getElementById("new-players-button");
+
 legSummaryButton.addEventListener("click", () => {
   legSummaryDialog.close();
+});
+samePlayersButton.addEventListener("click", () => {
+  newGameDialog.close();
+  startNewGame(true);
+});
+newPlayersButton.addEventListener("click", () => {
+  newGameDialog.close();
+  startNewGame(false);
 });
 
 const displayLegResults = (legResults) => {
@@ -74,7 +86,8 @@ const promptRestart = () => {
   restartButton.id = "restart-button";
   restartButton.innerText = "Start a new game";
   restartButton.addEventListener("click", () => {
-    startNewGame();
+    finalSummaryDialog.close();
+    newGameDialog.showModal();
   });
   finalSummaryDialog.appendChild(restartButton);
 };

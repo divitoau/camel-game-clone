@@ -144,11 +144,18 @@
     </div>
     <dialog id="game-start-dialog">
       <h1>Welcome to Camel Up!</h1>
-  <form id="new-player-form">
-    <label for="new-player-input">Add a new player</label>
-    <input type="text" id="new-player-input" name="playerName" placeholder="Name" required minlength="3" />
-    <button type="button" id="add-player-button">Add Player</button>
-  </form>
+      <form id="new-player-form">
+        <label for="new-player-input">Add a new player</label>
+        <input
+          type="text"
+          id="new-player-input"
+          name="playerName"
+          placeholder="Name"
+          required
+          minlength="3"
+        />
+        <button type="button" id="add-player-button">Add Player</button>
+      </form>
       <ol id="starting-player-list"></ol>
     </dialog>
     <dialog id="leg-bet-dialog">
@@ -186,10 +193,14 @@
         </div>
       </div>
     </dialog>
+    <dialog id="new-game-dialog">
+      <h2>Start a new game</h2>
+      <button id="same-players-button">Use the same players</button>
+      <button id="new-players-button">Make new players</button>
+    </dialog>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./clientSocket.js"></script>
     <script src="./clientSessionManager.js"></script>
-
     <script src="./centerDisplay.js"></script>
     <script src="./camelDisplay.js"></script>
     <script src="./playerDisplay.js"></script>

@@ -11,6 +11,7 @@ const {
   countFinishCards,
   declarePlayerRanking,
 } = require("./gameLogic/scoringLogic.js");
+const { resetGame } = require("./gameLogic/gameOperations.js");
 
 const app = express();
 const server = createServer(app);
@@ -20,7 +21,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = false;
+const autoStart = true;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -154,11 +155,20 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("startNewGame", () => {
-    console.log("woohoo another game");
+  socket.on("startNewGame", (isSamePlayers) => {
+    if (manager.checkHost(socket.id)) {
+      resetGame(isSamePlayers);
+      console.log(gameState);
+      declareTurn();
+      io.emit("startGameRes", gameState.getGameState());
+      sendPlayerStates();
+    } else {
+      socket.emit("permissionDeny");
+    }
   });
 });
 
+// ******* move this to session manager
 const handleClientReconnect = (clientId, socket) => {
   if (!gameState.raceStarted) {
     const hostName = manager.hostMap?.name;
