@@ -3,7 +3,6 @@ const legSummaryButton = document.getElementById("leg-summary-button");
 const legSummaryDisplay = document.getElementById("leg-summary-display");
 
 const finalSummaryDialog = document.getElementById("final-summary-dialog");
-const finalSummaryButton = document.getElementById("final-summary-button");
 const finalSummaryDisplay = document.getElementById("final-summary-display");
 const finalWinnerBets = document.getElementById("final-winner-bets");
 const finalLoserBets = document.getElementById("final-loser-bets");
@@ -12,12 +11,6 @@ const playerRanking = document.getElementById("player-ranking");
 
 legSummaryButton.addEventListener("click", () => {
   legSummaryDialog.close();
-});
-
-finalSummaryButton.addEventListener("click", () => {
-  finalSummaryDialog.close();
-  resetTents();
-  removeAllElements(".spectator-tile");
 });
 
 const displayLegResults = (legResults) => {
@@ -70,4 +63,18 @@ const updateFinalSummary = (
     player.innerText = `${name} | ${money}`;
     playerRanking.appendChild(player);
   });
+};
+
+const promptRestart = () => {
+  const oldButton = document.getElementById("restart-button");
+  if (oldButton) {
+    oldButton.remove();
+  }
+  const restartButton = document.createElement("button");
+  restartButton.id = "restart-button";
+  restartButton.innerText = "Start a new game";
+  restartButton.addEventListener("click", () => {
+    startNewGame();
+  });
+  finalSummaryDialog.appendChild(restartButton);
 };

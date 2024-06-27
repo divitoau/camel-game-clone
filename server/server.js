@@ -153,6 +153,10 @@ io.on("connection", (socket) => {
       }
     });
   });
+
+  socket.on("startNewGame", () => {
+    console.log("woohoo another game");
+  });
 });
 
 const handleClientReconnect = (clientId, socket) => {
@@ -275,6 +279,7 @@ const endRace = () => {
       rankedPlayers
     );
   });
+  io.to(manager.hostMap.socketId).emit("promptRestart");
 };
 
 const performAutoStart = (clientId, socket) => {

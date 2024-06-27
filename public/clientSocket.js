@@ -1,6 +1,7 @@
 const socket = io();
 
 const autoPlay = false;
+let autoDiceCount = 0;
 
 socket.on("connect", () => {
   const clientId = getClientId();
@@ -48,28 +49,35 @@ socket.on("declareHost", (isHost) => {
 socket.on("yourTurn", () => {
   enableActionButtons();
   if (autoPlay) {
-    if (document.getElementById("tent-5").className.length > 10) {
+    setTimeout(() => {
+      socket.emit("takePyramidTicket");
+    }, 200);
+    autoDiceCount += 1;
+    if (autoDiceCount === 5) {
+      autoDiceCount = 0;
+      console.log(autoDiceCount);
       setTimeout(() => {
         legSummaryDialog.close();
         resetTents();
         removeAllElements(".spectator-tile");
-      }, 100);
+        socket.emit("takePyramidTicket");
+      }, 1000);
     }
-    setTimeout(() => {
-      socket.emit("takePyramidTicket");
-    }, 100);
   }
 });
 
 socket.on("notYourTurn", () => {
   disableActionButtons();
   if (autoPlay) {
-    if (document.getElementById("tent-5").className.length > 10) {
+    autoDiceCount += 1;
+    if (autoDiceCount === 5) {
+      autoDiceCount = 0;
+      console.log(autoDiceCount);
       setTimeout(() => {
         legSummaryDialog.close();
         resetTents();
         removeAllElements(".spectator-tile");
-      }, 50);
+      }, 1000);
     }
   }
 });
@@ -154,6 +162,10 @@ socket.on(
   }
 );
 
+socket.on("promptRestart", () => {
+  promptRestart();
+});
+
 const closeDialogs = () => {
   legSummaryDialog.close();
   gameStartDialog.close();
@@ -211,4 +223,8 @@ const displayState = (state) => {
   displayBettingTickets(state.remainingBettingTickets);
   displayFinishStack(true, state.finishWinnerStack);
   displayFinishStack(false, state.finishLoserStack);
+};
+
+const startNewGame = () => {
+  socket.emit("startNewGame");
 };
