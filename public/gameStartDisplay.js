@@ -14,14 +14,8 @@ addPlayerButton.addEventListener("click", () => {
 });
 
 const openStartDialog = () => {
-  const oldButton = document.getElementById("start-game-button");
-  const waitingText = document.getElementById("waiting-text");
-  if (oldButton) {
-    oldButton.remove();
-  }
-  if (waitingText) {
-    waitingText.remove();
-  }
+  checkAndRemove("start-game-button");
+  checkAndRemove("waiting-text");
   gameStartDialog.showModal();
 };
 

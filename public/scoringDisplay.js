@@ -79,10 +79,6 @@ const updateFinalSummary = (
 };
 
 const promptRestart = () => {
-  const oldButton = document.getElementById("restart-button");
-  if (oldButton) {
-    oldButton.remove();
-  }
   const restartButton = document.createElement("button");
   restartButton.id = "restart-button";
   restartButton.innerText = "Start a new game";

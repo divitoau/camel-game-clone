@@ -26,8 +26,10 @@ socket.on("issueEncounter", (msg) => {
 });
 
 socket.on("newPlayerRes", (playerNames, hostName) => {
-  closeDialogs();
-  openStartDialog();
+  closeDialogsExcept(gameStartDialog);
+  if (!gameStartDialog.hasAttribute("open")) {
+    openStartDialog();
+  }
   displayNewPlayer(playerNames, hostName);
   if (playerNames.length > 1) {
     const isHost = getIsGameHost();
@@ -40,7 +42,7 @@ socket.on("newPlayerRes", (playerNames, hostName) => {
 
 socket.on("yourName", (name) => {
   highlightYourName(name);
-  newPlayerForm.remove();
+  checkAndRemove(newPlayerForm);
 });
 
 socket.on("declareHost", (isHost) => {
@@ -60,7 +62,6 @@ socket.on("yourTurn", () => {
       setTimeout(() => {
         legSummaryDialog.close();
         resetTents();
-        removeAllElements(".spectator-tile");
         socket.emit("takePyramidTicket");
       }, 1000);
     }
@@ -77,20 +78,18 @@ socket.on("notYourTurn", () => {
       setTimeout(() => {
         legSummaryDialog.close();
         resetTents();
-        removeAllElements(".spectator-tile");
       }, 1000);
     }
   }
 });
 
 socket.on("startGameRes", (state) => {
-  if (document.contains(proceedButton)) {
-    proceedButton.remove();
-  }
+  checkAndRemove("restart-button");
+  checkAndRemove(proceedButton);
   if (!document.contains(legSummaryButton)) {
     legSummaryDialog.appendChild(legSummaryButton);
   }
-  closeDialogs();
+  closeDialogsExcept(null);
   displayState(state);
 });
 
@@ -107,7 +106,7 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
 });
 
 socket.on("endLeg", (legResults, bettingTickets, isCurrent) => {
-  closeDialogs();
+  closeDialogsExcept(legBetDialog);
   if (autoPlay) {
     displayBettingTickets(bettingTickets);
     displayLegResults(legResults);
@@ -153,7 +152,7 @@ socket.on("updateFinishStack", (isWinner, finishStack) => {
 });
 
 socket.on("finalEndLeg", (finalResults) => {
-  closeDialogs();
+  closeDialogsExcept(legBetDialog);
   displayFinalLeg(finalResults);
 });
 
@@ -173,18 +172,9 @@ socket.on("promptRestart", () => {
   promptRestart();
 });
 
-const closeDialogs = () => {
-  legSummaryDialog.close();
-  gameStartDialog.close();
-  spectatorDialog.close();
-  legBetDialog.close();
-  finishBetDialog.close();
-  finalSummaryDialog.close();
-};
-
 const addPlayer = () => {
   const name = newPlayerInput.value.trim().substring(0, 16);
-  if (name === "") {
+  if (!name) {
     console.log("Player name cannot be empty");
   } else {
     socket.emit("newPlayer", name, setClientId());

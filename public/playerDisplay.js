@@ -93,7 +93,7 @@ const updatePlayerDisplay = (player) => {
 
 // shows the newly placed spectator tile on DOM
 const displaySpectatorTile = (currentPlayerName, isCheering, spaceNumber) => {
-  removeOldTile(currentPlayerName);
+  checkAndRemove(`${currentPlayerName}-spectator-tile`);
   const tile = document.createElement("div");
   tile.id = `${currentPlayerName}-spectator-tile`;
   tile.className = `spectator-tile ${isCheering ? "cheering" : "booing"}-tile`;
@@ -111,7 +111,7 @@ const displaySpectatorPlacers = (
   prohibitedSpaces,
   isCheering
 ) => {
-  removeOldTile(currentPlayerName);
+  checkAndRemove(`${currentPlayerName}-spectator-tile`);
   document.querySelectorAll(".track-space").forEach((s) => {
     const spaceNumber = parseInt(s.id.substring(12));
     if (!prohibitedSpaces.includes(spaceNumber)) {
@@ -178,15 +178,3 @@ const showFinishDialog = (isWinner, finishCards) => {
   }
 };
 
-const removeOldTile = (currentPlayerName) => {
-  oldTile = document.getElementById(`${currentPlayerName}-spectator-tile`);
-  if (oldTile) {
-    oldTile.remove();
-  }
-};
-
-const removeAllElements = (elementString) => {
-  document.querySelectorAll(elementString).forEach((b) => {
-    b.remove();
-  });
-};
