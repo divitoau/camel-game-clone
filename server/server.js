@@ -4,7 +4,10 @@ const { Server } = require("socket.io");
 
 const manager = require("./sessionManager.js");
 const gameState = require("./gameLogic/gameState.js");
-const { setStartingPositions } = require("./gameLogic/camelLogic");
+const {
+  generateCamels,
+  setStartingPositions,
+} = require("./gameLogic/camelLogic");
 const { addPlayer, generatePlayers } = require("./gameLogic/playerLogic");
 const {
   calculateLeg,
@@ -86,7 +89,7 @@ io.on("connection", (socket) => {
         io.emit("notYourTurn");
         endLeg(false);
       } else {
-        declareTurn();
+        manager.declareTurn(io);
       }
       sendPlayerStates();
     });
@@ -109,7 +112,7 @@ io.on("connection", (socket) => {
       currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
       io.emit("spectatorTileRes", currentPlayer.name, isCheering, spaceNumber);
       sendThisPlayerState(socket.id);
-      declareTurn();
+      manager.declareTurn(io);
     });
   });
 
@@ -124,7 +127,7 @@ io.on("connection", (socket) => {
         currentPlayer.takeBettingTicket(betColorArray);
         io.emit("updateBettingTickets", gameState.remainingBettingTickets);
         sendPlayerStates();
-        declareTurn();
+        manager.declareTurn(io);
       } else {
         socket.emit("issueEncounter", `no ${color} tickets are left`);
       }
@@ -150,7 +153,7 @@ io.on("connection", (socket) => {
           gameState.hideFinishStack(isWinner)
         );
         sendPlayerStates();
-        declareTurn();
+        manager.declareTurn(io);
       } else {
         socket.emit(
           "issueEncounter",
@@ -162,29 +165,23 @@ io.on("connection", (socket) => {
 
   socket.on("startNewGame", (isSamePlayers) => {
     manager.checkHost(socket, () => {
-      resetGame(isSamePlayers);
-      console.log(gameState);
-      declareTurn();
-      io.emit("startGameRes", gameState.getGameState());
-      sendPlayerStates();
+      resetGame(isSamePlayers, io);
+      if (isSamePlayers) {
+        sendPlayerStates();
+      }
     });
   });
 });
 
 const startGame = () => {
   generatePlayers();
+  generateCamels();
   setStartingPositions();
   gameState.resetPyramid();
   gameState.setRaceStarted(true);
-  declareTurn();
-  io.emit("startGameRes", gameState.getGameState());
+  manager.declareTurn(io);
+  io.emit("startGameRes", gameState.getBoardState());
   sendPlayerStates();
-};
-
-const declareTurn = () => {
-  const currentPlayerSocket = manager.getCurrentPlayerSocket().currentSocketId;
-  io.to(currentPlayerSocket).emit("yourTurn");
-  io.except(currentPlayerSocket).emit("notYourTurn");
 };
 
 const checkTurn = (socket, callback) => {

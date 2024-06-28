@@ -140,15 +140,17 @@ class Camel {
   }
 }
 
-gameState.setCamels([
-  new Camel("blue"),
-  new Camel("yellow"),
-  new Camel("green"),
-  new Camel("red"),
-  new Camel("purple"),
-  new Camel("white"),
-  new Camel("black"),
-]);
+const generateCamels = () => {
+  gameState.setCamels([
+    new Camel("blue"),
+    new Camel("yellow"),
+    new Camel("green"),
+    new Camel("red"),
+    new Camel("purple"),
+    new Camel("white"),
+    new Camel("black"),
+  ]);
+};
 
 const setStartingPositions = () => {
   // roll all dice to determine the starting positions of the racers
@@ -209,5 +211,6 @@ const checkIfFinished = (position) => {
 };
 
 module.exports = {
+  generateCamels,
   setStartingPositions,
 };

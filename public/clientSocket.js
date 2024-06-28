@@ -28,12 +28,13 @@ socket.on("issueEncounter", (msg) => {
 socket.on("newPlayerRes", (playerNames, hostName) => {
   closeDialogs();
   openStartDialog();
-  if (playerNames) {
-    displayNewPlayer(playerNames, hostName);
-    if (playerNames.length > 1) {
-      const isHost = getIsGameHost();
-      promptStartGame(isHost);
-    }
+  displayNewPlayer(playerNames, hostName);
+  if (playerNames.length > 1) {
+    const isHost = getIsGameHost();
+    promptStartGame(isHost);
+  }
+  if (!document.contains(newPlayerForm)) {
+    gameStartDialog.appendChild(newPlayerForm);
   }
 });
 
@@ -83,7 +84,13 @@ socket.on("notYourTurn", () => {
 });
 
 socket.on("startGameRes", (state) => {
-  gameStartDialog.close();
+  if (document.contains(proceedButton)) {
+    proceedButton.remove();
+  }
+  if (!document.contains(legSummaryButton)) {
+    legSummaryDialog.appendChild(legSummaryButton);
+  }
+  closeDialogs();
   displayState(state);
 });
 

@@ -13,6 +13,12 @@ const newGameDialog = document.getElementById("new-game-dialog");
 const samePlayersButton = document.getElementById("same-players-button");
 const newPlayersButton = document.getElementById("new-players-button");
 
+const proceedButton = document.createElement("button");
+proceedButton.innerText = "Proceed to final results";
+proceedButton.addEventListener("click", () => {
+  displayFinalResults();
+});
+
 legSummaryButton.addEventListener("click", () => {
   legSummaryDialog.close();
 });
@@ -31,11 +37,6 @@ const displayLegResults = (legResults) => {
 };
 
 const displayFinalLeg = (finalResults) => {
-  const proceedButton = document.createElement("button");
-  proceedButton.innerText = "Proceed to final results";
-  proceedButton.addEventListener("click", () => {
-    displayFinalResults();
-  });
   legSummaryButton.remove();
   legSummaryDialog.appendChild(proceedButton);
   legSummaryDialog.showModal();

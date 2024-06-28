@@ -116,6 +116,7 @@ class GameState {
     return finishStack.map((c) => c.playerName);
   }
 
+  // ***** this might not have to send this much info
   getGameState() {
     return {
       raceOver: this.raceOver,
@@ -125,6 +126,15 @@ class GameState {
       rankedCamels: this.rankedCamels,
       playerNames: this.playerNames,
       allPlayers: this.hideFinishCards(),
+      finishWinnerStack: this.hideFinishStack(true),
+      finishLoserStack: this.hideFinishStack(false),
+      remainingBettingTickets: this.remainingBettingTickets,
+    };
+  }
+
+  getBoardState() {
+    return {
+      allCamels: this.allCamels,
       finishWinnerStack: this.hideFinishStack(true),
       finishLoserStack: this.hideFinishStack(false),
       remainingBettingTickets: this.remainingBettingTickets,
@@ -166,6 +176,27 @@ class GameState {
       }
     });
     return Array.from(prohibitedSpaces);
+  }
+
+  reset(isSamePlayers) {
+    this.raceOver = false;
+    if (!isSamePlayers) {
+      this.raceStarted = false;
+      this.playerNames = [];
+    }
+    this.diceInPyramid = ["blue", "yellow", "green", "red", "purple", "grey"];
+    this.diceOnTents = [];
+    this.allCamels = [];
+    this.rankedCamels = [];
+    this.whiteCarryingRacer = false;
+    this.blackCarryingRacer = false;
+    this.whiteCarryingBlack = false;
+    this.blackCarryingWhite = false;
+    this.allPlayers = [];
+    this.currentPlayerIndex;
+    this.finishWinnerStack = [];
+    this.finishLoserStack = [];
+    this.remainingBettingTickets = this.initializeBettingTickets();
   }
 }
 

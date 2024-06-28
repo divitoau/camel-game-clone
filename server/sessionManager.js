@@ -9,10 +9,10 @@ class ClientMap {
   }
 }
 
-class MapState {
+class SessionState {
   constructor() {
     this.allMaps = [];
-    this.hostMap;
+    this.hostMap = null;
   }
 
   createClientMap(name, clientId, socketId) {
@@ -55,6 +55,12 @@ class MapState {
     }
   }
 
+  declareTurn(io) {
+    const currentPlayerSocket = this.getCurrentPlayerSocket().currentSocketId;
+    io.to(currentPlayerSocket).emit("yourTurn");
+    io.except(currentPlayerSocket).emit("notYourTurn");
+  }
+
   getCurrentPlayerSocket() {
     const currentPlayer = gameState.allPlayers[gameState.currentPlayerIndex];
     const currentSocketId = this.allMaps.find(
@@ -62,8 +68,13 @@ class MapState {
     ).socketId;
     return { currentSocketId, currentPlayer };
   }
+
+  clearMaps() {
+    this.allMaps = [];
+    this.hostMap = null;
+  }
 }
 
-const manager = new MapState();
+const manager = new SessionState();
 
 module.exports = manager;
