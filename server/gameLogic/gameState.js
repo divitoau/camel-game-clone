@@ -17,7 +17,6 @@ class GameState {
     this.blackCarryingRacer = false;
     this.whiteCarryingBlack = false;
     this.blackCarryingWhite = false;
-    this.playerNames = [];
     this.allPlayers = [];
     this.currentPlayerIndex;
     this.finishWinnerStack = [];
@@ -124,7 +123,6 @@ class GameState {
       diceOnTents: this.diceOnTents,
       allCamels: this.allCamels,
       rankedCamels: this.rankedCamels,
-      playerNames: this.playerNames,
       allPlayers: this.hideFinishCards(),
       finishWinnerStack: this.hideFinishStack(true),
       finishLoserStack: this.hideFinishStack(false),
@@ -182,7 +180,6 @@ class GameState {
     this.raceOver = false;
     if (!isSamePlayers) {
       this.raceStarted = false;
-      this.playerNames = [];
     }
     this.diceInPyramid = ["blue", "yellow", "green", "red", "purple", "grey"];
     this.diceOnTents = [];

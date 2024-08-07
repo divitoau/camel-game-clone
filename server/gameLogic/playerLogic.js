@@ -80,12 +80,8 @@ class Player {
   }
 }
 
-const addPlayer = (name) => {
-  gameState.playerNames.push(name);
-};
-
-const generatePlayers = () => {
-  const generatedPlayers = gameState.playerNames.map((n) => {
+const generatePlayers = (names) => {
+  const generatedPlayers = names.map((n) => {
     let finishArray = racerColors.map((c) => {
       return new FinishCard(c, n);
     });
@@ -104,11 +100,6 @@ const generatePlayers = () => {
   );
 };
 
-const regeneratePlayers = () => {
-  gameState.allPlayers.length = 0;
-  generatePlayers();
-};
-
 const endTurn = () => {
   gameState.setCurrentPlayerIndex(
     (gameState.currentPlayerIndex + 1) % gameState.allPlayers.length
@@ -116,7 +107,5 @@ const endTurn = () => {
 };
 
 module.exports = {
-  addPlayer,
   generatePlayers,
-  regeneratePlayers,
 };

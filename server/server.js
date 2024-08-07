@@ -8,7 +8,7 @@ const {
   generateCamels,
   setStartingPositions,
 } = require("./gameLogic/camelLogic");
-const { addPlayer, generatePlayers } = require("./gameLogic/playerLogic");
+const { generatePlayers } = require("./gameLogic/playerLogic");
 const {
   calculateLeg,
   countFinishCards,
@@ -31,6 +31,9 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
+    if (!gameState.raceStarted) {
+      manager.removeMap(socket.id, io);
+    }
   });
 
   // maintains a consistent client state through socket reconnections
@@ -49,18 +52,19 @@ io.on("connection", (socket) => {
     const playerSockets = manager.allMaps.map((m) => m.socketId);
     if (playerSockets.includes(socket.id)) {
       socket.emit("issueEncounter", "there is already a player on this socket");
+    } else if (gameState.raceStarted) {
+      socket.emit("issueEncounter", "the race has already started");
     } else if (clientId.length !== 8) {
       socket.emit("issueEncounter", "clientId error");
     } else if (!name) {
       socket.emit("issueEncounter", "Player name cannot be empty");
-    } else if (gameState.playerNames.includes(name)) {
+    } else if (manager.getPlayerNames().includes(name)) {
       socket.emit("issueEncounter", `${name} is already taken`);
     } else {
       const clientMap = manager.createClientMap(name, clientId, socket.id);
       const hostName = manager.hostMap.name;
-      addPlayer(name);
       socket.emit("declareHost", clientMap.isHost);
-      io.emit("newPlayerRes", gameState.playerNames, hostName);
+      io.emit("newPlayerRes", manager.getPlayerNames(), hostName);
       manager.allMaps.forEach((m) => {
         io.to(m.socketId).emit("yourName", m.name);
       });
@@ -174,7 +178,7 @@ io.on("connection", (socket) => {
 });
 
 const startGame = () => {
-  generatePlayers();
+  generatePlayers(manager.getPlayerNames());
   generateCamels();
   setStartingPositions();
   gameState.resetPyramid();
@@ -256,9 +260,8 @@ const performAutoStart = (clientId, socket) => {
     clientId,
     socket.id
   );
-  addPlayer(dummyUsers[dummyUserIndex]);
   const hostName = manager.hostMap.name;
-  io.emit("newPlayerRes", gameState.playerNames, hostName);
+  io.emit("newPlayerRes", manager.getPlayerNames(), hostName);
   socket.emit("declareHost", clientMap.isHost);
   dummyUserIndex += 1;
   if (dummyUserIndex === 2) {

@@ -1,17 +1,17 @@
 const { generateCamels, setStartingPositions } = require("./camelLogic");
 const gameState = require("./gameState.js");
-const { regeneratePlayers } = require("./playerLogic.js");
+const { generatePlayers } = require("./playerLogic.js");
 const manager = require("../sessionManager.js");
-
-
 
 const resetGame = (isSamePlayers, io) => {
   console.log("resetting game");
+  // **** think we maybe gotta reset manager in here too
   gameState.reset(isSamePlayers);
   generateCamels();
   setStartingPositions();
   if (isSamePlayers) {
-    regeneratePlayers();
+    gameState.allPlayers.length = 0;
+    generatePlayers(manager.getPlayerNames());
     manager.declareTurn(io);
     io.emit("startGameRes", gameState.getBoardState());
   } else {

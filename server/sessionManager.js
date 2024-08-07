@@ -16,19 +16,36 @@ class SessionState {
   }
 
   createClientMap(name, clientId, socketId) {
-    const isHost = gameState.playerNames.length < 1;
+    const isHost = this.getPlayerNames().length < 1;
     const clientMap = new ClientMap(name, clientId, socketId, isHost);
     if (isHost) {
       this.hostMap = clientMap;
     }
     this.allMaps.push(clientMap);
+    console.log(this.allMaps);
     return clientMap;
+  }
+
+  removeMap(socketId, io) {
+    const index = this.allMaps.findIndex((m) => m.socketId === socketId);
+    if (index !== -1) {
+      const isHost = this.allMaps[index].isHost;
+      this.allMaps.splice(index, 1);
+      if (isHost && this.allMaps.length > 0) {
+        const newHost = this.allMaps[0];
+        this.hostMap = newHost;
+        newHost.isHost = true;
+        io.to(newHost.socketId).emit("declareHost", true);
+        io.emit("newPlayerRes", this.getPlayerNames(), newHost.name);
+      }
+    }
+    console.log(this.allMaps);
   }
 
   handleClientReconnect(clientId, socket) {
     if (!gameState.raceStarted) {
       const hostName = this.hostMap?.name;
-      socket.emit("newPlayerRes", gameState.playerNames, hostName);
+      socket.emit("newPlayerRes", this.getPlayerNames(), hostName);
     }
     const player = this.allMaps.find((p) => p.clientId === clientId);
     if (player) {
@@ -44,7 +61,15 @@ class SessionState {
       } else {
         socket.emit("yourName", player.name);
       }
+    } else {
+      // ******* connect this to client end
+      socket.emit("spectator");
     }
+  }
+
+  getPlayerNames() {
+    const playerNames = this.allMaps.map((m) => m.name);
+    return playerNames;
   }
 
   checkHost(socket, callback) {
