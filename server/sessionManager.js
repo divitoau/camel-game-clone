@@ -22,24 +22,32 @@ class SessionState {
       this.hostMap = clientMap;
     }
     this.allMaps.push(clientMap);
-    console.log(this.allMaps);
     return clientMap;
   }
 
   removeMap(socketId, io) {
-    const index = this.allMaps.findIndex((m) => m.socketId === socketId);
-    if (index !== -1) {
-      const isHost = this.allMaps[index].isHost;
-      this.allMaps.splice(index, 1);
-      if (isHost && this.allMaps.length > 0) {
-        const newHost = this.allMaps[0];
-        this.hostMap = newHost;
-        newHost.isHost = true;
-        io.to(newHost.socketId).emit("declareHost", true);
-        io.emit("newPlayerRes", this.getPlayerNames(), newHost.name);
+    const thisIndex = this.allMaps.findIndex((m) => m.socketId === socketId);
+    if (thisIndex !== -1) {
+      const isHost = this.allMaps[thisIndex].isHost;
+      this.allMaps.splice(thisIndex, 1);
+      if (isHost) {
+        if (this.allMaps.length > 0) {
+          const newHost = this.allMaps[0];
+          this.hostMap = newHost;
+          newHost.isHost = true;
+          io.to(newHost.socketId).emit("declareHost", true);
+          io.emit("newPlayerRes", this.getPlayerNames(), newHost.name);
+        } else {
+          this.hostMap = null;
+          io.emit("newPlayerRes", [], null);
+        }
+      } else {
+        io.emit("newPlayerRes", this.getPlayerNames(), this.hostMap.name);
       }
     }
-    console.log(this.allMaps);
+    this.allMaps.forEach((m) => {
+      io.to(m.socketId).emit("yourName", m.name);
+    });
   }
 
   handleClientReconnect(clientId, socket) {

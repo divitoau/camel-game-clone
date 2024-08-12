@@ -8,11 +8,11 @@ const setClientId = () => {
 };
 
 const getClientId = () => {
-  clientId = document.cookie
+  const clientId = document.cookie
     .split("; ")
     .find((c) => c.startsWith("clientId="))
     ?.slice(9);
-  return clientId;
+  return clientId ? clientId : null;
 };
 
 const setIsGameHost = (isHost) => {

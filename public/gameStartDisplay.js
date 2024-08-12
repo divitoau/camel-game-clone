@@ -14,8 +14,7 @@ addPlayerButton.addEventListener("click", () => {
 });
 
 const openStartDialog = () => {
-  checkAndRemove("start-game-button");
-  checkAndRemove("waiting-text");
+  checkAndRemove(".start-prompt");
   gameStartDialog.showModal();
 };
 
@@ -48,15 +47,18 @@ const highlightYourName = (name) => {
 };
 
 const promptStartGame = (isHost) => {
+  removeAllElements(".start-prompt");
   if (isHost) {
     const startGameButton = document.createElement("button");
     startGameButton.id = "start-game-button";
+    startGameButton.className = "start-prompt";
     startGameButton.innerText = "start game";
     startGameButton.addEventListener("click", () => startGame());
     gameStartDialog.appendChild(startGameButton);
   } else {
     const waitingText = document.createElement("p");
     waitingText.id = "waiting-text";
+    waitingText.className = "start-prompt";
     waitingText.textContent = "waiting for host to start game...";
     gameStartDialog.appendChild(waitingText);
   }

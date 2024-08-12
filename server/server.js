@@ -28,6 +28,7 @@ const autoStart = false;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
+  console.log(manager.allMaps);
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);

@@ -4,6 +4,7 @@ const autoPlay = false;
 let autoDiceCount = 0;
 
 socket.on("connect", () => {
+  setIsGameHost(false);
   const clientId = getClientId();
   socket.emit("clientId", clientId ? clientId : setClientId());
 });
@@ -31,13 +32,17 @@ socket.on("newPlayerRes", (playerNames, hostName) => {
     openStartDialog();
   }
   displayNewPlayer(playerNames, hostName);
-  if (playerNames.length > 1) {
+  if (playerNames.length < 2) {
+    removeAllElements(".start-prompt");
+  }
+  if (playerNames.length === 2) {
     const isHost = getIsGameHost();
     promptStartGame(isHost);
   }
-  if (!document.contains(newPlayerForm)) {
+  // ****** this needs to be reworked
+  /*   if (!document.contains(newPlayerForm)) {
     gameStartDialog.appendChild(newPlayerForm);
-  }
+  } */
 });
 
 socket.on("yourName", (name) => {
