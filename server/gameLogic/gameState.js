@@ -101,13 +101,6 @@ class GameState {
     this.currentPlayerIndex = value;
   }
 
-  /*   hidePlayerSecrets() {
-    return this.allPlayers.map(({ clientId, ...p }) => ({
-      ...p,
-      finishCards: p.finishCards ? p.finishCards.length : 0,
-    }));
-  } */
-
   getSpectatorTiles() {
     return this.allPlayers
       .filter((p) => p.spectatorTile.position > 1)

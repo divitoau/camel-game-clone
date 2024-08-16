@@ -1,3 +1,5 @@
+// ******* might need to add “SameSite=None“ to the cookies to get rid of mozilla warning
+
 const setClientId = () => {
   const clientId = Math.floor(Math.random() * 1e8)
     .toString()

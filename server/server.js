@@ -116,6 +116,7 @@ io.on("connection", (socket) => {
     checkTurn(socket, (currentPlayer) => {
       currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
       io.emit("spectatorTileRes", currentPlayer.spectatorTile);
+      // ******* this should maybe be sendplayerstates
       sendThisPlayerState(socket.id);
       manager.declareTurn(io);
     });
@@ -200,17 +201,32 @@ const checkTurn = (socket, callback) => {
   }
 };
 
+//    io.except(currentPlayerSocket).emit("notYourTurn");
+/* 
+  hidePlayerSecrets() {
+    return this.allPlayers.map(({ clientId, ...p }) => ({
+      ...p,
+      finishCards: p.finishCards ? p.finishCards.length : 0,
+    }));
+  } */
+
 const sendPlayerStates = () => {
   manager.allMaps.forEach((m) => {
     const player = gameState.allPlayers.find((p) => p.name === m.name);
-    io.to(m.socketId).emit("yourPlayerState", player);
+    const otherPlayers = gameState.allPlayers.filter((p) => p.name !== m.name);
+    io.to(m.socketId).emit("playerStates", player, otherPlayers);
   });
 };
 
+// ******* this broke when someone entering after race started
+
 const sendThisPlayerState = (socketId) => {
   const thisMap = manager.allMaps.find((m) => m.socketId === socketId);
-  const thisPlayer = gameState.allPlayers.find((p) => p.name === thisMap.name);
-  io.to(socketId).emit("yourPlayerState", thisPlayer);
+  const player = gameState.allPlayers.find((p) => p.name === thisMap.name);
+  const otherPlayers = gameState.allPlayers.filter(
+    (p) => p.name !== thisMap.name
+  );
+  io.to(socketId).emit("playerStates", player, otherPlayers);
 };
 
 const endLeg = (isFinal) => {

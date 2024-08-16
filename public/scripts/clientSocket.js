@@ -97,8 +97,9 @@ socket.on("startGameRes", (state) => {
   displayState(state);
 });
 
-socket.on("yourPlayerState", (player) => {
+socket.on("playerStates", (player, otherPlayers) => {
   updatePlayerDisplay(player);
+  console.log(otherPlayers);
 });
 
 socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
