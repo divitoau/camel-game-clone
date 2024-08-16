@@ -12,9 +12,8 @@ socket.on("connect", () => {
 socket.on("fullState", (state) => {
   displayState(state);
   displayDice(state.diceOnTents);
-  state.allPlayers.forEach((p) => {
-    const tile = p.spectatorTile;
-    displaySpectatorTile(tile.player, tile.isCheering, tile.position);
+  state.spectatorTiles.forEach((t) => {
+    displaySpectatorTile(t);
   });
 });
 
@@ -135,9 +134,9 @@ socket.on(
   }
 );
 
-socket.on("spectatorTileRes", (currentPlayerName, isCheering, spaceNumber) => {
+socket.on("spectatorTileRes", (spectatorTile) => {
   removeAllElements(".place-button");
-  displaySpectatorTile(currentPlayerName, isCheering, spaceNumber);
+  displaySpectatorTile(spectatorTile);
 });
 
 socket.on("bettingTicketsRes", (bettingTickets) => {

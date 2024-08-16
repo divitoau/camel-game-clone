@@ -115,7 +115,7 @@ io.on("connection", (socket) => {
   socket.on("placeSpectatorTile", (isCheering, spaceNumber) => {
     checkTurn(socket, (currentPlayer) => {
       currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
-      io.emit("spectatorTileRes", currentPlayer.name, isCheering, spaceNumber);
+      io.emit("spectatorTileRes", currentPlayer.spectatorTile);
       sendThisPlayerState(socket.id);
       manager.declareTurn(io);
     });

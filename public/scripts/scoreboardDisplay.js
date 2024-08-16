@@ -1,4 +1,4 @@
-`
+/* `
 <div class="opp-nameplate" id="${playerName}-nameplate">
   <span class="opp-name">${playerName}</span>
   <span class="opp-gold-container">
@@ -21,3 +21,4 @@
   </div>
 </div>
 `;
+ */

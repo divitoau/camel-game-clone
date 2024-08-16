@@ -101,11 +101,17 @@ class GameState {
     this.currentPlayerIndex = value;
   }
 
-  hidePlayerSecrets() {
+  /*   hidePlayerSecrets() {
     return this.allPlayers.map(({ clientId, ...p }) => ({
       ...p,
       finishCards: p.finishCards ? p.finishCards.length : 0,
     }));
+  } */
+
+  getSpectatorTiles() {
+    return this.allPlayers
+      .filter((p) => p.spectatorTile.position > 1)
+      .map((p) => p.spectatorTile);
   }
 
   hideFinishStack(isWinner) {
@@ -119,7 +125,7 @@ class GameState {
     return {
       diceOnTents: this.diceOnTents,
       allCamels: this.allCamels,
-      allPlayers: this.hidePlayerSecrets(),
+      spectatorTiles: this.getSpectatorTiles(),
       finishWinnerStack: this.hideFinishStack(true),
       finishLoserStack: this.hideFinishStack(false),
       remainingBettingTickets: this.remainingBettingTickets,

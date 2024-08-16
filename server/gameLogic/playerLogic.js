@@ -29,6 +29,7 @@ class Player {
     finishCards
   ) {
     this.name = name;
+    this.clientID = clientID;
     this.money = money;
     this.bettingTickets = bettingTickets;
     this.pyramidTickets = pyramidTickets;
