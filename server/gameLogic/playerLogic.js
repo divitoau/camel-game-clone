@@ -21,6 +21,7 @@ class FinishCard {
 class Player {
   constructor(
     name,
+    clientID,
     money,
     bettingTickets,
     pyramidTickets,
@@ -80,17 +81,18 @@ class Player {
   }
 }
 
-const generatePlayers = (names) => {
-  const generatedPlayers = names.map((n) => {
+const generatePlayers = (players) => {
+  const generatedPlayers = players.map((p) => {
     let finishArray = racerColors.map((c) => {
-      return new FinishCard(c, n);
+      return new FinishCard(c, p.name);
     });
     return new Player(
-      n,
+      p.name,
+      p.clientID,
       3,
       [],
       0,
-      new SpectatorTile(n, null, null),
+      new SpectatorTile(p.name, null, null),
       finishArray
     );
   });

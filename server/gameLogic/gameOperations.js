@@ -11,9 +11,9 @@ const resetGame = (isSamePlayers, io) => {
   setStartingPositions();
   if (isSamePlayers) {
     gameState.allPlayers.length = 0;
-    generatePlayers(manager.getPlayerNames());
+    generatePlayers(manager.getPlayerInfo());
     manager.declareTurn(io);
-    io.emit("startGameRes", gameState.getBoardState());
+    io.emit("startGameRes", gameState.getGameState());
   } else {
     manager.clearMaps();
     io.emit("newPlayerRes", [], null);

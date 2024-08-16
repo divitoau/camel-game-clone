@@ -101,10 +101,10 @@ class GameState {
     this.currentPlayerIndex = value;
   }
 
-  hideFinishCards() {
-    return this.allPlayers.map((p) => ({
+  hidePlayerSecrets() {
+    return this.allPlayers.map(({ clientId, ...p }) => ({
       ...p,
-      finishCards: p.finishCards ? p.finishCards?.length : 0,
+      finishCards: p.finishCards ? p.finishCards.length : 0,
     }));
   }
 
@@ -115,24 +115,11 @@ class GameState {
     return finishStack.map((c) => c.playerName);
   }
 
-  // ***** this might not have to send this much info
   getGameState() {
     return {
-      raceOver: this.raceOver,
-      diceInPyramid: this.diceInPyramid,
       diceOnTents: this.diceOnTents,
       allCamels: this.allCamels,
-      rankedCamels: this.rankedCamels,
-      allPlayers: this.hideFinishCards(),
-      finishWinnerStack: this.hideFinishStack(true),
-      finishLoserStack: this.hideFinishStack(false),
-      remainingBettingTickets: this.remainingBettingTickets,
-    };
-  }
-
-  getBoardState() {
-    return {
-      allCamels: this.allCamels,
+      allPlayers: this.hidePlayerSecrets(),
       finishWinnerStack: this.hideFinishStack(true),
       finishLoserStack: this.hideFinishStack(false),
       remainingBettingTickets: this.remainingBettingTickets,

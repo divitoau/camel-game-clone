@@ -76,8 +76,14 @@ class SessionState {
   }
 
   getPlayerNames() {
-    const playerNames = this.allMaps.map((m) => m.name);
-    return playerNames;
+    return this.allMaps.map((m) => m.name);
+  }
+
+  getPlayerInfo() {
+    return this.allMaps.map((m) => ({
+      name: m.name,
+      clientId: m.clientId,
+    }));
   }
 
   checkHost(socket, callback) {

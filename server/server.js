@@ -24,7 +24,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = true;
+const autoStart = false;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -179,13 +179,13 @@ io.on("connection", (socket) => {
 });
 
 const startGame = () => {
-  generatePlayers(manager.getPlayerNames());
+  generatePlayers(manager.getPlayerInfo());
   generateCamels();
   setStartingPositions();
   gameState.resetPyramid();
   gameState.setRaceStarted(true);
   manager.declareTurn(io);
-  io.emit("startGameRes", gameState.getBoardState());
+  io.emit("startGameRes", gameState.getGameState());
   sendPlayerStates();
 };
 
