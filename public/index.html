@@ -9,8 +9,79 @@
     <link rel="stylesheet" type="text/css" href="styles/dice.css" />
     <link rel="stylesheet" type="text/css" href="styles/playerMenu.css" />
     <link rel="stylesheet" type="text/css" href="styles/startDisplay.css" />
+    <link rel="stylesheet" type="text/css" href="styles/scoreboard.css" />
   </head>
   <body>
+    <div id="scoreboard">
+      <div class="opp-nameplate">
+        <span class="opp-name">theguy4567</span>
+        <span class="opp-gold-container">
+          <img
+            class="gold-logo"
+            src="images/gold.svg"
+            alt="a pile of gold coins"
+          />
+          <span class="opp-gold-count">5</span>
+        </span>
+        <div class="opp-inventory">
+          <div class="opp-pyramid-ticket-container">
+            <img
+              class="pyramid-ticket"
+              src="images/pyramidToken.svg"
+              alt="a square with the letter P"
+            />
+            <img
+              class="pyramid-ticket"
+              src="images/pyramidToken.svg"
+              alt="a square with the letter P"
+            />
+          </div>
+          <div class="opp-spectator-tile-container">
+            <img class="thumb" src="images/thumb.svg" alt="a thumb" />
+          </div>
+          <div class="opp-betting-ticket-container">
+            <span class="opp-betting-ticket blue-ticket">5</span>
+            <span class="opp-betting-ticket blue-ticket">3</span>
+            <span class="opp-betting-ticket green-ticket">5</span>
+            <span class="opp-betting-ticket green-ticket">3</span>
+            <span class="opp-betting-ticket red-ticket">2</span>
+            <span class="opp-betting-ticket yellow-ticket">2</span>
+          </div>
+          <div class="opp-finish-ticket-container">
+            <span class="opp-finish-ticket">F</span>
+            <span class="opp-finish-ticket">F</span>
+            <span class="opp-finish-ticket">F</span>
+            <span class="opp-finish-ticket">F</span>
+            <span class="opp-finish-ticket">F</span>
+          </div>
+        </div>
+      </div>
+      <div class="opp-nameplate">
+        <span class="opp-name">otherguy</span>
+        <span class="opp-gold-container">
+          <img
+            class="gold-logo"
+            src="images/gold.svg"
+            alt="a pile of gold coins"
+          />
+          <span class="opp-gold-count">20</span>
+        </span>
+        <div class="opp-inventory">
+          <div class="opp-pyramid-ticket-container"></div>
+          <div class="opp-spectator-tile-container"></div>
+          <div class="opp-betting-ticket-container">
+            <span class="opp-betting-ticket purple-ticket">5</span>
+            <span class="opp-betting-ticket purple-ticket">3</span>
+          </div>
+          <div class="opp-finish-ticket-container">
+            <span class="opp-finish-ticket">F</span>
+            <span class="opp-finish-ticket">F</span>
+            <span class="opp-finish-ticket">F</span>
+            <span class="opp-finish-ticket">F</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="game-board">
       <div class="track-space" id="track-space-15">
         <div class="space-number-label">
@@ -142,62 +213,65 @@
         <button id="finish-loser-button">place finish loser bet</button>
       </div>
     </div>
-    <dialog id="game-start-dialog">
-      <h1>Welcome to Camel Up!</h1>
-      <form id="new-player-form">
-        <label for="new-player-input">Add a new player</label>
-        <input
-          type="text"
-          id="new-player-input"
-          name="playerName"
-          placeholder="Name"
-          required
-          minlength="3"
-        />
-        <button type="button" id="add-player-button">Add Player</button>
-      </form>
-      <ol id="starting-player-list"></ol>
-    </dialog>
-    <dialog id="leg-bet-dialog">
-      <button id="leg-bet-cancel-button">Cancel</button>
-    </dialog>
-    <dialog id="finish-bet-dialog">
-      <button id="finish-bet-cancel-button">Cancel</button>
-    </dialog>
-    <dialog id="spectator-dialog">
-      <p>Place Spectator Tile</p>
-      <button id="cheering-button">Cheering</button>
-      <button id="booing-button">Booing</button>
-      <button id="spectator-cancel-button">Cancel</button>
-    </dialog>
-    <dialog id="leg-summary-dialog">
-      <div id="leg-summary-display"></div>
-      <button id="leg-summary-button">OK</button>
-    </dialog>
-    <dialog id="final-summary-dialog">
-      <div id="final-summary-display">
-        <div id="final-winner-container">
-          <h2>Winner Bets</h2>
-          <ol id="final-winner-bets"></ol>
+    <div id="dialog-land">
+      <dialog id="game-start-dialog">
+        <h1>Welcome to Camel Up!</h1>
+        <form id="new-player-form">
+          <label for="new-player-input">Add a new player</label>
+          <input
+            type="text"
+            id="new-player-input"
+            name="playerName"
+            placeholder="Name"
+            required
+            minlength="3"
+            maxlength="10"
+          />
+          <button type="button" id="add-player-button">Add Player</button>
+        </form>
+        <ol id="starting-player-list"></ol>
+      </dialog>
+      <dialog id="leg-bet-dialog">
+        <button id="leg-bet-cancel-button">Cancel</button>
+      </dialog>
+      <dialog id="finish-bet-dialog">
+        <button id="finish-bet-cancel-button">Cancel</button>
+      </dialog>
+      <dialog id="spectator-dialog">
+        <p>Place Spectator Tile</p>
+        <button id="cheering-button">Cheering</button>
+        <button id="booing-button">Booing</button>
+        <button id="spectator-cancel-button">Cancel</button>
+      </dialog>
+      <dialog id="leg-summary-dialog">
+        <div id="leg-summary-display"></div>
+        <button id="leg-summary-button">OK</button>
+      </dialog>
+      <dialog id="final-summary-dialog">
+        <div id="final-summary-display">
+          <div id="final-winner-container">
+            <h2>Winner Bets</h2>
+            <ol id="final-winner-bets"></ol>
+          </div>
+          <div id="final-loser-container">
+            <h2>Loser Bets</h2>
+            <ol id="final-loser-bets"></ol>
+          </div>
+          <div id="total-rewards">
+            <h2>Payout from finish bets</h2>
+          </div>
+          <div id="player-ranking-container">
+            <h2>Final Scores</h2>
+            <ol id="player-ranking"></ol>
+          </div>
         </div>
-        <div id="final-loser-container">
-          <h2>Loser Bets</h2>
-          <ol id="final-loser-bets"></ol>
-        </div>
-        <div id="total-rewards">
-          <h2>Payout from finish bets</h2>
-        </div>
-        <div id="player-ranking-container">
-          <h2>Final Scores</h2>
-          <ol id="player-ranking"></ol>
-        </div>
-      </div>
-    </dialog>
-    <dialog id="new-game-dialog">
-      <h2>Start a new game</h2>
-      <button id="same-players-button">Use the same players</button>
-      <button id="new-players-button">Make new players</button>
-    </dialog>
+      </dialog>
+      <dialog id="new-game-dialog">
+        <h2>Start a new game</h2>
+        <button id="same-players-button">Use the same players</button>
+        <button id="new-players-button">Make new players</button>
+      </dialog>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./clientSocket.js"></script>
     <script src="./clientSessionManager.js"></script>

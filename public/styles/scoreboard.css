@@ -1,0 +1,74 @@
+#scoreboard {
+    display: grid;
+    min-width: 1030px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    column-gap: 8px;
+    justify-items: center;
+}
+
+.opp-nameplate {
+    position: relative;
+    width: 100%;
+    min-width: 120px;
+    background-color: gray;
+}
+
+.opp-inventory {
+    display: none;
+    position: absolute;
+    /* figure out how to make this width the same as parent */
+    width: 74%;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.opp-nameplate:hover .opp-inventory {
+    display: block;
+}
+
+.pyramid-ticket,
+.gold-logo,
+.thumb {
+    height: 1em;
+}
+
+.opp-betting-ticket-container,
+.opp-finish-ticket-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.opp-betting-ticket,
+.opp-finish-ticket {
+    width: 18px;
+    height: 26px;
+    border: black solid 1px;
+    border-radius: 4px;
+}
+
+.opp-finish-ticket {
+    background-color: brown;
+}
+
+.blue-ticket {
+    background-color: blue;
+}
+
+.yellow-ticket {
+    background-color: yellow;
+}
+
+.green-ticket {
+    background-color: green;
+}
+
+.red-ticket {
+    background-color: red;
+}
+
+.purple-ticket {
+    background-color: purple;
+}

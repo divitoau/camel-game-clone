@@ -24,7 +24,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = false;
+const autoStart = true;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
