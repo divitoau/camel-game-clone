@@ -180,7 +180,7 @@ io.on("connection", (socket) => {
 });
 
 const startGame = () => {
-  generatePlayers(manager.getPlayerInfo());
+  generatePlayers(manager.getPlayerNames());
   generateCamels();
   setStartingPositions();
   gameState.resetPyramid();
@@ -205,7 +205,7 @@ const separatePlayers = (clientMap) => {
   const player = gameState.allPlayers.find((p) => p.name === clientMap.name);
   const otherPlayers = gameState.allPlayers
     .filter((p) => p.name !== clientMap.name)
-    .map(({ clientId, ...p }) => ({
+    .map((p) => ({
       ...p,
       finishCards: p.finishCards ? p.finishCards.length : 0,
     }));
