@@ -87,7 +87,7 @@ socket.on("notYourTurn", () => {
   }
 });
 
-socket.on("startGameRes", (state) => {
+socket.on("startGameRes", (state, playerNames) => {
   checkAndRemove("restart-button");
   checkAndRemove(proceedButton);
   if (!document.contains(legSummaryButton)) {
@@ -95,11 +95,12 @@ socket.on("startGameRes", (state) => {
   }
   closeDialogsExcept(null);
   displayState(state);
+  createScoreboard(playerNames);
 });
 
 socket.on("playerStates", (player, otherPlayers) => {
   updatePlayerDisplay(player);
-  console.log(otherPlayers);
+  updateScoreboard(otherPlayers);
 });
 
 socket.on("takePyramidTicketRes", (player, dice, allCamels) => {

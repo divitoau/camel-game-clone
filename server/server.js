@@ -116,8 +116,7 @@ io.on("connection", (socket) => {
     checkTurn(socket, (currentPlayer) => {
       currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
       io.emit("spectatorTileRes", currentPlayer.spectatorTile);
-      // ******* this should maybe be sendplayerstates
-      sendThisPlayerState(socket.id);
+      sendPlayerStates();
       manager.declareTurn(io);
     });
   });
@@ -180,13 +179,21 @@ io.on("connection", (socket) => {
 });
 
 const startGame = () => {
-  generatePlayers(manager.getPlayerNames());
+  const playerNames = manager.getPlayerNames();
+  generatePlayers(playerNames);
   generateCamels();
   setStartingPositions();
   gameState.resetPyramid();
   gameState.setRaceStarted(true);
+  manager.allMaps.forEach((m) => {
+    const otherPlayerNames = playerNames.filter((p) => p !== m.name);
+    io.to(m.socketId).emit(
+      "startGameRes",
+      gameState.getGameState(),
+      otherPlayerNames
+    );
+  });
   manager.declareTurn(io);
-  io.emit("startGameRes", gameState.getGameState());
   sendPlayerStates();
 };
 
