@@ -99,6 +99,14 @@ socket.on("startGameRes", (state, playerNames) => {
 });
 
 socket.on("playerStates", (player, otherPlayers) => {
+  const allNameplates = document.querySelectorAll(".opp-nameplate");
+  if (allNameplates.length !== otherPlayers.length) {
+    allNameplates.forEach((n) => {
+      checkAndRemove(n);
+    });
+    otherPlayerNames = otherPlayers.map((p) => p.name);
+    createScoreboard(otherPlayerNames);
+  }
   updatePlayerDisplay(player);
   updateScoreboard(otherPlayers);
 });
