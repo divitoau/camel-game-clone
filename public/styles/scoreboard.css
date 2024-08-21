@@ -35,21 +35,21 @@
 }
 
 .opp-betting-ticket-container,
-.opp-finish-ticket-container {
+.opp-finish-card-container {
     display: flex;
     flex-wrap: wrap;
     gap: 3px;
 }
 
 .opp-betting-ticket,
-.opp-finish-ticket {
+.opp-finish-card {
     width: 18px;
     height: 26px;
     border: black solid 1px;
     border-radius: 4px;
 }
 
-.opp-finish-ticket {
+.opp-finish-card {
     background-color: brown;
 }
 
