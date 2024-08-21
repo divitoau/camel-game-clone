@@ -23,57 +23,73 @@ const createScoreboard = (playerNames) => {
 
 const updateScoreboard = (otherPlayers) => {
   otherPlayers.forEach((p) => {
-    const goldCount = document.querySelector(
-      `#${p.name}-nameplate .opp-gold-count`
-    );
-    goldCount.textContent = p.money;
+    updateGold(p);
+    updatePyramidTickets(p);
+    updateSpectatorTiles(p);
+    updateBettingTickets(p);
+    updateFinishCards(p);
+  });
+};
 
-    const pyramidTicketContainer = document.querySelector(
-      `#${p.name}-nameplate .opp-pyramid-ticket-container`
-    );
-    let pyramidTicketHtml = "";
-    for (let i = 0; i < p.pyramidTickets; i++) {
-      pyramidTicketHtml += `
+const updateGold = (player) => {
+  const goldCount = document.querySelector(
+    `#${player.name}-nameplate .opp-gold-count`
+  );
+  goldCount.textContent = player.money;
+};
+
+const updatePyramidTickets = (player) => {
+  const pyramidTicketContainer = document.querySelector(
+    `#${player.name}-nameplate .opp-pyramid-ticket-container`
+  );
+  let pyramidTicketHtml = "";
+  for (let i = 0; i < player.pyramidTickets; i++) {
+    pyramidTicketHtml += `
         <img
           class="pyramid-ticket"
           src="images/pyramidToken.svg"
           alt="a square with the letter P"
         />`;
-    }
-    pyramidTicketContainer.innerHTML = pyramidTicketHtml;
+  }
+  pyramidTicketContainer.innerHTML = pyramidTicketHtml;
+};
 
-    const spectatorTileContainer = document.querySelector(
-      `#${p.name}-nameplate .opp-spectator-tile-container`
-    );
-    let spectatorTileHtml = "";
-    if (p.spectatorTile.position === null) {
-      spectatorTileHtml += `
+const updateSpectatorTiles = (player) => {
+  const spectatorTileContainer = document.querySelector(
+    `#${player.name}-nameplate .opp-spectator-tile-container`
+  );
+  let spectatorTileHtml = "";
+  if (player.spectatorTile.position === null) {
+    spectatorTileHtml += `
         <img
           class="thumb"
           src="images/thumb.svg"
           alt="a thumb"
         />`;
-    }
-    spectatorTileContainer.innerHTML = spectatorTileHtml;
+  }
+  spectatorTileContainer.innerHTML = spectatorTileHtml;
+};
 
-    const bettingTicketContainer = document.querySelector(
-      `#${p.name}-nameplate .opp-betting-ticket-container`
-    );
-    let bettingTicketHtml = "";
-    p.bettingTickets.forEach((t) => {
-      bettingTicketHtml += `
+const updateBettingTickets = (player) => {
+  const bettingTicketContainer = document.querySelector(
+    `#${player.name}-nameplate .opp-betting-ticket-container`
+  );
+  let bettingTicketHtml = "";
+  player.bettingTickets.forEach((t) => {
+    bettingTicketHtml += `
         <span class="opp-betting-ticket ${t.color}-ticket">${t.value}</span>`;
-    });
-    bettingTicketContainer.innerHTML = bettingTicketHtml;
-
-    const finishCardContainer = document.querySelector(
-      `#${p.name}-nameplate .opp-finish-card-container`
-    );
-    let finishCardHtml = "";
-    for (let i = 0; i < p.finishCards; i++) {
-      finishCardHtml += `
-        <span class="opp-finish-card">F</span>`;
-    }
-    finishCardContainer.innerHTML = finishCardHtml;
   });
+  bettingTicketContainer.innerHTML = bettingTicketHtml;
+};
+
+const updateFinishCards = (player) => {
+  const finishCardContainer = document.querySelector(
+    `#${player.name}-nameplate .opp-finish-card-container`
+  );
+  let finishCardHtml = "";
+  for (let i = 0; i < player.finishCards; i++) {
+    finishCardHtml += `
+        <span class="opp-finish-card">F</span>`;
+  }
+  finishCardContainer.innerHTML = finishCardHtml;
 };
