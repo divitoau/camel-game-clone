@@ -38,10 +38,12 @@ socket.on("newPlayerRes", (playerNames, hostName) => {
     const isHost = getIsGameHost();
     promptStartGame(isHost);
   }
-  // ****** this needs to be reworked
-  /*   if (!document.contains(newPlayerForm)) {
+  if (
+    !document.querySelector(".your-name") &&
+    !document.contains(newPlayerForm)
+  ) {
     gameStartDialog.appendChild(newPlayerForm);
-  } */
+  }
 });
 
 socket.on("yourName", (name) => {

@@ -41,7 +41,7 @@ const highlightYourName = (name) => {
       elementName = elementName.substring(0, elementName.length - 7);
     }
     if (elementName === name) {
-      e.classList.add("highlight");
+      e.classList.add("your-name");
     }
   });
 };
