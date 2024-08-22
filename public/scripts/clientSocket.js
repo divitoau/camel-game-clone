@@ -25,6 +25,10 @@ socket.on("issueEncounter", (msg) => {
   alert(msg);
 });
 
+socket.on("spectator", () => {
+  alert("spectator");
+});
+
 socket.on("newPlayerRes", (playerNames, hostName) => {
   closeDialogsExcept(gameStartDialog);
   if (!gameStartDialog.hasAttribute("open")) {
@@ -109,7 +113,9 @@ socket.on("playerStates", (player, otherPlayers) => {
     otherPlayerNames = otherPlayers.map((p) => p.name);
     createScoreboard(otherPlayerNames);
   }
-  updatePlayerDisplay(player);
+  if (player) {
+    updatePlayerDisplay(player);
+  }
   updateScoreboard(otherPlayers);
 });
 

@@ -51,27 +51,32 @@ class SessionState {
   }
 
   handleClientReconnect(clientId, socket) {
-    if (!gameState.raceStarted) {
-      const hostName = this.hostMap?.name;
-      socket.emit("newPlayerRes", this.getPlayerNames(), hostName);
-    }
     const player = this.allMaps.find((p) => p.clientId === clientId);
+    const hostName = this.hostMap?.name;
+
+    if (!gameState.raceStarted) {
+      socket.emit("newPlayerRes", this.getPlayerNames(), hostName);
+      return false;
+    }
     if (player) {
       player.socketId = socket.id;
       if (gameState.raceStarted) {
         const currentPlayerObject = this.getCurrentPlayerSocket();
-        socket.emit(
+        const event =
           socket.id === currentPlayerObject.currentSocketId
             ? "yourTurn"
-            : "notYourTurn"
-        );
+            : "notYourTurn";
+        socket.emit(event);
         socket.emit("fullState", gameState.getGameState());
+        return false;
       } else {
         socket.emit("yourName", player.name);
+        return false;
       }
-    } else {
-      // ******* connect this to client end
+    } else if (gameState.raceStarted) {
       socket.emit("spectator");
+      socket.emit("fullState", gameState.getGameState());
+      return true;
     }
   }
 

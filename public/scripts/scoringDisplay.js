@@ -33,14 +33,18 @@ newPlayersButton.addEventListener("click", () => {
 
 const displayLegResults = (legResults) => {
   legSummaryDialog.showModal();
-  legSummaryDisplay.innerHTML = `<p>Money from bets: ${legResults.legBetMoney}</p><p>Money from pyramid tickets: ${legResults.legPyramidMoney}</p>`;
+  if (legResults) {
+    legSummaryDisplay.innerHTML = `<p>Money from bets: ${legResults.legBetMoney}</p><p>Money from pyramid tickets: ${legResults.legPyramidMoney}</p>`;
+  }
 };
 
 const displayFinalLeg = (finalResults) => {
   legSummaryButton.remove();
   legSummaryDialog.appendChild(proceedButton);
   legSummaryDialog.showModal();
-  legSummaryDisplay.innerHTML = `<p>Money from bets: ${finalResults.legBetMoney}</p><p>Money from pyramid tickets: ${finalResults.legPyramidMoney}</p>`;
+  if (finalResults) {
+    legSummaryDisplay.innerHTML = `<p>Money from bets: ${finalResults.legBetMoney}</p><p>Money from pyramid tickets: ${finalResults.legPyramidMoney}</p>`;
+  }
 };
 
 const displayFinalResults = () => {
@@ -68,9 +72,11 @@ const updateFinalSummary = (
     }`;
     finalLoserBets.appendChild(card);
   });
-  const rewardCount = document.createElement("p");
-  rewardCount.innerText = totalFinishRewards;
-  totalRewards.appendChild(rewardCount);
+  if (totalFinishRewards) {
+    const rewardCount = document.createElement("p");
+    rewardCount.innerText = totalFinishRewards;
+    totalRewards.appendChild(rewardCount);
+  }
   rankedPlayers.forEach(({ name, money }) => {
     const player = document.createElement("li");
     player.innerText = `${name} | ${money}`;

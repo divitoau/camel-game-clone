@@ -39,9 +39,9 @@ io.on("connection", (socket) => {
 
   // maintains a consistent client state through socket reconnections
   socket.on("clientId", (clientId) => {
-    manager.handleClientReconnect(clientId, socket);
+    const isSpectator = manager.handleClientReconnect(clientId, socket);
     if (gameState.raceStarted) {
-      sendThisPlayerState(socket.id);
+      sendThisPlayerState(socket.id, isSpectator);
     } else {
       if (autoStart) {
         performAutoStart(clientId, socket);
@@ -209,24 +209,30 @@ const checkTurn = (socket, callback) => {
 };
 
 const separatePlayers = (clientMap) => {
-  const player = gameState.allPlayers.find((p) => p.name === clientMap.name);
-  const otherPlayers = gameState.allPlayers
-    .filter((p) => p.name !== clientMap.name)
-    .map((p) => ({
-      ...p,
-      finishCards: p.finishCards ? p.finishCards.length : 0,
-    }));
+  const playerName = clientMap?.name;
+  const cleanedPlayers = gameState.allPlayers.map((p) => ({
+    ...p,
+    finishCards: p.finishCards ? p.finishCards.length : 0,
+  }));
+  const player = clientMap
+    ? gameState.allPlayers.find((p) => p.name === playerName)
+    : null;
+  const otherPlayers = clientMap
+    ? cleanedPlayers.filter((p) => p.name !== playerName)
+    : cleanedPlayers;
   return { player, otherPlayers };
 };
 
 const sendPlayerStates = () => {
+  let playerSocketIds = [];
   manager.allMaps.forEach((m) => {
+    playerSocketIds.push(m.socketId);
     const { player, otherPlayers } = separatePlayers(m);
     io.to(m.socketId).emit("playerStates", player, otherPlayers);
   });
+  const { otherPlayers } = separatePlayers();
+  io.except(playerSocketIds).emit("playerStates", null, otherPlayers);
 };
-
-// ******* this broke when someone entered after race started
 
 const sendThisPlayerState = (socketId) => {
   const thisMap = manager.allMaps.find((m) => m.socketId === socketId);
@@ -235,12 +241,14 @@ const sendThisPlayerState = (socketId) => {
 };
 
 const endLeg = (isFinal) => {
-  const currentPlayerSocket = manager.getCurrentPlayerSocket().currentSocketId;
   gameState.resetPyramid();
   gameState.resetBettingTickets();
+  let playerSocketIds = [];
+  const currentPlayerSocket = manager.getCurrentPlayerSocket().currentSocketId;
   const eventName = isFinal ? "finalEndLeg" : "endLeg";
   const bettingTickets = !isFinal ? gameState.remainingBettingTickets : null;
   manager.allMaps.forEach((m) => {
+    playerSocketIds.push(m.socketId);
     const isCurrent = m.socketId === currentPlayerSocket;
     io.to(m.socketId).emit(
       eventName,
@@ -249,16 +257,19 @@ const endLeg = (isFinal) => {
       isCurrent
     );
   });
+  io.except(playerSocketIds).emit(eventName, null, bettingTickets, false);
 };
 
 const endRace = () => {
   gameState.setRaceOver(true);
   endLeg(true);
+  let playerSocketIds = [];
   const winnerCardScores = countFinishCards(true);
   const loserCardScores = countFinishCards(false);
   const allCardScores = winnerCardScores.concat(loserCardScores);
   const rankedPlayers = declarePlayerRanking();
   manager.allMaps.forEach((m) => {
+    playerSocketIds.push(m.socketId);
     let totalFinishRewards = 0;
     allCardScores.forEach((c) => {
       if (c.owner === m.name) {
@@ -273,6 +284,13 @@ const endRace = () => {
       rankedPlayers
     );
   });
+  io.except(playerSocketIds).emit(
+    "endRace",
+    winnerCardScores,
+    loserCardScores,
+    null,
+    rankedPlayers
+  );
   io.to(manager.hostMap.socketId).emit("promptRestart");
 };
 
