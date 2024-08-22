@@ -28,7 +28,6 @@ const autoStart = false;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
-  console.log(manager.allMaps);
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
@@ -212,85 +211,69 @@ const separatePlayers = (clientMap) => {
   const playerName = clientMap?.name;
   const cleanedPlayers = gameState.allPlayers.map((p) => ({
     ...p,
-    finishCards: p.finishCards ? p.finishCards.length : 0,
+    finishCards: p.finishCards?.length || 0,
   }));
-  const player = clientMap
-    ? gameState.allPlayers.find((p) => p.name === playerName)
-    : null;
-  const otherPlayers = clientMap
-    ? cleanedPlayers.filter((p) => p.name !== playerName)
-    : cleanedPlayers;
-  return { player, otherPlayers };
+  const player = cleanedPlayers.find((p) => p.name === playerName) || null;
+  const otherPlayers = cleanedPlayers.filter((p) => p.name !== playerName);
+  return [player, otherPlayers];
 };
 
-const sendPlayerStates = () => {
+const separateSpectators = (event, callback) => {
   let playerSocketIds = [];
   manager.allMaps.forEach((m) => {
     playerSocketIds.push(m.socketId);
-    const { player, otherPlayers } = separatePlayers(m);
-    io.to(m.socketId).emit("playerStates", player, otherPlayers);
+    const [param1, param2, param3, param4] = callback(m);
+    io.to(m.socketId).emit(event, param1, param2, param3, param4);
   });
-  const { otherPlayers } = separatePlayers();
-  io.except(playerSocketIds).emit("playerStates", null, otherPlayers);
+  const [param1, param2, param3, param4] = callback();
+  io.except(playerSocketIds).emit(event, param1, param2, param3, param4);
+};
+
+const sendPlayerStates = () => {
+  separateSpectators("playerStates", (m) => separatePlayers(m));
 };
 
 const sendThisPlayerState = (socketId) => {
   const thisMap = manager.allMaps.find((m) => m.socketId === socketId);
-  const { player, otherPlayers } = separatePlayers(thisMap);
+  const [player, otherPlayers] = separatePlayers(thisMap);
   io.to(socketId).emit("playerStates", player, otherPlayers);
 };
 
 const endLeg = (isFinal) => {
   gameState.resetPyramid();
   gameState.resetBettingTickets();
-  let playerSocketIds = [];
-  const currentPlayerSocket = manager.getCurrentPlayerSocket().currentSocketId;
   const eventName = isFinal ? "finalEndLeg" : "endLeg";
-  const bettingTickets = !isFinal ? gameState.remainingBettingTickets : null;
-  manager.allMaps.forEach((m) => {
-    playerSocketIds.push(m.socketId);
-    const isCurrent = m.socketId === currentPlayerSocket;
-    io.to(m.socketId).emit(
-      eventName,
-      calculateLeg(m.name),
-      bettingTickets,
-      isCurrent
-    );
+  const currentPlayerSocket = manager.getCurrentPlayerSocket().currentSocketId;
+  const bettingTickets = isFinal ? null : gameState.remainingBettingTickets;
+  separateSpectators(eventName, (m) => {
+    const isCurrent = m?.socketId === currentPlayerSocket;
+    return [m ? calculateLeg(m.name) : null, bettingTickets, isCurrent];
   });
-  io.except(playerSocketIds).emit(eventName, null, bettingTickets, false);
 };
 
 const endRace = () => {
   gameState.setRaceOver(true);
   endLeg(true);
-  let playerSocketIds = [];
   const winnerCardScores = countFinishCards(true);
   const loserCardScores = countFinishCards(false);
   const allCardScores = winnerCardScores.concat(loserCardScores);
   const rankedPlayers = declarePlayerRanking();
-  manager.allMaps.forEach((m) => {
-    playerSocketIds.push(m.socketId);
-    let totalFinishRewards = 0;
-    allCardScores.forEach((c) => {
-      if (c.owner === m.name) {
-        totalFinishRewards += c.reward;
-      }
-    });
-    io.to(m.socketId).emit(
-      "endRace",
+  separateSpectators("endRace", (m) => {
+    let totalFinishRewards = m ? 0 : null;
+    if (m) {
+      allCardScores.forEach((c) => {
+        if (c.owner === m.name) {
+          totalFinishRewards += c.reward;
+        }
+      });
+    }
+    return [
       winnerCardScores,
       loserCardScores,
       totalFinishRewards,
-      rankedPlayers
-    );
+      rankedPlayers,
+    ];
   });
-  io.except(playerSocketIds).emit(
-    "endRace",
-    winnerCardScores,
-    loserCardScores,
-    null,
-    rankedPlayers
-  );
   io.to(manager.hostMap.socketId).emit("promptRestart");
 };
 
