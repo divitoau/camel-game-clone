@@ -14,7 +14,6 @@ const {
   countFinishCards,
   declarePlayerRanking,
 } = require("./gameLogic/scoringLogic.js");
-const { resetGame } = require("./gameLogic/gameOperations.js");
 
 const app = express();
 const server = createServer(app);
@@ -24,7 +23,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = false;
+const autoStart = true;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -38,9 +37,9 @@ io.on("connection", (socket) => {
 
   // maintains a consistent client state through socket reconnections
   socket.on("clientId", (clientId) => {
-    const isSpectator = manager.handleClientReconnect(clientId, socket);
+    manager.handleClientReconnect(clientId, socket);
     if (gameState.raceStarted) {
-      sendThisPlayerState(socket.id, isSpectator);
+      sendThisPlayerState(socket.id);
     } else {
       if (autoStart) {
         performAutoStart(clientId, socket);
@@ -169,7 +168,7 @@ io.on("connection", (socket) => {
 
   socket.on("startNewGame", (isSamePlayers) => {
     manager.checkHost(socket, () => {
-      resetGame(isSamePlayers, io);
+      resetGame(isSamePlayers);
       if (isSamePlayers) {
         sendPlayerStates();
       }
@@ -184,13 +183,9 @@ const startGame = () => {
   setStartingPositions();
   gameState.resetPyramid();
   gameState.setRaceStarted(true);
-  manager.allMaps.forEach((m) => {
-    const otherPlayerNames = playerNames.filter((p) => p !== m.name);
-    io.to(m.socketId).emit(
-      "startGameRes",
-      gameState.getGameState(),
-      otherPlayerNames
-    );
+  separateSpectators("startGameRes", (m) => {
+    const otherPlayerNames = playerNames.filter((p) => p !== m?.name);
+    return [gameState.getGameState(), otherPlayerNames];
   });
   manager.declareTurn(io);
   sendPlayerStates();
@@ -213,7 +208,8 @@ const separatePlayers = (clientMap) => {
     ...p,
     finishCards: p.finishCards?.length || 0,
   }));
-  const player = cleanedPlayers.find((p) => p.name === playerName) || null;
+  const player =
+    gameState.allPlayers.find((p) => p.name === playerName) || null;
   const otherPlayers = cleanedPlayers.filter((p) => p.name !== playerName);
   return [player, otherPlayers];
 };
@@ -275,6 +271,26 @@ const endRace = () => {
     ];
   });
   io.to(manager.hostMap.socketId).emit("promptRestart");
+};
+
+const resetGame = (isSamePlayers) => {
+  console.log("resetting game");
+  gameState.reset(isSamePlayers);
+  generateCamels();
+  setStartingPositions();
+  const playerNames = manager.getPlayerNames();
+  if (isSamePlayers) {
+    gameState.allPlayers.length = 0;
+    generatePlayers(playerNames);
+    manager.declareTurn(io);
+    separateSpectators("startGameRes", (m) => {
+      const otherPlayerNames = playerNames.filter((p) => p !== m?.name);
+      return [gameState.getGameState(), otherPlayerNames];
+    });
+  } else {
+    manager.clearMaps();
+    io.emit("newPlayerRes", [], null);
+  }
 };
 
 const performAutoStart = (clientId, socket) => {

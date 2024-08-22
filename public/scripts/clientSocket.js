@@ -1,6 +1,5 @@
 const socket = io();
 
-const autoPlay = false;
 let autoDiceCount = 0;
 
 socket.on("connect", () => {
@@ -23,10 +22,6 @@ socket.on("permissionDeny", () => {
 
 socket.on("issueEncounter", (msg) => {
   alert(msg);
-});
-
-socket.on("spectator", () => {
-  alert("spectator");
 });
 
 socket.on("newPlayerRes", (playerNames, hostName) => {
@@ -61,36 +56,10 @@ socket.on("declareHost", (isHost) => {
 
 socket.on("yourTurn", () => {
   enableActionButtons();
-  if (autoPlay) {
-    setTimeout(() => {
-      socket.emit("takePyramidTicket");
-    }, 200);
-    autoDiceCount += 1;
-    if (autoDiceCount === 5) {
-      autoDiceCount = 0;
-      console.log(autoDiceCount);
-      setTimeout(() => {
-        legSummaryDialog.close();
-        resetTents();
-        socket.emit("takePyramidTicket");
-      }, 1000);
-    }
-  }
 });
 
 socket.on("notYourTurn", () => {
   disableActionButtons();
-  if (autoPlay) {
-    autoDiceCount += 1;
-    if (autoDiceCount === 5) {
-      autoDiceCount = 0;
-      console.log(autoDiceCount);
-      setTimeout(() => {
-        legSummaryDialog.close();
-        resetTents();
-      }, 1000);
-    }
-  }
 });
 
 socket.on("startGameRes", (state, playerNames) => {
@@ -129,20 +98,16 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
 
 socket.on("endLeg", (legResults, bettingTickets, isCurrent) => {
   closeDialogsExcept(legBetDialog);
-  if (autoPlay) {
+
+  setTimeout(() => {
     displayBettingTickets(bettingTickets);
     displayLegResults(legResults);
-  } else {
-    setTimeout(() => {
-      displayBettingTickets(bettingTickets);
-      displayLegResults(legResults);
-      resetTents();
-      removeAllElements(".spectator-tile");
-      if (isCurrent) {
-        enableActionButtons();
-      }
-    }, 1000);
-  }
+    resetTents();
+    removeAllElements(".spectator-tile");
+    if (isCurrent) {
+      enableActionButtons();
+    }
+  }, 1000);
 });
 
 socket.on(

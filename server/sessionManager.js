@@ -56,7 +56,6 @@ class SessionState {
 
     if (!gameState.raceStarted) {
       socket.emit("newPlayerRes", this.getPlayerNames(), hostName);
-      return false;
     }
     if (player) {
       player.socketId = socket.id;
@@ -68,15 +67,11 @@ class SessionState {
             : "notYourTurn";
         socket.emit(event);
         socket.emit("fullState", gameState.getGameState());
-        return false;
       } else {
         socket.emit("yourName", player.name);
-        return false;
       }
     } else if (gameState.raceStarted) {
-      socket.emit("spectator");
       socket.emit("fullState", gameState.getGameState());
-      return true;
     }
   }
 
