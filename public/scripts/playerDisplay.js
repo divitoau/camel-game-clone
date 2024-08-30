@@ -1,4 +1,4 @@
-const actionButtons = document.querySelectorAll("#player-actions button");
+const actionButtons = document.querySelectorAll("#player-interface button");
 
 const pyramidButton = document.getElementById("pyramid-button");
 
@@ -85,7 +85,15 @@ const updatePlayerDisplay = (player) => {
   let finishCardsDisplay = " ";
   player.finishCards.forEach((f) => {
     finishCardsDisplay = finishCardsDisplay.concat(
-      `<span class="${f.color}">finish </span>`
+      `
+      <div class="game-card finish-card">
+          <p class="card-player">${player.name}</p>
+          <img
+            class="card-camel ${f.color}-card-camel"
+            src="images/camel.svg"
+            alt="a camel"
+          />
+        </div>`
     );
   });
   heldFinishCardsContainer.innerHTML = finishCardsDisplay;

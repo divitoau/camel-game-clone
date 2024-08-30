@@ -1,0 +1,48 @@
+.game-card {
+    width: 30%;
+    aspect-ratio: 8/11;
+    border: 1px solid black;
+    border-radius: 8px;
+    text-align: center;
+    background-color: brown;
+    box-shadow: -3px 3px 5px;
+    margin-left: -44px;
+    position: relative;
+}
+
+.game-card:first-child {
+    margin-left: 0;
+}
+
+.card-player {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.card-camel {
+    width: 75%;
+}
+
+.blue-card-camel {
+    filter: invert(11%) sepia(100%) saturate(5044%) hue-rotate(244deg) brightness(93%) contrast(151%);
+}
+
+.yellow-card-camel {
+    filter: invert(84%) sepia(77%) saturate(4399%) hue-rotate(358deg) brightness(106%) contrast(104%);
+}
+
+.green-card-camel {
+    filter: invert(27%) sepia(96%) saturate(1286%) hue-rotate(93deg) brightness(94%) contrast(103%);
+}
+
+.red-card-camel {
+    filter: invert(27%) sepia(82%) saturate(5323%) hue-rotate(351deg) brightness(89%) contrast(133%);
+}
+
+.purple-card-camel {
+    filter: invert(14%) sepia(43%) saturate(6012%) hue-rotate(288deg) brightness(92%) contrast(120%);
+}
+
+.white-card-camel {
+    filter: invert(97%) sepia(17%) saturate(0%) hue-rotate(90deg) brightness(104%) contrast(104%);
+}
