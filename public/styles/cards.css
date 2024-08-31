@@ -1,19 +1,29 @@
 .game-card {
-    width: 30%;
+    max-height: 15vh;
+    max-width: 20.6vh;
     aspect-ratio: 8/11;
     border: 1px solid black;
     border-radius: 8px;
-    text-align: center;
     background-color: brown;
     box-shadow: -3px 3px 5px;
-    margin-left: -44px;
+    margin-left: -10%;
     position: relative;
+}
+
+.leg-bet-card {
+    width: 15%;
+}
+
+.finish-card {
+    text-align: center;
+    width: 30%;
 }
 
 .game-card:first-child {
     margin-left: 0;
 }
 
+.leg-bet-value,
 .card-player {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -21,6 +31,10 @@
 
 .card-camel {
     width: 75%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 4px;
 }
 
 .blue-card-camel {

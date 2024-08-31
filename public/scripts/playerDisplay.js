@@ -77,24 +77,28 @@ const updatePlayerDisplay = (player) => {
     player.spectatorTile.position === null ? "spectator tile" : "";
   let bettingTicketsDisplay = " ";
   player.bettingTickets.forEach((b) => {
-    bettingTicketsDisplay = bettingTicketsDisplay.concat(
-      `<span class="${b.color}">${b.value} </span>`
-    );
+    bettingTicketsDisplay += `
+      <div class="game-card leg-bet-card">
+          <p class="leg-bet-value ${b.color}">${b.value}</p>
+          <img
+            class="card-camel ${b.color}-card-camel"
+            src="images/camel.svg"
+            alt="a ${b.color} camel"
+          />
+        </div>`;
   });
   heldLegBetsContainer.innerHTML = bettingTicketsDisplay;
-  let finishCardsDisplay = " ";
+  let finishCardsDisplay = "";
   player.finishCards.forEach((f) => {
-    finishCardsDisplay = finishCardsDisplay.concat(
-      `
+    finishCardsDisplay += `
       <div class="game-card finish-card">
           <p class="card-player">${player.name}</p>
           <img
             class="card-camel ${f.color}-card-camel"
             src="images/camel.svg"
-            alt="a camel"
+            alt="a ${f.color} camel"
           />
-        </div>`
-    );
+        </div>`;
   });
   heldFinishCardsContainer.innerHTML = finishCardsDisplay;
 };

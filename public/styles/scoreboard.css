@@ -1,6 +1,5 @@
 #scoreboard {
     display: grid;
-    min-width: 1030px;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     column-gap: 8px;
     justify-items: center;
