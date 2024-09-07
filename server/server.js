@@ -137,12 +137,6 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("getFinishCards", (isWinner) => {
-    checkTurn(socket, (currentPlayer) => {
-      socket.emit("finishCardsRes", isWinner, currentPlayer.finishCards);
-    });
-  });
-
   socket.on("placeFinishCard", (color, isWinner) => {
     checkTurn(socket, (currentPlayer) => {
       const finishCard = currentPlayer.finishCards.find(

@@ -11,9 +11,6 @@
 #held-leg-bets-container,
 #held-finish-cards-container {
     background: radial-gradient(closest-side, rgba(255, 248, 172, 0.5791727405247813) 52%, rgba(255, 252, 214, 0.47421647230320696) 62%, rgba(0, 0, 0, 0) 100%);
-}
-
-#money-display {
     height: 78%;
 }
 
@@ -22,17 +19,8 @@
     margin-left: 3px;
 }
 
-#pyramid-tickets-display {
-    height: 78%;
-}
-
-#spectator-tile-display {
-    height: 78%;
-}
-
 #held-leg-bets-container {
     padding: 2.5%;
-    height: 78%;
     display: flex;
     align-items: center;
     position: relative;
@@ -41,7 +29,6 @@
 
 #held-finish-cards-container {
     padding: 5%;
-    height: 78%;
     display: flex;
     align-items: center;
     position: relative;

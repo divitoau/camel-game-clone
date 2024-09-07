@@ -130,9 +130,6 @@ socket.on("updateBettingTickets", (bettingTickets) => {
   displayBettingTickets(bettingTickets);
 });
 
-socket.on("finishCardsRes", (isWinner, finishCards) => {
-  showFinishDialog(isWinner, finishCards);
-});
 
 socket.on("updateFinishStack", (isWinner, finishStack) => {
   displayFinishStack(isWinner, finishStack);
@@ -191,7 +188,7 @@ const getBettingTickets = () => {
 const getFinishCards = (isWinner) => {
   socket.emit("getFinishCards", isWinner);
 };
-
+//.
 const takeBettingTicket = (color) => {
   socket.emit("takeBettingTicket", color);
 };

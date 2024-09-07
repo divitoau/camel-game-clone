@@ -1,3 +1,11 @@
+const finishWinnerContainer = document.getElementById(
+  "finish-winner-container"
+);
+
+const finishLoserContainer = document.getElementById(
+  "finish-loser-container"
+);
+
 const displayDice = (dice) => {
   dice.forEach((d) => {
     const tentNumber = dice.indexOf(d) + 1;

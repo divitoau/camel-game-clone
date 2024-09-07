@@ -14,13 +14,6 @@ const legBetButton = document.getElementById("leg-bet-button");
 const legBetDialog = document.getElementById("leg-bet-dialog");
 const legBetCancelButton = document.getElementById("leg-bet-cancel-button");
 
-const finishWinnerButton = document.getElementById("finish-winner-button");
-const finishLoserButton = document.getElementById("finish-loser-button");
-const finishBetDialog = document.getElementById("finish-bet-dialog");
-const finishBetCancelButton = document.getElementById(
-  "finish-bet-cancel-button"
-);
-
 const moneyCount = document.getElementById("money-count");
 const pyramidTicketsDisplay = document.getElementById(
   "pyramid-tickets-display"
@@ -49,13 +42,6 @@ legBetButton.addEventListener("click", () => getBettingTickets());
 legBetCancelButton.addEventListener("click", () => {
   legBetDialog.close();
   removeAllElements("#leg-bet-dialog .bet-button");
-});
-
-finishWinnerButton.addEventListener("click", () => getFinishCards(true));
-finishLoserButton.addEventListener("click", () => getFinishCards(false));
-finishBetCancelButton.addEventListener("click", () => {
-  finishBetDialog.close();
-  removeAllElements("#finish-bet-dialog .bet-button");
 });
 
 const disableActionButtons = () => {
@@ -88,19 +74,42 @@ const updatePlayerDisplay = (player) => {
         </div>`;
   });
   heldLegBetsContainer.innerHTML = bettingTicketsDisplay;
-  let finishCardsDisplay = "";
+  updateHeldFinishCards(player);
+};
+
+const updateHeldFinishCards = (player) => {
+  heldFinishCardsContainer.innerHTML = "";
   player.finishCards.forEach((f) => {
-    finishCardsDisplay += `
-      <div class="game-card finish-card">
-          <p class="card-player">${player.name}</p>
-          <img
-            class="card-camel ${f.color}-card-camel"
-            src="images/camel.svg"
-            alt="a ${f.color} camel"
-          />
-        </div>`;
+    const cardElement = document.createElement("div");
+    cardElement.className = "game-card finish-card";
+    cardElement.innerHTML = `
+    <p class="card-player">${player.name}</p>
+    <img
+      class="card-camel ${f.color}-card-camel"
+      src="images/camel.svg"
+      alt="a ${f.color} camel"
+    />`;
+    cardElement.addEventListener("click", () => choseFinishSpot(f.color));
+    heldFinishCardsContainer.appendChild(cardElement);
   });
-  heldFinishCardsContainer.innerHTML = finishCardsDisplay;
+};
+
+const choseFinishSpot = (color) => {
+  finishWinnerContainer.innerHTML += `<button id="win-button">Bet ${color} to Win</button>`;
+  finishLoserContainer.innerHTML += `<button id="lose-button">Bet ${color} to Lose</button>`;
+  const winButton = document.getElementById("win-button");
+  const loseButton = document.getElementById("lose-button");
+
+  winButton.addEventListener("click", () => {
+    placeFinishCard(color, true);
+    winButton.remove();
+    loseButton.remove();
+  });
+  loseButton.addEventListener("click", () => {
+    placeFinishCard(color, false);
+    winButton.remove();
+    loseButton.remove();
+  });
 };
 
 // shows the newly placed spectator tile on DOM
@@ -142,8 +151,8 @@ const displaySpectatorPlacers = (
     }
   });
 };
-
-const createBetButtons = (container, ticketArray, isWinner) => {
+//.
+const createBetButtons = (container, ticketArray) => {
   ticketArray.forEach((t) => {
     const color = t.color;
     const betButton = document.createElement("button");
@@ -157,10 +166,6 @@ const createBetButtons = (container, ticketArray, isWinner) => {
           takeBettingTicket(color);
           legBetDialog.close();
           removeAllElements("#leg-bet-dialog .bet-button");
-        } else if (container === finishBetDialog) {
-          placeFinishCard(color, isWinner);
-          finishBetDialog.close();
-          removeAllElements("#finish-bet-dialog .bet-button");
         }
       },
       false
@@ -180,14 +185,5 @@ const showBettingDialog = (bettingTickets) => {
     }
     createBetButtons(legBetDialog, topBettingTickets);
     legBetDialog.showModal();
-  }
-};
-
-const showFinishDialog = (isWinner, finishCards) => {
-  if (finishCards.length < 1) {
-    console.log("you are out of finish cards");
-  } else {
-    createBetButtons(finishBetDialog, finishCards, isWinner);
-    finishBetDialog.showModal();
   }
 };
