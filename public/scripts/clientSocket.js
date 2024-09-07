@@ -97,7 +97,7 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
 });
 
 socket.on("endLeg", (legResults, bettingTickets, isCurrent) => {
-  closeDialogsExcept(legBetDialog);
+  closeDialogsExcept(null);
 
   setTimeout(() => {
     displayBettingTickets(bettingTickets);
@@ -122,10 +122,6 @@ socket.on("spectatorTileRes", (spectatorTile) => {
   displaySpectatorTile(spectatorTile);
 });
 
-socket.on("bettingTicketsRes", (bettingTickets) => {
-  showBettingDialog(bettingTickets);
-});
-
 socket.on("updateBettingTickets", (bettingTickets) => {
   displayBettingTickets(bettingTickets);
 });
@@ -136,7 +132,7 @@ socket.on("updateFinishStack", (isWinner, finishStack) => {
 });
 
 socket.on("finalEndLeg", (finalResults) => {
-  closeDialogsExcept(legBetDialog);
+  closeDialogsExcept(null);
   displayFinalLeg(finalResults);
 });
 
@@ -181,14 +177,10 @@ const placeSpectatorTile = (isCheering, spaceNumber) => {
   socket.emit("placeSpectatorTile", isCheering, spaceNumber);
 };
 
-const getBettingTickets = () => {
-  socket.emit("getBettingTickets");
-};
-
 const getFinishCards = (isWinner) => {
   socket.emit("getFinishCards", isWinner);
 };
-//.
+
 const takeBettingTicket = (color) => {
   socket.emit("takeBettingTicket", color);
 };

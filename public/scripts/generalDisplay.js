@@ -19,13 +19,12 @@ const checkAndRemove = (input) => {
   }
 };
 
+//***** consider simplifying
 const closeDialogsExcept = (exception) => {
   const allDialogs = [
     legSummaryDialog,
     gameStartDialog,
     spectatorDialog,
-    legBetDialog,
-    finishBetDialog,
     finalSummaryDialog,
   ];
   allDialogs.forEach((d) => {

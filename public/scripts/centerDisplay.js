@@ -1,10 +1,7 @@
 const finishWinnerContainer = document.getElementById(
   "finish-winner-container"
 );
-
-const finishLoserContainer = document.getElementById(
-  "finish-loser-container"
-);
+const finishLoserContainer = document.getElementById("finish-loser-container");
 
 const displayDice = (dice) => {
   dice.forEach((d) => {
@@ -23,15 +20,23 @@ const resetTents = () => {
 };
 
 const displayBettingTickets = (tickets) => {
-  removeAllElements(".leg-bet-stack li");
   for (const color in tickets) {
     if (tickets[color].length > 0) {
+      const stackElement = document.getElementById(`${color}-leg-bets`);
+      stackElement.innerHTML = "";
       tickets[color].forEach((t) => {
-        const ticketElement = document.createElement("li");
-        const stackElement = document.getElementById(`${t.color}-leg-bets`);
-        ticketElement.className = t.color;
-        ticketElement.textContent = t.value;
-        stackElement.appendChild(ticketElement);
+        stackElement.innerHTML += `
+          <div class="game-card leg-bet-card">
+            <p class="leg-bet-value ${t.color}">${t.value}</p>
+            <img
+              class="card-camel ${t.color}-card-camel"
+              src="images/camel.svg"
+              alt="a ${t.color} camel"
+            />
+          </div>`;
+        stackElement.addEventListener("click", () =>
+          takeBettingTicket(t.color)
+        );
       });
     }
   }

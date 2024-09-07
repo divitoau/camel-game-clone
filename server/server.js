@@ -119,10 +119,6 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("getBettingTickets", () => {
-    socket.emit("bettingTicketsRes", gameState.remainingBettingTickets);
-  });
-
   socket.on("takeBettingTicket", (color) => {
     checkTurn(socket, (currentPlayer) => {
       const betColorArray = gameState.remainingBettingTickets[color];

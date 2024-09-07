@@ -99,11 +99,11 @@
         </div>
         <div id="center-track">
           <div id="leg-bet-container">
-            <ol class="leg-bet-stack" id="blue-leg-bets"></ol>
-            <ol class="leg-bet-stack" id="yellow-leg-bets"></ol>
-            <ol class="leg-bet-stack" id="green-leg-bets"></ol>
-            <ol class="leg-bet-stack" id="red-leg-bets"></ol>
-            <ol class="leg-bet-stack" id="purple-leg-bets"></ol>
+            <div class="leg-bet-stack" id="blue-leg-bets"></div>
+            <div class="leg-bet-stack" id="yellow-leg-bets"></div>
+            <div class="leg-bet-stack" id="green-leg-bets"></div>
+            <div class="leg-bet-stack" id="red-leg-bets"></div>
+            <div class="leg-bet-stack" id="purple-leg-bets"></div>
           </div>
           <div id="dice-tent-container">
             <div class="dice-tent" id="tent-1"></div>
@@ -137,10 +137,8 @@
       <div id="spectator-tile-display"></div>
       <div id="held-leg-bets-container"></div>
       <div id="held-finish-cards-container"></div>
-
       <button id="pyramid-button">dice</button>
       <button id="spectator-button">spec</button>
-      <button id="leg-bet-button">bet</button>
     </div>
     <div id="dialog-land">
       <dialog id="game-start-dialog">
@@ -159,9 +157,6 @@
           <button type="button" id="add-player-button">Add Player</button>
         </form>
         <ol id="starting-player-list"></ol>
-      </dialog>
-      <dialog id="leg-bet-dialog">
-        <button id="leg-bet-cancel-button">Cancel</button>
       </dialog>
       <dialog id="spectator-dialog">
         <p>Place Spectator Tile</p>
