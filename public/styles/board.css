@@ -130,21 +130,13 @@ body {
 #leg-bet-container {
     padding-right: 4%;
     padding-left: 4%;
+    padding-top: 6vh;
     display: flex;
     justify-content: space-between;
 }
 
 .leg-bet-stack {
-    height: 60%;
-    width: 16%;
-    border: 2px black solid;
-    line-height: 40px;
     place-self: center;
-}
-
-.leg-bet-stack>li {
-    list-style-type: none;
-    height: 1em;
 }
 
 #dice-tent-container {

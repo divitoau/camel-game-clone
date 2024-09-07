@@ -24,7 +24,7 @@ const displayBettingTickets = (tickets) => {
     if (tickets[color].length > 0) {
       const stackElement = document.getElementById(`${color}-leg-bets`);
       stackElement.innerHTML = "";
-      tickets[color].forEach((t) => {
+      tickets[color].reverse().forEach((t) => {
         stackElement.innerHTML += `
           <div class="game-card leg-bet-card">
             <p class="leg-bet-value ${t.color}">${t.value}</p>
