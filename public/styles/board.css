@@ -5,6 +5,10 @@ body {
     padding: 0;
 }
 
+html {
+    scrollbar-color: #aaa9 #0000;
+}
+
 body {
     background-color: #eed072;
     display: grid;
