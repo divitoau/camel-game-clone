@@ -43,15 +43,14 @@ const displayBettingTickets = (tickets) => {
 };
 
 const displayFinishStack = (isWinner, finishStack) => {
-  removeAllElements(
-    isWinner ? "#finish-winner-stack li" : "#finish-loser-stack li"
+  const stackElement = document.getElementById(
+    `finish-${isWinner ? "winner" : "loser"}-stack`
   );
-  finishStack.forEach((c) => {
-    const cardElement = document.createElement("li");
-    const stackElement = document.getElementById(
-      isWinner ? "finish-winner-stack" : "finish-loser-stack"
-    );
-    cardElement.textContent = c;
-    stackElement.appendChild(cardElement);
+  stackElement.innerHTML = "";
+  finishStack.forEach((n) => {
+    stackElement.innerHTML += `
+      <div class="game-card finish-card">
+        <p class="card-player">${n}</p>
+      </div>`;
   });
 };
