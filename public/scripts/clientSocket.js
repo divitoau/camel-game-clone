@@ -126,7 +126,6 @@ socket.on("updateBettingTickets", (bettingTickets) => {
   displayBettingTickets(bettingTickets);
 });
 
-
 socket.on("updateFinishStack", (isWinner, finishStack) => {
   displayFinishStack(isWinner, finishStack);
 });
@@ -182,7 +181,9 @@ const getFinishCards = (isWinner) => {
 };
 
 const takeBettingTicket = (color) => {
-  socket.emit("takeBettingTicket", color);
+  if (document.querySelector(`.${color}-leg-bet-card`)) {
+    socket.emit("takeBettingTicket", color);
+  }
 };
 
 const placeFinishCard = (color, isWinner) => {

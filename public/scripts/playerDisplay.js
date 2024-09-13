@@ -23,7 +23,6 @@ const heldFinishCardsContainer = document.getElementById(
 
 pyramidButton.addEventListener("click", () => takePyramidTicket());
 
-spectatorButton.addEventListener("click", () => spectatorDialog.showModal());
 spectatorCancelButton.addEventListener("click", () => spectatorDialog.close());
 cheeringButton.addEventListener("click", () => {
   requestSpectatorSpaces(true);
@@ -49,10 +48,29 @@ const enableActionButtons = () => {
 const updatePlayerDisplay = (player) => {
   moneyCount.innerText = player.money;
   pyramidTicketsCount.innerText = player.pyramidTickets;
-  spectatorTileDisplay.innerText =
-    player.spectatorTile.position === null ? "spectator tile" : "";
+  updateHeldSpectatorTile(player);
   updateHeldBettingTickets(player);
   updateHeldFinishCards(player);
+};
+
+const updateHeldSpectatorTile = (player) => {
+  spectatorTileDisplay.innerHTML = "";
+  if (player.spectatorTile.position === null) {
+    const tileElement = document.createElement("div");
+    tileElement.className = "spectator-tile neutral-tile";
+    tileElement.innerHTML = `
+      <p class="card-player">${player.name}</p>
+      <img class="thumb" src="./images/thumb.svg" alt="a thumb" />
+      <img
+        class="thumb"
+        src="./images/thumb.svg"
+        alt="a thumb"
+        style="transform: rotate(180deg)"
+      />
+      <p>±1</p>`;
+    tileElement.addEventListener("click", () => spectatorDialog.showModal());
+    spectatorTileDisplay.appendChild(tileElement);
+  }
 };
 
 const updateHeldBettingTickets = (player) => {
@@ -117,7 +135,6 @@ const displaySpectatorTile = (tile) => {
   tileElement.innerHTML = `<p>${tile.player}</p> <p>${
     tile.isCheering ? "+" : "-"
   }1</p>`;
-
   const tileSpace = document.getElementById(`track-space-${tile.position}`);
   tileSpace?.appendChild(tileElement);
 };

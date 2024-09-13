@@ -21,22 +21,26 @@ const resetTents = () => {
 
 const displayBettingTickets = (tickets) => {
   for (const color in tickets) {
+    const stackElement = document.getElementById(`${color}-leg-bets`);
+    stackElement.innerHTML = "";
     if (tickets[color].length > 0) {
-      const stackElement = document.getElementById(`${color}-leg-bets`);
-      stackElement.innerHTML = "";
+      if (
+        stackElement &&
+        !stackElement.hasAttribute("betting-ticket-listener")
+      ) {
+        stackElement.addEventListener("click", () => takeBettingTicket(color));
+        stackElement.setAttribute("betting-ticket-listener", "true");
+      }
       tickets[color].reverse().forEach((t) => {
         stackElement.innerHTML += `
-          <div class="game-card leg-bet-card">
-            <p class="leg-bet-value ${t.color}">${t.value}</p>
+          <div class="game-card leg-bet-card ${color}-leg-bet-card">
+            <p class="leg-bet-value ${color}">${t.value}</p>
             <img
-              class="card-camel ${t.color}-card-camel"
+              class="card-camel ${color}-card-camel"
               src="images/camel.svg"
-              alt="a ${t.color} camel"
+              alt="a ${color} camel"
             />
           </div>`;
-        stackElement.addEventListener("click", () =>
-          takeBettingTicket(t.color)
-        );
       });
     }
   }

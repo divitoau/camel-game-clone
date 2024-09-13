@@ -131,6 +131,8 @@ body {
     grid-template-rows: 3fr 1fr;
 }
 
+/* ****** change to grid and give children specific spots
+ */
 #leg-bet-container {
     padding-right: 4%;
     padding-left: 4%;
@@ -165,12 +167,21 @@ body {
 }
 
 .spectator-tile {
-    width: 60px;
+    width: 80px;
+    aspect-ratio: 8/9;
     margin: auto;
     background-color: lightgray;
+    text-align: center;
+}
+
+.neutral-tile {
+    border: 4px solid darkgray;
+}
+
+.cheering-tile,
+.booing-tile {
     bottom: 46px;
     position: relative;
-    text-align: center;
 }
 
 .cheering-tile {
@@ -179,4 +190,11 @@ body {
 
 .booing-tile {
     border: 4px solid red;
+}
+
+.thumb {
+    width: 75%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
