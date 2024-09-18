@@ -54,12 +54,13 @@ socket.on("declareHost", (isHost) => {
   setIsGameHost(isHost);
 });
 
+// ****** figure out what to do with these
 socket.on("yourTurn", () => {
-  enableActionButtons();
+  console.log("your turn");
 });
 
 socket.on("notYourTurn", () => {
-  disableActionButtons();
+  console.log("not your turn");
 });
 
 socket.on("startGameRes", (state, playerNames) => {
@@ -98,14 +99,13 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
 
 socket.on("endLeg", (legResults, bettingTickets, isCurrent) => {
   closeDialogsExcept(null);
-
   setTimeout(() => {
     displayBettingTickets(bettingTickets);
     displayLegResults(legResults);
     resetTents();
     removeAllElements(".spectator-tile");
     if (isCurrent) {
-      enableActionButtons();
+      console.log("your turn");
     }
   }, 1000);
 });

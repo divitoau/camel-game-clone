@@ -12,7 +12,7 @@ html {
 body {
     background-color: #eed072;
     display: grid;
-    grid-template-rows: auto 3fr 1fr;
+    grid-template-rows: auto 7fr 2fr;
     grid-template-columns: 1fr;
     overflow: hidden;
 }
@@ -143,6 +143,10 @@ body {
 
 .leg-bet-stack {
     place-self: center;
+}
+
+#dice-pyramid {
+    width: 60px;
 }
 
 #dice-tent-container {

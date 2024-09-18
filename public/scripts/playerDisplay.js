@@ -1,6 +1,4 @@
-const actionButtons = document.querySelectorAll("#player-interface button");
-
-const pyramidButton = document.getElementById("pyramid-button");
+const dicePyramid = document.getElementById("dice-pyramid");
 
 const spectatorButton = document.getElementById("spectator-button");
 const spectatorDialog = document.getElementById("spectator-dialog");
@@ -14,14 +12,13 @@ const moneyCount = document.getElementById("money-count");
 const pyramidTicketsDisplay = document.getElementById(
   "pyramid-tickets-display"
 );
-const pyramidTicketsCount = document.getElementById("pyramid-tickets-count");
 const spectatorTileDisplay = document.getElementById("spectator-tile-display");
 const heldLegBetsContainer = document.getElementById("held-leg-bets-container");
 const heldFinishCardsContainer = document.getElementById(
   "held-finish-cards-container"
 );
 
-pyramidButton.addEventListener("click", () => takePyramidTicket());
+dicePyramid.addEventListener("click", () => takePyramidTicket());
 
 spectatorCancelButton.addEventListener("click", () => spectatorDialog.close());
 cheeringButton.addEventListener("click", () => {
@@ -33,24 +30,24 @@ booingButton.addEventListener("click", () => {
   spectatorDialog.close();
 });
 
-const disableActionButtons = () => {
-  actionButtons.forEach((b) => {
-    b.setAttribute("disabled", "");
-  });
-};
-
-const enableActionButtons = () => {
-  actionButtons.forEach((b) => {
-    b.removeAttribute("disabled", "");
-  });
-};
-
 const updatePlayerDisplay = (player) => {
   moneyCount.innerText = player.money;
-  pyramidTicketsCount.innerText = player.pyramidTickets;
+  updateHeldPyramidTickets(player);
   updateHeldSpectatorTile(player);
   updateHeldBettingTickets(player);
   updateHeldFinishCards(player);
+};
+
+const updateHeldPyramidTickets = (player) => {
+  pyramidTicketsDisplay.innerHTML = "";
+  for (let i = 0; i < player.pyramidTickets; i++) {
+    pyramidTicketsDisplay.innerHTML += `
+        <img
+          class="pyramid-ticket"
+          src="images/pyramidToken.svg"
+          alt="a square with the letter P"
+        />`;
+  }
 };
 
 const updateHeldSpectatorTile = (player) => {
