@@ -56,11 +56,11 @@ socket.on("declareHost", (isHost) => {
 
 // ****** figure out what to do with these
 socket.on("yourTurn", () => {
-  console.log("your turn");
+  toggleOverlays(false);
 });
 
 socket.on("notYourTurn", () => {
-  console.log("not your turn");
+  toggleOverlays(true);
 });
 
 socket.on("startGameRes", (state, playerNames) => {
