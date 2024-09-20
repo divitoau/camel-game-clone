@@ -233,7 +233,12 @@ const endLeg = (isFinal) => {
   const bettingTickets = isFinal ? null : gameState.remainingBettingTickets;
   separateSpectators(eventName, (m) => {
     const isCurrent = m?.socketId === currentPlayerSocket;
-    return [m ? calculateLeg(m.name) : null, bettingTickets, isCurrent];
+    return [
+      m ? calculateLeg(m.name) : null,
+      bettingTickets,
+      isCurrent,
+      m?.name,
+    ];
   });
 };
 

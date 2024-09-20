@@ -64,6 +64,7 @@ socket.on("notYourTurn", () => {
 });
 
 socket.on("startGameRes", (state, playerNames) => {
+  removeAllElements(".spectator-tile");
   checkAndRemove("restart-button");
   checkAndRemove(proceedButton);
   if (!document.contains(legSummaryButton)) {
@@ -97,15 +98,17 @@ socket.on("takePyramidTicketRes", (player, dice, allCamels) => {
   );
 });
 
-socket.on("endLeg", (legResults, bettingTickets, isCurrent) => {
+socket.on("endLeg", (legResults, bettingTickets, isCurrent, name) => {
   closeDialogsExcept(null);
   setTimeout(() => {
     displayBettingTickets(bettingTickets);
     displayLegResults(legResults);
     resetTents();
     removeAllElements(".spectator-tile");
+    // dummy player object to make function work properly
+    updateHeldSpectatorTile({ name: name, spectatorTile: { position: null } });
     if (isCurrent) {
-      console.log("your turn");
+      toggleOverlays(false);
     }
   }, 1000);
 });
@@ -131,6 +134,7 @@ socket.on("updateFinishStack", (isWinner, finishStack) => {
 });
 
 socket.on("finalEndLeg", (finalResults) => {
+  removeAllElements(".spectator-tile");
   closeDialogsExcept(null);
   displayFinalLeg(finalResults);
 });
