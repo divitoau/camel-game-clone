@@ -8,11 +8,11 @@ socket.on("connect", () => {
   socket.emit("clientId", clientId ? clientId : setClientId());
 });
 
-socket.on("fullState", (state) => {
+socket.on("fullState", (state, yourName) => {
   displayState(state);
   displayDice(state.diceOnTents);
   state.spectatorTiles.forEach((t) => {
-    displaySpectatorTile(t);
+    displaySpectatorTile(t, t.player === yourName);
   });
 });
 
@@ -120,9 +120,9 @@ socket.on(
   }
 );
 
-socket.on("spectatorTileRes", (spectatorTile) => {
+socket.on("spectatorTileRes", (spectatorTile, isYours) => {
   removeAllElements(".place-button");
-  displaySpectatorTile(spectatorTile);
+  displaySpectatorTile(spectatorTile, isYours);
 });
 
 socket.on("updateBettingTickets", (bettingTickets) => {

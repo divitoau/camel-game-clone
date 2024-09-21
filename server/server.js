@@ -113,7 +113,12 @@ io.on("connection", (socket) => {
   socket.on("placeSpectatorTile", (isCheering, spaceNumber) => {
     checkTurn(socket, (currentPlayer) => {
       currentPlayer.placeSpectatorTile(isCheering, spaceNumber);
-      io.emit("spectatorTileRes", currentPlayer.spectatorTile);
+      socket.emit("spectatorTileRes", currentPlayer.spectatorTile, true);
+      io.except(socket.id).emit(
+        "spectatorTileRes",
+        currentPlayer.spectatorTile,
+        false
+      );
       sendPlayerStates();
       manager.declareTurn(io);
     });

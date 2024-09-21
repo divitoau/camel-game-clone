@@ -66,12 +66,12 @@ class SessionState {
             ? "yourTurn"
             : "notYourTurn";
         socket.emit(event);
-        socket.emit("fullState", gameState.getGameState());
+        socket.emit("fullState", gameState.getGameState(), player.name);
       } else {
         socket.emit("yourName", player.name);
       }
     } else if (gameState.raceStarted) {
-      socket.emit("fullState", gameState.getGameState());
+      socket.emit("fullState", gameState.getGameState(), null);
     }
   }
 

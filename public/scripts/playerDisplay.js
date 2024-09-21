@@ -122,7 +122,7 @@ const choseFinishSpot = (color) => {
 };
 
 // shows the newly placed spectator tile on DOM
-const displaySpectatorTile = (tile) => {
+const displaySpectatorTile = (tile, isYours) => {
   checkAndRemove(`${tile.player}-spectator-tile`);
   const tileElement = document.createElement("div");
   tileElement.id = `${tile.player}-spectator-tile`;
@@ -132,6 +132,9 @@ const displaySpectatorTile = (tile) => {
   tileElement.innerHTML = `<p>${tile.player}</p> <p>${
     tile.isCheering ? "+" : "-"
   }1</p>`;
+  if (isYours) {
+    tileElement.addEventListener("click", () => spectatorDialog.showModal());
+  }
   const tileSpace = document.getElementById(`track-space-${tile.position}`);
   tileSpace?.appendChild(tileElement);
 };
