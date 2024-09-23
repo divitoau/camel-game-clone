@@ -123,19 +123,27 @@ const choseFinishSpot = (color) => {
 
 // shows the newly placed spectator tile on DOM
 const displaySpectatorTile = (tile, isYours) => {
-  checkAndRemove(`${tile.player}-spectator-tile`);
+  const { isCheering, player, position } = tile;
+  checkAndRemove(`${player}-spectator-tile`);
   const tileElement = document.createElement("div");
-  tileElement.id = `${tile.player}-spectator-tile`;
+  tileElement.id = `${player}-spectator-tile`;
   tileElement.className = `spectator-tile ${
-    tile.isCheering ? "cheering" : "booing"
+    isCheering ? "cheering" : "booing"
   }-tile`;
-  tileElement.innerHTML = `<p>${tile.player}</p> <p>${
-    tile.isCheering ? "+" : "-"
-  }1</p>`;
+  tileElement.innerHTML = `
+      <p class="card-player">${player}</p>
+      <img class="thumb" src="./images/thumb.svg" alt="a thumbs-${
+        isCheering ? 'up"/>' : 'down" style="transform: rotate(180deg)"/>'
+      }
+      <p>${isCheering ? "+" : "-"}1</p>`;
   if (isYours) {
+    const overlay = document.createElement("div");
+    overlay.className = "block-overlay";
     tileElement.addEventListener("click", () => spectatorDialog.showModal());
+    tileElement.classList.add("your-spectator-tile");
+    tileElement.appendChild(overlay);
   }
-  const tileSpace = document.getElementById(`track-space-${tile.position}`);
+  const tileSpace = document.getElementById(`track-space-${position}`);
   tileSpace?.appendChild(tileElement);
 };
 
