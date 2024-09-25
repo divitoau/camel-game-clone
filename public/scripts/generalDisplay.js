@@ -1,5 +1,3 @@
-const overlays = document.querySelectorAll(".block-overlay");
-
 const removeAllElements = (elementString) => {
   document.querySelectorAll(elementString).forEach((b) => {
     b.remove();
@@ -22,6 +20,7 @@ const checkAndRemove = (input) => {
 };
 
 const toggleOverlays = (turningOn) => {
+  const overlays = document.querySelectorAll(".block-overlay");
   overlays.forEach((o) => (o.style.display = turningOn ? "block" : "none"));
 };
 

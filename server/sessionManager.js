@@ -61,12 +61,12 @@ class SessionState {
       player.socketId = socket.id;
       if (gameState.raceStarted) {
         const currentPlayerObject = this.getCurrentPlayerSocket();
-        const event =
+        socket.emit("fullState", gameState.getGameState(), player.name);
+        const turnEvent =
           socket.id === currentPlayerObject.currentSocketId
             ? "yourTurn"
             : "notYourTurn";
-        socket.emit(event);
-        socket.emit("fullState", gameState.getGameState(), player.name);
+        socket.emit(turnEvent);
       } else {
         socket.emit("yourName", player.name);
       }

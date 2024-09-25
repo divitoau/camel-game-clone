@@ -54,7 +54,6 @@ socket.on("declareHost", (isHost) => {
   setIsGameHost(isHost);
 });
 
-// ****** figure out what to do with these
 socket.on("yourTurn", () => {
   toggleOverlays(false);
 });
