@@ -137,10 +137,13 @@ const displaySpectatorTile = (tile, isYours) => {
       }
       <p>${isCheering ? "+" : "-"}1</p>`;
   if (isYours) {
+    const clickBox = document.createElement("div");
     const overlay = document.createElement("div");
+    clickBox.className = "click-box";
     overlay.className = "block-overlay";
-    tileElement.addEventListener("click", () => spectatorDialog.showModal());
+    clickBox.addEventListener("click", () => spectatorDialog.showModal());
     tileElement.classList.add("your-spectator-tile");
+    tileElement.appendChild(clickBox);
     tileElement.appendChild(overlay);
   }
   const tileSpace = document.getElementById(`track-space-${position}`);
