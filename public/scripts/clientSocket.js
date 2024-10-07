@@ -47,7 +47,7 @@ socket.on("newPlayerRes", (playerNames, hostName) => {
 
 socket.on("yourName", (name) => {
   highlightYourName(name);
-  checkAndRemove(newPlayerForm);
+  removeAllElements(newPlayerForm);
 });
 
 socket.on("declareHost", (isHost) => {
@@ -64,8 +64,8 @@ socket.on("notYourTurn", () => {
 
 socket.on("startGameRes", (state, playerNames) => {
   removeAllElements(".spectator-tile");
-  checkAndRemove("restart-button");
-  checkAndRemove(proceedButton);
+  removeAllElements("#restart-button");
+  removeAllElements(proceedButton);
   if (!document.contains(legSummaryButton)) {
     legSummaryDialog.appendChild(legSummaryButton);
   }
@@ -78,7 +78,7 @@ socket.on("playerStates", (player, otherPlayers) => {
   const allNameplates = document.querySelectorAll(".opp-nameplate");
   if (allNameplates.length !== otherPlayers.length) {
     allNameplates.forEach((n) => {
-      checkAndRemove(n);
+      removeAllElements(n);
     });
     otherPlayerNames = otherPlayers.map((p) => p.name);
     createScoreboard(otherPlayerNames);

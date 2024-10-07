@@ -1,21 +1,11 @@
-const removeAllElements = (elementString) => {
-  document.querySelectorAll(elementString).forEach((b) => {
-    b.remove();
-  });
-};
-
-const checkAndRemove = (input) => {
+const removeAllElements = (input) => {
   let elementToRemove;
   if (typeof input === "string" || input instanceof String) {
-    elementToRemove = document.getElementById(input);
+    document.querySelectorAll(input).forEach((el) => {
+      el.remove();
+    });
   } else if (input instanceof HTMLElement) {
-    elementToRemove = input;
-  }
-  if (document.contains(elementToRemove)) {
-    elementToRemove.remove();
-    return true;
-  } else {
-    return false;
+    input.remove();
   }
 };
 

@@ -13,7 +13,7 @@ const displayCamels = (allCamels) => {
 
 const removeCamels = (allCamels) => {
   allCamels.forEach((camel) => {
-    checkAndRemove(`${camel.color}-camel`);
+    removeAllElements(`#${camel.color}-camel`);
   });
 };
 

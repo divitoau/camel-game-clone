@@ -145,7 +145,7 @@ const choseFinishSpot = (color) => {
 // shows the newly placed spectator tile on DOM
 const displaySpectatorTile = (tile, isYours) => {
   const { isCheering, player, position } = tile;
-  checkAndRemove(`${player}-spectator-tile`);
+  removeAllElements(`#${player}-spectator-tile`);
   const tileElement = document.createElement("div");
   tileElement.id = `${player}-spectator-tile`;
   tileElement.className = `spectator-tile ${
@@ -194,7 +194,7 @@ const displaySpectatorPlacers = (
   currentTile
 ) => {
   floatingSpectatorTile = currentTile;
-  checkAndRemove(`${currentPlayerName}-spectator-tile`);
+  removeAllElements(`#${currentPlayerName}-spectator-tile`);
   document.querySelectorAll(".track-space").forEach((s) => {
     const spaceNumber = parseInt(s.id.substring(12));
     if (!prohibitedSpaces.includes(spaceNumber)) {

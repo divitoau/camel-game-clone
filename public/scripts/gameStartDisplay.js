@@ -21,7 +21,7 @@ newPlayerInput.addEventListener("keydown", (event) => {
 });
 
 const openStartDialog = () => {
-  checkAndRemove(".start-prompt");
+  removeAllElements(".start-prompt");
   gameStartDialog.showModal();
 };
 
