@@ -23,7 +23,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = false;
+const autoStart = true;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -100,12 +100,14 @@ io.on("connection", (socket) => {
 
   socket.on("requestSpectatorSpaces", (isCheering) => {
     checkTurn(socket, (currentPlayer) => {
+      const { name, spectatorTile } = currentPlayer;
       const prohibitedSpaces = gameState.getProhibitedSpaces();
       socket.emit(
         "spectatorSpaces",
-        currentPlayer.name,
+        name,
         prohibitedSpaces,
-        isCheering
+        isCheering,
+        spectatorTile
       );
     });
   });

@@ -18,7 +18,16 @@ const heldFinishCardsContainer = document.getElementById(
   "held-finish-cards-container"
 );
 
-dicePyramid.addEventListener("click", () => takePyramidTicket());
+const finishWinnerContainer = document.getElementById(
+  "finish-winner-container"
+);
+const finishLoserContainer = document.getElementById("finish-loser-container");
+
+dicePyramid.addEventListener("click", () => {
+  removeAllElements(".place-button");
+  removeAllElements(".finish-button");
+  takePyramidTicket();
+});
 
 spectatorCancelButton.addEventListener("click", () => spectatorDialog.close());
 cheeringButton.addEventListener("click", () => {
@@ -65,7 +74,11 @@ const updateHeldSpectatorTile = (player) => {
         style="transform: rotate(180deg)"
       />
       <p>±1</p>`;
-    tileElement.addEventListener("click", () => spectatorDialog.showModal());
+    tileElement.addEventListener("click", () => {
+      removeAllElements(".place-button");
+      removeAllElements(".finish-button");
+      spectatorDialog.showModal();
+    });
     spectatorTileDisplay.appendChild(tileElement);
   }
 };
@@ -98,14 +111,18 @@ const updateHeldFinishCards = (player) => {
       src="images/camel.svg"
       alt="a ${f.color} camel"
     />`;
-    cardElement.addEventListener("click", () => choseFinishSpot(f.color));
+    cardElement.addEventListener("click", () => {
+      removeAllElements(".place-button");
+      removeAllElements(".finish-button");
+      choseFinishSpot(f.color);
+    });
     heldFinishCardsContainer.appendChild(cardElement);
   });
 };
 
 const choseFinishSpot = (color) => {
-  finishWinnerContainer.innerHTML += `<button id="win-button">Bet ${color} to Win</button>`;
-  finishLoserContainer.innerHTML += `<button id="lose-button">Bet ${color} to Lose</button>`;
+  finishWinnerContainer.innerHTML += `<button id="win-button" class="finish-button">Bet ${color} to Win</button>`;
+  finishLoserContainer.innerHTML += `<button id="lose-button" class="finish-button">Bet ${color} to Lose</button>`;
   const winButton = document.getElementById("win-button");
   const loseButton = document.getElementById("lose-button");
 
@@ -119,6 +136,8 @@ const choseFinishSpot = (color) => {
     winButton.remove();
     loseButton.remove();
   });
+
+  winButton.focus();
 };
 
 // shows the newly placed spectator tile on DOM
@@ -141,7 +160,10 @@ const displaySpectatorTile = (tile, isYours) => {
     const overlay = document.createElement("div");
     clickBox.className = "click-box";
     overlay.className = "block-overlay";
-    clickBox.addEventListener("click", () => spectatorDialog.showModal());
+    clickBox.addEventListener("click", () => {
+      removeAllElements(".finish-button");
+      spectatorDialog.showModal();
+    });
     tileElement.classList.add("your-spectator-tile");
     tileElement.appendChild(clickBox);
     tileElement.appendChild(overlay);
@@ -154,12 +176,28 @@ const displaySpectatorTile = (tile, isYours) => {
 const displaySpectatorPlacers = (
   currentPlayerName,
   prohibitedSpaces,
-  isCheering
+  isCheering,
+  currentTile
 ) => {
   checkAndRemove(`${currentPlayerName}-spectator-tile`);
   document.querySelectorAll(".track-space").forEach((s) => {
     const spaceNumber = parseInt(s.id.substring(12));
     if (!prohibitedSpaces.includes(spaceNumber)) {
+      if (spaceNumber === currentTile.position) {
+        const cancelButton = document.createElement("button");
+        cancelButton.className = "place-button";
+        cancelButton.id = `spectator-cancel-button`;
+        cancelButton.textContent = "Cancel";
+        cancelButton.addEventListener("click", () => {
+          removeAllElements(".place-button");
+          displaySpectatorTile(currentTile, true);
+          toggleOverlays(false);
+        });
+        s.appendChild(cancelButton);
+        if (isCheering === currentTile.isCheering) {
+          return;
+        }
+      }
       const placeButton = document.createElement("button");
       placeButton.className = "place-button";
       placeButton.id = `place-button-${spaceNumber}`;

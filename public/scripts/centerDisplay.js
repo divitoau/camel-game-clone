@@ -1,8 +1,3 @@
-const finishWinnerContainer = document.getElementById(
-  "finish-winner-container"
-);
-const finishLoserContainer = document.getElementById("finish-loser-container");
-
 const displayDice = (dice) => {
   dice.forEach((d) => {
     const tentNumber = dice.indexOf(d) + 1;
@@ -28,7 +23,11 @@ const displayBettingTickets = (tickets) => {
         stackElement &&
         !stackElement.hasAttribute("betting-ticket-listener")
       ) {
-        stackElement.addEventListener("click", () => takeBettingTicket(color));
+        stackElement.addEventListener("click", () => {
+          removeAllElements(".place-button");
+          removeAllElements(".finish-button");
+          takeBettingTicket(color);
+        });
         stackElement.setAttribute("betting-ticket-listener", "true");
       }
       tickets[color].reverse().forEach((t) => {

@@ -114,8 +114,13 @@ socket.on("endLeg", (legResults, bettingTickets, isCurrent, name) => {
 
 socket.on(
   "spectatorSpaces",
-  (currentPlayerName, prohibitedSpaces, isCheering) => {
-    displaySpectatorPlacers(currentPlayerName, prohibitedSpaces, isCheering);
+  (currentPlayerName, prohibitedSpaces, isCheering, currentTile) => {
+    displaySpectatorPlacers(
+      currentPlayerName,
+      prohibitedSpaces,
+      isCheering,
+      currentTile
+    );
   }
 );
 
