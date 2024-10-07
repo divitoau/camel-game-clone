@@ -26,6 +26,7 @@ const displayBettingTickets = (tickets) => {
         stackElement.addEventListener("click", () => {
           removeAllElements(".place-button");
           removeAllElements(".finish-button");
+          replaceSpectatorTile();
           takeBettingTicket(color);
         });
         stackElement.setAttribute("betting-ticket-listener", "true");

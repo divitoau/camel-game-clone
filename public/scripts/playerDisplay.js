@@ -26,6 +26,7 @@ const finishLoserContainer = document.getElementById("finish-loser-container");
 dicePyramid.addEventListener("click", () => {
   removeAllElements(".place-button");
   removeAllElements(".finish-button");
+  replaceSpectatorTile();
   takePyramidTicket();
 });
 
@@ -114,6 +115,7 @@ const updateHeldFinishCards = (player) => {
     cardElement.addEventListener("click", () => {
       removeAllElements(".place-button");
       removeAllElements(".finish-button");
+      replaceSpectatorTile();
       choseFinishSpot(f.color);
     });
     heldFinishCardsContainer.appendChild(cardElement);
@@ -170,6 +172,18 @@ const displaySpectatorTile = (tile, isYours) => {
   }
   const tileSpace = document.getElementById(`track-space-${position}`);
   tileSpace?.appendChild(tileElement);
+  floatingSpectatorTile = null;
+};
+
+// this lets spectator tile be redisplayed on board if placement is interrupted
+let floatingSpectatorTile = null;
+
+const replaceSpectatorTile = () => {
+  if (floatingSpectatorTile) {
+    displaySpectatorTile(floatingSpectatorTile, true);
+    floatingSpectatorTile = null;
+    toggleOverlays(false);
+  }
 };
 
 // creates buttons on each permitted space where a tile can be placed
@@ -179,6 +193,7 @@ const displaySpectatorPlacers = (
   isCheering,
   currentTile
 ) => {
+  floatingSpectatorTile = currentTile;
   checkAndRemove(`${currentPlayerName}-spectator-tile`);
   document.querySelectorAll(".track-space").forEach((s) => {
     const spaceNumber = parseInt(s.id.substring(12));
@@ -190,8 +205,7 @@ const displaySpectatorPlacers = (
         cancelButton.textContent = "Cancel";
         cancelButton.addEventListener("click", () => {
           removeAllElements(".place-button");
-          displaySpectatorTile(currentTile, true);
-          toggleOverlays(false);
+          replaceSpectatorTile();
         });
         s.appendChild(cancelButton);
         if (isCheering === currentTile.isCheering) {
