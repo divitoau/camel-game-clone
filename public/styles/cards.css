@@ -45,27 +45,3 @@
     margin-right: auto;
     margin-bottom: 4px;
 }
-
-.blue-card-camel {
-    filter: invert(11%) sepia(100%) saturate(5044%) hue-rotate(244deg) brightness(93%) contrast(151%);
-}
-
-.yellow-card-camel {
-    filter: invert(84%) sepia(77%) saturate(4399%) hue-rotate(358deg) brightness(106%) contrast(104%);
-}
-
-.green-card-camel {
-    filter: invert(27%) sepia(96%) saturate(1286%) hue-rotate(93deg) brightness(94%) contrast(103%);
-}
-
-.red-card-camel {
-    filter: invert(27%) sepia(82%) saturate(5323%) hue-rotate(351deg) brightness(89%) contrast(133%);
-}
-
-.purple-card-camel {
-    filter: invert(14%) sepia(43%) saturate(6012%) hue-rotate(288deg) brightness(92%) contrast(120%);
-}
-
-.white-card-camel {
-    filter: invert(97%) sepia(17%) saturate(0%) hue-rotate(90deg) brightness(104%) contrast(104%);
-}

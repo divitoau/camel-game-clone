@@ -1,9 +1,7 @@
-.camel {
+.camel-piece {
     display: inline-block;
     height: 30%;
     aspect-ratio: 1/1;
-    border-radius: 50%;
-    border: 1px black solid;
     position: absolute;
     left: 20px;
 }
@@ -43,30 +41,31 @@
     z-index: 7;
 }
 
-#blue-camel {
-    background-color: blue;
+.blue-camel {
+    filter: invert(11%) sepia(100%) saturate(5044%) hue-rotate(244deg) brightness(93%) contrast(151%);
 }
 
-#yellow-camel {
-    background-color: yellow;
+.yellow-camel {
+    filter: invert(84%) sepia(77%) saturate(4399%) hue-rotate(358deg) brightness(106%) contrast(104%);
 }
 
-#green-camel {
-    background-color: green;
+.green-camel {
+    filter: invert(27%) sepia(96%) saturate(1286%) hue-rotate(93deg) brightness(94%) contrast(103%);
 }
 
-#red-camel {
-    background-color: red;
+.red-camel {
+    filter: invert(27%) sepia(82%) saturate(5323%) hue-rotate(351deg) brightness(89%) contrast(133%);
 }
 
-#purple-camel {
-    background-color: purple;
+.purple-camel {
+    filter: invert(14%) sepia(43%) saturate(6012%) hue-rotate(288deg) brightness(92%) contrast(120%);
 }
 
-#white-camel {
-    background-color: white;
+.white-camel {
+    filter: invert(97%) sepia(17%) saturate(0%) hue-rotate(90deg) brightness(104%) contrast(104%);
 }
 
-#black-camel {
-    background-color: black;
+#black-camel-piece,
+#white-camel-piece {
+    transform: scaleX(-1);
 }

@@ -91,7 +91,7 @@ const updateHeldBettingTickets = (player) => {
       <div class="game-card leg-bet-card">
         <p class="leg-bet-value ${b.color}">${b.value}</p>
         <img
-          class="card-camel ${b.color}-card-camel"
+          class="card-camel ${b.color}-camel"
           src="images/camel.svg"
           alt="a ${b.color} camel"
         />
@@ -108,7 +108,7 @@ const updateHeldFinishCards = (player) => {
     cardElement.innerHTML = `
     <p class="card-player">${player.name}</p>
     <img
-      class="card-camel ${f.color}-card-camel"
+      class="card-camel ${f.color}-camel"
       src="images/camel.svg"
       alt="a ${f.color} camel"
     />`;

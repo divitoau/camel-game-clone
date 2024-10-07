@@ -36,7 +36,7 @@ const displayBettingTickets = (tickets) => {
           <div class="game-card leg-bet-card ${color}-leg-bet-card">
             <p class="leg-bet-value ${color}">${t.value}</p>
             <img
-              class="card-camel ${color}-card-camel"
+              class="card-camel ${color}-camel"
               src="images/camel.svg"
               alt="a ${color} camel"
             />

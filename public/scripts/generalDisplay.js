@@ -1,5 +1,4 @@
 const removeAllElements = (input) => {
-  let elementToRemove;
   if (typeof input === "string" || input instanceof String) {
     document.querySelectorAll(input).forEach((el) => {
       el.remove();
@@ -14,7 +13,6 @@ const toggleOverlays = (turningOn) => {
   overlays.forEach((o) => (o.style.display = turningOn ? "block" : "none"));
 };
 
-//***** consider simplifying
 const closeDialogsExcept = (exception) => {
   const allDialogs = [
     legSummaryDialog,
