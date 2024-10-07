@@ -13,6 +13,13 @@ addPlayerButton.addEventListener("click", () => {
   }
 });
 
+newPlayerInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    addPlayerButton.click();
+  }
+});
+
 const openStartDialog = () => {
   checkAndRemove(".start-prompt");
   gameStartDialog.showModal();
@@ -55,6 +62,7 @@ const promptStartGame = (isHost) => {
     startGameButton.innerText = "start game";
     startGameButton.addEventListener("click", () => startGame());
     gameStartDialog.appendChild(startGameButton);
+    startGameButton.focus();
   } else {
     const waitingText = document.createElement("p");
     waitingText.id = "waiting-text";
