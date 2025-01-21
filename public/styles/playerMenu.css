@@ -1,0 +1,71 @@
+#player-interface {
+    background-image: url('../images/wood.jpg');
+    background-size: cover;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 6fr 3fr;
+}
+
+#money-display,
+#pyramid-tickets-display,
+#spectator-tile-display,
+#held-leg-bets-container,
+#held-finish-cards-container {
+    background: radial-gradient(closest-side, rgba(255, 248, 172, 0.5791727405247813) 52%, rgba(255, 252, 214, 0.47421647230320696) 62%, rgba(0, 0, 0, 0) 100%);
+    height: 78%;
+}
+
+#held-leg-bets-container {
+    padding: 2.5%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+#held-finish-cards-container {
+    padding: 5%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.blue-bet-button {
+    background-color: blue;
+}
+
+.yellow-bet-button {
+    background-color: yellow;
+}
+
+.green-bet-button {
+    background-color: green;
+}
+
+.red-bet-button {
+    background-color: red;
+}
+
+.purple-bet-button {
+    background-color: purple;
+}
+
+.blue {
+    color: blue;
+}
+
+.yellow {
+    color: yellow;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.purple {
+    color: purple;
+}

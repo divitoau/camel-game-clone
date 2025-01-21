@@ -1,0 +1,71 @@
+.camel-piece {
+    display: inline-block;
+    height: 30%;
+    aspect-ratio: 1/1;
+    position: absolute;
+    left: 20px;
+}
+
+.elevation-0 {
+    bottom: 5%;
+    z-index: 1;
+}
+
+.elevation-1 {
+    bottom: 15%;
+    z-index: 2;
+}
+
+.elevation-2 {
+    bottom: 25%;
+    z-index: 3;
+}
+
+.elevation-3 {
+    bottom: 35%;
+    z-index: 4;
+}
+
+.elevation-4 {
+    bottom: 45%;
+    z-index: 5;
+}
+
+.elevation-5 {
+    bottom: 55%;
+    z-index: 6;
+}
+
+.elevation-6 {
+    bottom: 65%;
+    z-index: 7;
+}
+
+.blue-camel {
+    filter: invert(11%) sepia(100%) saturate(5044%) hue-rotate(244deg) brightness(93%) contrast(151%);
+}
+
+.yellow-camel {
+    filter: invert(84%) sepia(77%) saturate(4399%) hue-rotate(358deg) brightness(106%) contrast(104%);
+}
+
+.green-camel {
+    filter: invert(27%) sepia(96%) saturate(1286%) hue-rotate(93deg) brightness(94%) contrast(103%);
+}
+
+.red-camel {
+    filter: invert(27%) sepia(82%) saturate(5323%) hue-rotate(351deg) brightness(89%) contrast(133%);
+}
+
+.purple-camel {
+    filter: invert(14%) sepia(43%) saturate(6012%) hue-rotate(288deg) brightness(92%) contrast(120%);
+}
+
+.white-camel {
+    filter: invert(97%) sepia(17%) saturate(0%) hue-rotate(90deg) brightness(104%) contrast(104%);
+}
+
+#black-camel-piece,
+#white-camel-piece {
+    transform: scaleX(-1);
+}

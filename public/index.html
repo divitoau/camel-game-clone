@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>camel game</title>
+    <link rel="stylesheet" type="text/css" href="styles/board.css" />
+    <link rel="stylesheet" type="text/css" href="styles/cards.css" />
+    <link rel="stylesheet" type="text/css" href="styles/camels.css" />
+    <link rel="stylesheet" type="text/css" href="styles/dice.css" />
+    <link rel="stylesheet" type="text/css" href="styles/playerMenu.css" />
+    <link rel="stylesheet" type="text/css" href="styles/startDisplay.css" />
+    <link rel="stylesheet" type="text/css" href="styles/scoreboard.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div id="scoreboard"></div>
+    <div id="game-board-container">
+      <div id="game-board">
+        <div class="track-space" id="track-space-15">
+          <div class="space-number-label">
+            <p>15</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-16">
+          <div class="space-number-label">
+            <p>16</p>
+          </div>
+          <div id="finish-line"></div>
+        </div>
+        <div class="track-space" id="track-space-1">
+          <div class="space-number-label">
+            <p>1</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-2">
+          <div class="space-number-label">
+            <p>2</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-3">
+          <div class="space-number-label">
+            <p>3</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-4">
+          <div class="space-number-label">
+            <p>4</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-14">
+          <div class="space-number-label">
+            <p>14</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-13">
+          <div class="space-number-label">
+            <p>13</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-5">
+          <div class="space-number-label">
+            <p>5</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-6">
+          <div class="space-number-label">
+            <p>6</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-12">
+          <div class="space-number-label">
+            <p>12</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-11">
+          <div class="space-number-label">
+            <p>11</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-10">
+          <div class="space-number-label">
+            <p>10</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-9">
+          <div class="space-number-label">
+            <p>9</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-8">
+          <div class="space-number-label">
+            <p>8</p>
+          </div>
+        </div>
+        <div class="track-space" id="track-space-7">
+          <div class="space-number-label">
+            <p>7</p>
+          </div>
+        </div>
+        <div id="center-track">
+          <div id="leg-bet-container">
+            <div class="leg-bet-stack" id="blue-leg-bets"></div>
+            <div class="leg-bet-stack" id="yellow-leg-bets"></div>
+            <div class="leg-bet-stack" id="green-leg-bets"></div>
+            <div class="leg-bet-stack" id="red-leg-bets"></div>
+            <div class="leg-bet-stack" id="purple-leg-bets"></div>
+          </div>
+          <div id="dice-tent-container">
+            <img id="dice-pyramid" src="./images/pyramid.svg" alt="a pyramid" />
+            <div class="dice-tent" id="tent-1"></div>
+            <div class="dice-tent" id="tent-2"></div>
+            <div class="dice-tent" id="tent-3"></div>
+            <div class="dice-tent" id="tent-4"></div>
+            <div class="dice-tent" id="tent-5"></div>
+          </div>
+          <div id="finish-stacks-container">
+            <div id="finish-winner-container">
+              <h2>Winner Bets</h2>
+              <div id="finish-winner-stack"></div>
+            </div>
+            <div id="finish-loser-container">
+              <h2>Loser Bets</h2>
+              <div id="finish-loser-stack"></div>
+            </div>
+          </div>
+          <div class="block-overlay"></div>
+        </div>
+      </div>
+    </div>
+    <div id="player-interface">
+      <div id="money-display">
+        <span id="money-count"></span>
+      </div>
+      <div id="pyramid-tickets-display"></div>
+      <div id="spectator-tile-display"></div>
+      <div id="held-leg-bets-container"></div>
+      <div id="held-finish-cards-container"></div>
+      <div class="block-overlay"></div>
+    </div>
+    <div id="dialog-land">
+      <dialog id="game-start-dialog">
+        <h1>Welcome to Camel Up!</h1>
+        <form id="new-player-form">
+          <label for="new-player-input">Add a new player</label>
+          <input
+            type="text"
+            id="new-player-input"
+            name="playerName"
+            placeholder="Name"
+            required
+            minlength="3"
+            maxlength="10"
+          />
+          <button type="button" id="add-player-button">Add Player</button>
+        </form>
+        <ol id="starting-player-list"></ol>
+      </dialog>
+      <dialog id="spectator-dialog">
+        <p>Place Spectator Tile</p>
+        <button id="cheering-button">Cheering</button>
+        <button id="booing-button">Booing</button>
+        <button id="spectator-cancel-button">Cancel</button>
+      </dialog>
+      <dialog id="leg-summary-dialog">
+        <div id="leg-summary-display"></div>
+        <button id="leg-summary-button">OK</button>
+      </dialog>
+      <dialog id="final-summary-dialog">
+        <div id="final-summary-display">
+          <div id="final-winner-container">
+            <h2>Winner Bets</h2>
+            <ol id="final-winner-bets"></ol>
+          </div>
+          <div id="final-loser-container">
+            <h2>Loser Bets</h2>
+            <ol id="final-loser-bets"></ol>
+          </div>
+          <div id="total-rewards">
+            <h2>Payout from finish bets</h2>
+          </div>
+          <div id="player-ranking-container">
+            <h2>Final Scores</h2>
+            <ol id="player-ranking"></ol>
+          </div>
+        </div>
+      </dialog>
+      <dialog id="new-game-dialog">
+        <h2>Start a new game</h2>
+        <button id="same-players-button">Use the same players</button>
+        <button id="new-players-button">Make new players</button>
+      </dialog>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="scripts/clientSocket.js"></script>
+    <script src="scripts/clientSessionManager.js"></script>
+    <script src="scripts/centerDisplay.js"></script>
+    <script src="scripts/camelDisplay.js"></script>
+    <script src="scripts/playerDisplay.js"></script>
+    <script src="scripts/gameStartDisplay.js"></script>
+    <script src="scripts/scoringDisplay.js"></script>
+    <script src="scripts/generalDisplay.js"></script>
+    <script src="scripts/scoreboardDisplay.js"></script>
+  </body>
+</html>

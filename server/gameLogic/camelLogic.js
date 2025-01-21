@@ -1,16 +1,7 @@
+const gameState = require("./gameState");
+const { rollDie, selectFace } = require("./diceLogic");
+
 // this file contains the logic for the movement of the camels
-
-// booleans to track whether the crazy camels are being ridden
-let whiteCarryingRacer = false;
-let blackCarryingRacer = false;
-let whiteCarryingBlack = false;
-let blackCarryingWhite = false;
-
-let raceOver = false;
-
-const racerColors = ["blue", "yellow", "green", "red", "purple"];
-
-let rankedCamels = [];
 
 class Camel {
   constructor(color, position, elevation, camelUnder) {
@@ -31,10 +22,10 @@ class Camel {
 
       // check if a camel is getting off of black or white
       if (this.camelUnder?.color === "white") {
-        whiteCarryingRacer = false;
+        gameState.setWhiteCarryingRacer(false);
       }
       if (this.camelUnder?.color === "black") {
-        blackCarryingRacer = false;
+        gameState.setBlackCarryingRacer(false);
       }
     }
 
@@ -42,7 +33,7 @@ class Camel {
     let goesUnder = false;
 
     // checks if camel landed on spectator tile
-    allPlayers.forEach((p) => {
+    gameState.allPlayers.forEach((p) => {
       if (p.spectatorTile.position === newPosition) {
         // pays tile owner
         p.money += 1;
@@ -72,12 +63,14 @@ class Camel {
     });
 
     // generates array of all camels above the moving camel
-    const camelsAbove = allCamels.filter(
+    const camelsAbove = gameState.allCamels.filter(
       (c) => c.position === this.position && c.elevation > this.elevation
     );
 
     // generates array of all camels on the new space
-    const camelsOnSpace = allCamels.filter((c) => c.position === newPosition);
+    const camelsOnSpace = gameState.allCamels.filter(
+      (c) => c.position === newPosition
+    );
 
     if (goesUnder) {
       // raises elevation so moving camels can be stacked under current camels
@@ -92,13 +85,11 @@ class Camel {
           }
         }
         cos.elevation += camelsAbove.length + 1;
-        displayNewPosition(cos.color);
       });
       // resolves position of camels riding the moving camel if group is going under
       camelsAbove.forEach((ca) => {
         ca.position = newPosition;
         ca.elevation -= this.elevation;
-        displayNewPosition(ca.color);
       });
 
       // places moving camel on bottom
@@ -114,7 +105,6 @@ class Camel {
       camelsAbove.forEach((c) => {
         c.position = newPosition;
         c.elevation = camelsOnSpace.length + (c.elevation - this.elevation);
-        displayNewPosition(c.color);
       });
 
       // places moving camel
@@ -126,22 +116,21 @@ class Camel {
 
     // logic for determing whether black or white are currently being ridden
     if (this.color === "white") {
-      blackCarryingWhite = this.camelUnder?.color === "black";
+      gameState.setBlackCarryingWhite(this.camelUnder?.color === "black");
     } else if (this.color === "black") {
-      whiteCarryingBlack = this.camelUnder?.color === "white";
+      gameState.setWhiteCarryingBlack(this.camelUnder?.color === "white");
     } else {
       if (this.camelUnder?.color === "white") {
-        whiteCarryingRacer = true;
+        gameState.setWhiteCarryingRacer(true);
       }
       if (this.camelUnder?.color === "black") {
-        blackCarryingRacer = true;
+        gameState.setBlackCarryingRacer(true);
       }
     }
 
     // update dom, check rankings and if anyone's crossed finish
-    displayNewPosition(this.color);
-    getRanking();
-    checkIfFinished(this);
+    gameState.getRanking();
+    return checkIfFinished(this.position);
   }
 
   setPosition(position, elevation, camelUnder) {
@@ -151,23 +140,27 @@ class Camel {
   }
 }
 
-const allCamels = [
-  new Camel("blue"),
-  new Camel("yellow"),
-  new Camel("green"),
-  new Camel("red"),
-  new Camel("purple"),
-  new Camel("white"),
-  new Camel("black"),
-];
+const generateCamels = () => {
+  gameState.setCamels([
+    new Camel("blue"),
+    new Camel("yellow"),
+    new Camel("green"),
+    new Camel("red"),
+    new Camel("purple"),
+    new Camel("white"),
+    new Camel("black"),
+  ]);
+};
 
 const setStartingPositions = () => {
   // roll all dice to determine the starting positions of the racers
   for (let i = 0; i < 6; i++) {
     let spawnRoll = rollDie();
     if (!spawnRoll.color.startsWith("grey-")) {
-      const camel = allCamels.find((c) => c.color === spawnRoll.color);
-      const camelsOnSpace = allCamels.filter(
+      const camel = gameState.allCamels.find(
+        (c) => c.color === spawnRoll.color
+      );
+      const camelsOnSpace = gameState.allCamels.filter(
         (c) => c.position === spawnRoll.number
       );
       camel.setPosition(
@@ -181,18 +174,20 @@ const setStartingPositions = () => {
   }
 
   // put dice back
-  diceInPyramid = [...allDice];
+  gameState.resetPyramid();
 
   // so that starting ranking is known in case i ever try to write a computer player
-  getRanking();
+  gameState.getRanking();
 
   // roll two dice to determine the start position of the crazy camels
   const crazyRoll = selectFace();
   const crazyNumber = crazyRoll > 3 ? crazyRoll - 3 : crazyRoll;
   const crazyColor = crazyRoll > 3 ? "black" : "white";
-  const crazyCamel = allCamels.find((c) => c.color === crazyColor);
+  const crazyCamel = gameState.allCamels.find((c) => c.color === crazyColor);
   const otherCrazyColor = crazyColor === "white" ? "black" : "white";
-  const otherCrazyCamel = allCamels.find((c) => c.color === otherCrazyColor);
+  const otherCrazyCamel = gameState.allCamels.find(
+    (c) => c.color === otherCrazyColor
+  );
   const otherCrazyPosition = 17 - Math.ceil(Math.random() * 3);
 
   crazyCamel.setPosition(17 - crazyNumber, 0, null);
@@ -203,29 +198,19 @@ const setStartingPositions = () => {
   );
   if (otherCrazyCamel.elevation === 1) {
     crazyColor === "white"
-      ? (whiteCarryingBlack = true)
-      : (blackCarryingWhite = true);
+      ? gameState.setWhiteCarryingBlack(true)
+      : gameState.setBlackCarryingWhite(true);
   }
 };
 
 // generate an array of the racers ordered by position then elevation, descending
-const getRanking = () => {
-  rankedCamels = allCamels.slice(0, 5).sort((a, b) => {
-    if (a.position === b.position) {
-      return b.elevation - a.elevation;
-    } else {
-      return b.position - a.position;
-    }
-  });
-};
 
 // check if a camel has crossed finish (in either direction)
-const checkIfFinished = (camel) => {
-  if (camel.position > 16) {
-    endLeg();
-    endRace();
-  } else if (camel.position < 1) {
-    endLeg();
-    endRace();
-  }
+const checkIfFinished = (position) => {
+  return position > 16 || position < 1;
+};
+
+module.exports = {
+  generateCamels,
+  setStartingPositions,
 };
