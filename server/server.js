@@ -23,7 +23,7 @@ app.use(express.static("public"));
 
 const dummyUsers = ["testguy1", "testguy2"];
 let dummyUserIndex = 0;
-const autoStart = true;
+const autoStart = false;
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -310,7 +310,7 @@ const performAutoStart = (clientId, socket) => {
   }
 };
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 80;
 server.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
 });
